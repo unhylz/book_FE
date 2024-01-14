@@ -4,6 +4,7 @@ import {BrowserRouter,Routes, Route} from 'react-router-dom';
 
 //Container import는 여기 아래에 쭈르륵 해주세요
 import Page1Container from './container/Page1Container';
+import Login from './components/login/Login';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <BrowserRouter>
       <Routes>
         <Route path='/' element={<Page1Container></Page1Container>}/>
+        <Route path='/login' element={<Login/>}></Route>
       </Routes>
       </BrowserRouter>
     </>
