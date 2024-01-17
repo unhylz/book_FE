@@ -33,8 +33,7 @@ export default function Login(props)
           <img className='cancle' src={cancle_icon} onClick={props.onEmailCancleHandler}/>
         </div>
         <div className={`pw_input_${props.notice}`}>
-              <input ref={props.pwInputRef} type={isEyeOpen ? 'text':'password'} placeholder='비밀번호' onChange={props.onPwChange} value={props.pw}/>
-            
+            <input ref={props.pwInputRef} type={isEyeOpen ? 'text':'password'} placeholder='비밀번호' onChange={props.onPwChange} value={props.pw}/>
             {isEyeOpen ?
             <img className='eye' src={eye_icon} onClick={()=>{setIsEyeOpen(false)}}/>
             :<img className='eye_off' src={eye_off_icon} onClick={()=>{setIsEyeOpen(true)}}/>
