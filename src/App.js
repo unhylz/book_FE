@@ -7,6 +7,8 @@ import HomeContainer from "./container/HomeContainer";
 import SentimentLeagueContainer from "./container/SentimentLeagueContainer";
 import TopNavSearchContainer from "./container/TopNavSearchContainer";
 import LoginContainer from "./container/LoginContainer";
+import SentimentWrite from './pages/page2/SentimentWrite';
+import SentimentDetail from './pages/page3/SentimentDetail';
 
 function App() {
   return (
@@ -15,14 +17,11 @@ function App() {
         <Routes>
           <Route path="/" element={<HomeContainer />} />
           <Route path="/login" element={<LoginContainer />}></Route>
-          <Route
-            path="/sentiment-league"
-            element={<SentimentLeagueContainer />}
-          ></Route>
-          <Route
-            path="/top-nav-search"
-            element={<TopNavSearchContainer />}
-          ></Route>
+          <Route path="/sentiment-league" element={<SentimentLeagueContainer />}></Route>
+          <Route path="/top-nav-search" element={<TopNavSearchContainer />}></Route>
+          <Route path='/login' element={<LoginContainer/>}></Route>
+          <Route path='/write' element={<SentimentWrite></SentimentWrite>}/>
+          <Route path='/detail' element={<SentimentDetail></SentimentDetail>}/>
         </Routes>
       </BrowserRouter>
     </>
