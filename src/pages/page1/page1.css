@@ -1,0 +1,12 @@
+.comPage1 h {
+  font-size: 100px;
+  color: rgba(52, 52, 52, 0.7);
+}
+.comPage1 .specialBtn {
+  width: 200px;
+  height: 150px;
+}
+.comPage1 .specialBtn:hover {
+  width: 300px;
+  height: 200px;
+}/*# sourceMappingURL=page1.css.map */
