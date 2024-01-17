@@ -1,0 +1,16 @@
+@import "../../lib/scss/BSL.scss";
+
+.search-contents {
+  display: flex;
+
+  .search-result {
+    margin-top: 0;
+
+    p {
+      margin: 0;
+      font-size: 17px;
+      text-align: left;
+      color: $black;
+    }
+  }
+}
