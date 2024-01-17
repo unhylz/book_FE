@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+/*
 import "./Login.scss";
 import BSL_logo from "../../assets/logos/BSL_logo.svg";
 import findPW_icon from "../../assets/icons/findPW.svg";
@@ -9,8 +9,9 @@ import eye_off_icon from "../../assets/icons/eye_off.svg";
 import cancle_icon from "../../assets/icons/cancle.svg";
 import checkbox_green from "../../assets/icons/checkbox_green.svg";
 import checkbox_black from "../../assets/icons/checkbox_black.svg";
-
+*/
 export default function Login() {
+  /*
   const [isEyeOpen, setIsEyeOpen] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
 
@@ -71,4 +72,5 @@ export default function Login() {
       </div>
     </div>
   );
+  */
 }
