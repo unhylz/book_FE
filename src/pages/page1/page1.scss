@@ -1,0 +1,44 @@
+//scss예시입니다.
+
+//아래의 코드를 붙혀넣으면
+//색상등의 정보가 담겨있는 라이브러리 사용가능합니다.
+@import "../../lib/scss/BSL.scss";
+
+
+//코드는 html 적듯이 적으면 됩니다.
+// .compage h {} 이렇게 안해도 됨
+
+.Header-container {
+  display: flex;
+  flex-direction: column;
+  background: #fff; // 배경색
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // 그림자 효과
+}
+
+// 헤더
+.header-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem; // 여백
+}
+
+  .header-left-wrap {
+    display: flex;
+    align-items: center;
+  }
+
+    // 로고 이미지
+    img {
+      width: 175px;
+      height: 84px;
+    }
+
+    // 검색 폼
+    .search-form {
+      width: 587px;
+      height: 48px;
+      flex-shrink: 0;
+      border-radius: 30px;
+      border: 2px solid #5FCB75;
+      }
