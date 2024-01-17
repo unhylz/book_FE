@@ -7,19 +7,38 @@
 
 //코드는 html 적듯이 적으면 됩니다.
 // .compage h {} 이렇게 안해도 됨
-.comPage1{
-  h{
-    font-size: 100px;
-    color: rgba($black, .7);
+
+.Header-container {
+  display: flex;
+  flex-direction: column;
+  background: #fff; // 배경색
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // 그림자 효과
+}
+
+// 헤더
+.header-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem; // 여백
+}
+
+  .header-left-wrap {
+    display: flex;
+    align-items: center;
   }
 
-  .specialBtn{
-    width: 200px;
-    height: 150px;
-        
-    &:hover{//specialBtn:hover 와 같은 의미
-      width: 300px;
-      height: 200px;
+    // 로고 이미지
+    img {
+      width: 175px;
+      height: 84px;
     }
-  }
-}
+
+    // 검색 폼
+    .search-form {
+      width: 587px;
+      height: 48px;
+      flex-shrink: 0;
+      border-radius: 30px;
+      border: 2px solid #5FCB75;
+      }
