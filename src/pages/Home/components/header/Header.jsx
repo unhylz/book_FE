@@ -23,19 +23,21 @@ export default function Header({ onLogoClick, defaultSearchContent }) {
     navigate("/sentiment-league");
   };
 
+  const handleWriteClick = () => {
+    navigate("/write");
+  };
+
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
+
+  const handleSignupClick = () => {
+    navigate("/signup");
+  };
+
   const handleSearchButtonClick = () => {
     goToSearchPage();
   };
-
-  /*
-  const goToSearchPage = (e) => {
-    if (e.key === "Enter") {
-      navigate("/top-nav-search?query=" + content, { state: { content } });
-    } else {
-      setContent(nowContent.current.value);
-    }
-  };
-  */
 
   const goToSearchPage = () => {
     if (content.trim() === "") {
@@ -84,12 +86,16 @@ export default function Header({ onLogoClick, defaultSearchContent }) {
           <img src={league} alt="League" className="league-icon" />
           League
         </button>
-        <button className="write-btn" onClick={() => {}}>
+        <button className="write-btn" onClick={handleWriteClick}>
           <img src={write} alt="Write" className="write-icon" />
           Write
         </button>
-        <button className="login-btn">로그인</button>
-        <button className="signup-btn">회원가입</button>
+        <button className="login-btn" onClick={handleLoginClick}>
+          로그인
+        </button>
+        <button className="signup-btn" onClick={handleSignupClick}>
+          회원가입
+        </button>
       </div>
     </header>
   );
