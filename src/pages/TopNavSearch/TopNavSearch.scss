@@ -2,16 +2,19 @@
 
 .search-contents {
   display: flex;
+
   justify-content: flex-start;
   flex-direction: column;
   //border: 2px dashed green;
   width: 100%;
+
 
   .search-result {
     margin-top: 0;
 
     p {
       margin: 0;
+
       font-size: 22px;
       text-align: left;
       color: $black;

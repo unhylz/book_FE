@@ -16,6 +16,7 @@ import SentimentDetailContainer from "./container/SentimentDetailContainer";
 import BookDetailContainer from "./container/BookDetailContainer";
 import RelatedBookMoreContainer from "./container/RelatedBookMoreContainer";
 
+
 function App() {
   return (
     <>
@@ -36,6 +37,7 @@ function App() {
             element={<PasswordSearchContainer />}
           ></Route>
           <Route path="/signup" element={<SignupContainer />}></Route>
+
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
           <Route path="/detail" element={<SentimentDetail></SentimentDetail>} />
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
@@ -52,6 +54,9 @@ function App() {
             path="/:content/related_book_more"
             element={<RelatedBookMoreContainer />}
           ></Route>
+
+          <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
+
         </Routes>
       </BrowserRouter>
     </>

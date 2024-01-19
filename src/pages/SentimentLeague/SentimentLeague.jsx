@@ -34,6 +34,7 @@ function SentimentLeague() {
         <div className="center">
           {/* 메인 광고 영역 */}
           <MainAd />
+
           <div className="contents">
             <Ranking />
           </div>

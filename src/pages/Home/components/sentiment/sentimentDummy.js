@@ -2,6 +2,7 @@
 export const sentimentDummy = [
   {
     id: 1,
+
     sentiment_title: "플러터 프로그래밍 후기",
     book_title: "Must Have 코드팩토리의 플러터 프로그래밍",
     author: "최지호",

@@ -7,11 +7,13 @@
 
   .logo {
     position: flex;
+
     margin-left: 50px;
 
     img {
       width: 175px;
       height: 84px;
+
     }
 
     &:hover {
@@ -71,8 +73,10 @@
   .buttons {
     display: flex;
     margin-left: auto; // 오른쪽 정렬
+
     margin-right: 50px;
     gap: 50px; // 버튼 사이의 간격
+
 
     .league-btn,
     .write-btn,
@@ -81,16 +85,19 @@
       display: flex;
       align-items: center;
       font-weight: bold;
+
       margin: 0;
       padding: 0;
       background-color: white;
 
       &:hover {
         //color: $green;
+
         cursor: pointer;
       }
 
       &:active {
+
         //color: darken($green, 10%); // 클릭 시 어둡게
         cursor: grabbing;
       }
@@ -140,6 +147,7 @@
       padding-bottom: 10px;
       padding-left: 15px;
       padding-right: 15px;
+
 
       &:hover {
         background-color: $green;

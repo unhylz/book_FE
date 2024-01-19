@@ -1,18 +1,22 @@
 // TopNavSearch.jsx
 import React from "react";
+
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
 import moreIcon from "../../assets/icons/moreicon.svg";
 import { bookDummy } from "./bookDummy";
+
 import "./TopNavSearch.scss";
 
 function TopNavSearch() {
   const navigate = useNavigate();
   const search_result = useLocation().state;
   const content = search_result ? search_result.content : "";
+
   const displayedItems = bookDummy.slice(0, 3);
+
 
   const handleLogoClick = () => {
     navigate("/");
@@ -39,6 +43,7 @@ function TopNavSearch() {
               )}
             </div>
             {/* 추가 검색 결과를 표시*/}
+
             <div className="search-additional">
               <div className="related-book">
                 <h2>#관련서적</h2>
@@ -96,6 +101,7 @@ function TopNavSearch() {
                 <h2>#닉네임</h2>
               </div>
             </div>
+
           </div>
         </div>
 

@@ -1,3 +1,4 @@
+
 // Home.jsx
 import React, { useState, useEffect } from "react";
 import Header from "./components/header/Header";
@@ -8,7 +9,9 @@ import Follow from "./components/follow/Follow";
 import Footer from "./components/footer/Footer";
 import "./Home.scss";
 
+
 export default function Home() {
+
   const [selectedButton, setSelectedButton] = useState("sentiment");
 
   const handleButtonClick = (button) => {
