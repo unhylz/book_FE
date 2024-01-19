@@ -36,41 +36,61 @@
   .sentiment-btn {
     width: 120px;
     height: 50px;
-    color: white;
-    background-color: $green;
-    border: none;
+
+    color: rgba($black, 0.7);
+    background-color: white;
+    border: 1.5px solid rgba(#343434, 0.7);
     border-radius: 5px;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 18px;
 
     &:hover {
-      color: rgba(#343434, 0.7);
-      cursor: pointer;
-    }
+      border: 1.5px solid rgba($green, 0.7);
+      color: $green;
 
-    &:active {
-      color: darken(rgba(#343434, 0.7), 10%); // 클릭 시 어둡게
-      cursor: grabbing;
+      color: white;
+      background-color: $green;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+
+      &:active {
+        color: darken($green, 10%); // 클릭 시 어둡게
+        cursor: grabbing;
+      }
     }
   }
+
   .follow-btn {
     width: 120px;
     height: 50px;
-    color: rgba(#343434, 0.7);
+
+    color: rgba($black, 0.7);
     background-color: white;
-    border: 1px solid rgba(#343434, 0.7);
+    border: 1.5px solid rgba(#343434, 0.7);
     border-radius: 5px;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 18px;
 
     &:hover {
-      color: $green;
-      cursor: pointer;
-    }
-
-    &:active {
-      color: darken($green, 10%); // 클릭 시 어둡게
+      border: 1.5px solid rgba($green, 0.7);
+      color: darken(rgba(#343434, 0.7), 10%); // 클릭 시 어둡게
       cursor: grabbing;
     }
+    cursor: grabbing;
+  }
+
+  .sentiment-btn.active {
+    border: none;
+    background-color: $green;
+    color: white;
+  }
+
+  .follow-btn.active {
+    border: none;
+    background-color: $green;
+    color: white;
   }
 }
