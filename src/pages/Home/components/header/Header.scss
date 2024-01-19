@@ -7,13 +7,11 @@
 
   .logo {
     position: flex;
-    width: 175px;
-    height: 84px;
-    margin-left: 68px;
+    margin-left: 50px;
 
     img {
-      max-width: 100%;
-      max-height: 100%;
+      width: 175px;
+      height: 84px;
     }
 
     &:hover {
@@ -73,8 +71,8 @@
   .buttons {
     display: flex;
     margin-left: auto; // 오른쪽 정렬
-    margin-right: 68px;
-    gap: 28px; // 버튼 사이의 간격
+    margin-right: 50px;
+    gap: 50px; // 버튼 사이의 간격
 
     .league-btn,
     .write-btn,
@@ -83,55 +81,65 @@
       display: flex;
       align-items: center;
       font-weight: bold;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      padding-left: 15px;
-      padding-right: 15px;
+      margin: 0;
+      padding: 0;
       background-color: white;
 
       &:hover {
-        color: $green;
+        //color: $green;
         cursor: pointer;
       }
 
       &:active {
-        color: darken($green, 10%); // 클릭 시 어둡게
+        //color: darken($green, 10%); // 클릭 시 어둡게
         cursor: grabbing;
-      }
-
-      img {
-        margin-right: 5px;
       }
     }
 
     .league-btn {
+      //border: 2px dashed green;
+      display: flex;
+      font-size: 17px;
+      border: none;
+      .league-icon {
+        //border: 2px dashed green;
+        margin: 0;
+        padding: 0;
+        margin-right: 5px;
+        width: 25px;
+      }
+    }
+
+    .write-btn {
+      //border: 2px dashed green;
       font-size: 17px;
       border: none;
 
-      .league-icon {
-        width: 80%;
-        height: 80%;
-      }
-    }
-    .write-btn {
-      font-size: 17px;
-      border: none;
       .write-icon {
-        width: 80%;
-        height: 80%;
+        margin: 0;
+        padding: 0;
+        margin-right: 5px;
+        width: 25px;
       }
     }
+
     .login-btn {
       margin-left: 10px;
       font-size: 17px;
       border: none;
       font-weight: normal;
     }
+
     .signup-btn {
       margin-left: 20px;
       font-size: 15px;
       border: 2px solid $black;
       border-radius: 5px;
+
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 15px;
+      padding-right: 15px;
 
       &:hover {
         background-color: $green;

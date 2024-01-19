@@ -3,8 +3,8 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import BSL_logo from "../../../../assets/logos/BSL_logo.svg";
 import topSearch from "../../../../assets/icons/topSearch.svg";
-import league from "../../../../assets/icons/league.svg";
-import write from "../../../../assets/icons/write.svg";
+import leagueIcon from "../../../../assets/icons/league.svg";
+import writeIcon from "../../../../assets/icons/write.svg";
 import "./Header.scss";
 
 export default function Header({ onLogoClick, defaultSearchContent }) {
@@ -15,7 +15,7 @@ export default function Header({ onLogoClick, defaultSearchContent }) {
   const handleLogoClick = () => {
     // 로고 클릭 시 홈으로 이동하면서 sentiment-btn이 선택된 상태로 변경
     navigate("/");
-    onLogoClick("sentiment");
+    onLogoClick("sentiment"); // 센티먼트/팔로우 중 센티먼트 기본 선택 상태
   };
 
   const handleLeagueClick = () => {
@@ -83,11 +83,11 @@ export default function Header({ onLogoClick, defaultSearchContent }) {
       {/* 로그인, 회원가입 버튼 등 */}
       <div className="buttons">
         <button className="league-btn" onClick={handleLeagueClick}>
-          <img src={league} alt="League" className="league-icon" />
+          <img src={leagueIcon} alt="League" className="league-icon" />
           League
         </button>
         <button className="write-btn" onClick={handleWriteClick}>
-          <img src={write} alt="Write" className="write-icon" />
+          <img src={writeIcon} alt="Write" className="write-icon" />
           Write
         </button>
         <button className="login-btn" onClick={handleLoginClick}>
