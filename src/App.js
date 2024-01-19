@@ -12,6 +12,10 @@ import MypageContainer from "./container/MypageContainer";
 import HomeContainer from "./container/HomeContainer";
 import SentimentLeagueContainer from "./container/SentimentLeagueContainer";
 import TopNavSearchContainer from "./container/TopNavSearchContainer";
+import SentimentDetailContainer from "./container/SentimentDetailContainer";
+import BookDetailContainer from "./container/BookDetailContainer";
+import RelatedBookMoreContainer from "./container/RelatedBookMoreContainer";
+
 
 function App() {
   return (
@@ -21,12 +25,18 @@ function App() {
           <Route path="/" element={<HomeContainer />} />
           <Route path="/sentiment-league" element={<SentimentLeagueContainer />} />
           <Route path="/top-nav-search" element={<TopNavSearchContainer />} />
-          <Route path="/login" element={<LoginContainer />} />
+          <Route path="/login" element={<LoginContainer />}></Route>
+          <Route path="/passwordsearch" element={<PasswordSearchContainer />} />
+          <Route path="/signup" element={<SignupContainer />}></Route>
+
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
           <Route path="/detail" element={<SentimentDetail></SentimentDetail>} />
-          <Route path="/passwordsearch" element={<PasswordSearchContainer />} />
-          <Route path="/signup" element={<SignupContainer />} />
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
+
+          <Route path="/sentiment/:id/:sentiment_title" element={<SentimentDetailContainer />} />
+          <Route path="/book/:content/:book_title" element={<BookDetailContainer />} />
+          <Route path="/:content/related_book_more" element={<RelatedBookMoreContainer />} />
+
         </Routes>
       </BrowserRouter>
     </>
