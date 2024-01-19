@@ -19,22 +19,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomeContainer />} />
-          <Route
-            path="/sentiment-league"
-            element={<SentimentLeagueContainer />}
-          ></Route>
-          <Route
-            path="/top-nav-search"
-            element={<TopNavSearchContainer />}
-          ></Route>
-          <Route path="/login" element={<LoginContainer />}></Route>
+          <Route path="/sentiment-league" element={<SentimentLeagueContainer />} />
+          <Route path="/top-nav-search" element={<TopNavSearchContainer />} />
+          <Route path="/login" element={<LoginContainer />} />
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
           <Route path="/detail" element={<SentimentDetail></SentimentDetail>} />
-          <Route
-            path="/passwordsearch"
-            element={<PasswordSearchContainer />}
-          ></Route>
-          <Route path="/signup" element={<SignupContainer />}></Route>
+          <Route path="/passwordsearch" element={<PasswordSearchContainer />} />
+          <Route path="/signup" element={<SignupContainer />} />
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
         </Routes>
       </BrowserRouter>
