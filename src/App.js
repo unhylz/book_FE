@@ -12,6 +12,9 @@ import MypageContainer from "./container/MypageContainer";
 import HomeContainer from "./container/HomeContainer";
 import SentimentLeagueContainer from "./container/SentimentLeagueContainer";
 import TopNavSearchContainer from "./container/TopNavSearchContainer";
+import SentimentDetailContainer from "./container/SentimentDetailContainer";
+import BookDetailContainer from "./container/BookDetailContainer";
+import RelatedBookMoreContainer from "./container/RelatedBookMoreContainer";
 
 function App() {
   return (
@@ -36,6 +39,19 @@ function App() {
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
           <Route path="/detail" element={<SentimentDetail></SentimentDetail>} />
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
+
+          <Route
+            path="/sentiment/:id/:sentiment_title"
+            element={<SentimentDetailContainer />}
+          />
+          <Route
+            path="/book/:content/:book_title"
+            element={<BookDetailContainer />}
+          ></Route>
+          <Route
+            path="/:content/related_book_more"
+            element={<RelatedBookMoreContainer />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </>
