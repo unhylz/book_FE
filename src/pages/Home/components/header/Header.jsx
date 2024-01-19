@@ -5,8 +5,6 @@ import BSL_logo from "../../../../assets/logos/BSL_logo.svg";
 import topSearch from "../../../../assets/icons/topSearch.svg";
 import leagueIcon from "../../../../assets/icons/league.svg";
 import writeIcon from "../../../../assets/icons/write.svg";
-import league from "../../../../assets/icons/league.svg";
-import write from "../../../../assets/icons/write.svg";
 import "./Header.scss";
 
 export default function Header({ onLogoClick, defaultSearchContent }) {
@@ -40,7 +38,6 @@ export default function Header({ onLogoClick, defaultSearchContent }) {
   const handleSearchButtonClick = () => {
     goToSearchPage();
   };
-
 
   /*
   const goToSearchPage = (e) => {
@@ -96,7 +93,6 @@ export default function Header({ onLogoClick, defaultSearchContent }) {
       {/* 로그인, 회원가입 버튼 등 */}
       <div className="buttons">
         <button className="league-btn" onClick={handleLeagueClick}>
-
           <img src={leagueIcon} alt="League" className="league-icon" />
           League
         </button>
@@ -109,7 +105,7 @@ export default function Header({ onLogoClick, defaultSearchContent }) {
         </button>
         <button className="signup-btn" onClick={handleSignupClick}>
           회원가입
-
+        </button>
       </div>
     </header>
   );

@@ -27,14 +27,11 @@ function Sentiment() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const displayedItems = sentimentDummy.slice(startIndex, endIndex);
-, setCurrentPage] = useState(1);
-
 
   // 페이지 번호 클릭 시 해당 페이지로 이동하는 함수
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
 
   //티어 아이콘 색상 변경용
   const getTierIcon = (tier) => {
@@ -124,7 +121,6 @@ function Sentiment() {
             <div className="rating-info">
               <img src={starIcon} alt="star" className="star-icon" />
               <p>{result.rating.toFixed(1)}</p>
-
             </div>
           </div>
         ))}
@@ -149,7 +145,6 @@ function Sentiment() {
     </div>
   );
 }
-
 
 function formatDateTime(dateTimeString) {
   const dateTime = new Date(dateTimeString);
