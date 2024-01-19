@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import MainAd from "../Home/components/advertisement/MainAd";
 import SideAd from "../Home/components/advertisement/SideAd";
+import Ranking from "./components/ranking/Ranking";
 import Footer from "../Home/components/footer/Footer";
 import "./SentimentLeague.scss";
 
@@ -33,7 +34,10 @@ function SentimentLeague() {
         <div className="center">
           {/* 메인 광고 영역 */}
           <MainAd />
-          <div className="contents"></div>
+
+          <div className="contents">
+            <Ranking />
+          </div>
         </div>
 
         {/* 3열 - 오른쪽 사이드 광고 부분 */}
