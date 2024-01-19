@@ -1,26 +1,56 @@
-.title-container{
-    .sort{
-        color: #5FCB75;
-    }
-    .book{
-        color: lightgray;
-        display: inline;
-    }
-    .author{
-        color: lightgray;
-        display: inline;
-    }
+#board-detail-wrapper{
+    padding: 100px 0;
 
-}
-.user{
-    .userimg{
-        position: relative;
-    }
-    .info{
-        display: inline;
-    }
-    .star{
-        color: #5FCB75;
-        display: inline;
+    display: flex;
+    justify-content: center;
+
+    .detail-container{
+        width: 996px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 }
+
+#detail-top {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    .top-header {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .sort {
+            font-size: 20px;
+            color: #5FCB75;
+        }
+        .title { 
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 140%;
+        }
+        .book-title {
+            font-size: 20px;
+            color: gray;
+        }
+        .book-author {
+        }
+        .writer-info-box {
+            display: flex;
+            flex-direction: row;
+            .nickname{
+                display: flex;
+                flex-direction: column;
+            }
+            .date {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+    }
+}
+
+
