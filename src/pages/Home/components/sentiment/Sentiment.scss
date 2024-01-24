@@ -1,7 +1,6 @@
 @import "../../../../lib/scss/BSL.scss";
 
 .search-container {
-
   border-top: 1px solid rgba($black, 0.2);
   display: flex;
   align-self: flex-start;
@@ -108,6 +107,7 @@
             margin-right: 20px;
 
             .tier-icon {
+              object-fit: fill;
               width: 12px;
               margin-left: 4px;
             }
@@ -115,31 +115,14 @@
 
           .likes {
             display: flex;
-            color: $red;
+            font-weight: normal;
+            align-items: center;
             //border: 2px dashed green;
             margin-right: 20px;
 
             .like-icon {
               margin: 0;
-              height: auto;
-              width: auto;
-              border: none;
-            }
-
-            p {
-              margin: 0;
-            }
-          }
-
-          .comments {
-            display: flex;
-            color: $blue;
-            //border: 2px dashed green;
-            margin-right: 20px;
-
-            .comment-icon {
-              margin: 0;
-              height: auto;
+              height: 18px;
               width: auto;
               border: none;
               margin-right: 2px;
@@ -147,24 +130,50 @@
 
             p {
               margin: 0;
+              color: $red;
+            }
+          }
+
+          .comments {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            //border: 2px dashed green;
+            margin-right: 20px;
+
+            .comment-icon {
+              margin: 0;
+              height: 17px;
+              width: auto;
+              border: none;
+              margin-right: 2px;
+              //border: 2px dashed green;
+            }
+
+            p {
+              margin: 0;
+              color: $blue;
             }
           }
 
           .bookmarks {
             display: flex;
-            color: $yellow;
+            align-items: center;
+            font-weight: normal;
             //border: 2px dashed green;
             margin-right: 20px;
 
             .bookmark-icon {
               margin: 0;
-              height: auto;
+              height: 20px;
               width: auto;
               border: none;
+              margin-right: 2px;
             }
 
             p {
               margin: 0;
+              color: $yellow;
             }
           }
 
