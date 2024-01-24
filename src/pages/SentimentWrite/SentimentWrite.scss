@@ -1,0 +1,134 @@
+* {
+	// border: 1px solid greenyellow; 
+}
+
+//아래의 코드를 붙혀넣으면
+//색상등의 정보가 담겨있는 라이브러리 사용가능합니다.
+@import "../../lib/scss/BSL.scss";
+
+
+
+.header-container {
+	height: 120px;
+	display: flex;
+	justify-content: space-between; // 수정: 로고와 내비게이션 링크 사이의 공간을 양쪽으로 분배
+	align-items: center; // 추가: 세로 중앙 정렬
+	margin-bottom: 20px;
+	.logo {
+		padding-left: 75px;
+	}
+	.btn-user-container{
+		display: flex;
+		flex-direction: row;
+		.write-btn {
+				width: 100px;
+				height: 40px;
+				border: none;
+				border-radius: 20px;
+				margin-right: 100px;
+				background-color: #5FCB75;
+				color: white;
+				cursor: pointer;
+				font-size: 16px;
+		}
+		.user-box{
+			margin-right: 160px;
+			font-size: 16px;
+		}
+	}
+}
+
+
+
+
+.modal-box{
+	justify-content: center;
+	align-content: center;
+	.search-title{
+			font-size: 34px;
+			text-align: center;
+	}
+	.search-input{
+			width: 80%;
+			height: 40px;
+			padding-left: 10px;
+			border-color: #5fcb75;
+			font-size: 18px;
+			margin-left: 10%;
+	}
+}
+
+
+
+
+
+
+.write{
+	display: flex;
+	flex-direction: row;
+	.image-add-container {
+		margin-top: 193px;
+		margin-right: 5px;
+		margin-left: 13%;
+	}
+	.write-container{
+		width: 70%;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		padding-bottom: 40px;
+		.title{
+				display: flex;
+				width: 100%;
+				height: 80px;
+				border-radius: 5px;
+				border: none;
+				background-color: #F8F8F8;
+				margin-left: 0;
+				margin-bottom: 25px;
+				padding-left: 25px;
+				font-size: 30px;
+		}
+		.search-rating-box{
+				display: flex;
+				flex-direction: row;
+				.search{
+						display: flex;
+						width: 75%;
+						height: 70px;
+						border-radius: 5px;
+						border: none;
+						background-color: #F8F8F8;
+						padding-left: 25px;
+						font-size: 24px;
+				}
+				.rating-box{
+						width: 25%;
+						height: 70px;
+						display: flex;
+						flex-direction: row;
+						justify-content: center;
+						align-items: center;
+						
+						.star{
+								display: flex;
+								font-size: 32px;
+						}
+						.rating-index{
+								padding-left: 10px;
+								display: flex;
+								font-size: 28px;
+						}
+				}
+		}
+		.input_box{
+				width: 100%;
+				height: 550px;
+				border-radius: 5px;
+				border: none;
+				font-size: 24px;
+				padding-left: 25px;
+				margin-top: 25px;
+		}
+	}
+}

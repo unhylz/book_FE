@@ -1,14 +1,13 @@
 import React from 'react';
-import {BrowserRouter,Routes, Route} from 'react-router-dom';
+import {BrowserRouter,Routes} from 'react-router-dom';
 
 
 
-function App() {
+function component1() {
     return (
       <>
         <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Page1Container></Page1Container>}/>
         </Routes>
         </BrowserRouter>
       </>

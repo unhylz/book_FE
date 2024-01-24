@@ -1,3 +1,11 @@
+
+*{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
+ }
+
 @import "../../lib/scss/BSL.scss";
 
 @mixin small_btn{
@@ -21,8 +29,8 @@
   background-color: rgba($black,.05);
   overflow: hidden;
   border-radius: 10px;
-  
-  
+
+
   input{
     background-color: rgba($black,0);
     height: 60px;
@@ -89,153 +97,133 @@
         width: 240px;
         height: 120px;
       }
-
-      .email_input_line{
-        display: flex;
-        justify-content: space-between;
-
-        .email_input{
-          @include input_layout(400px);
-        }
-        .email_input_0{
-          @extend .email_input;
-        }
-        .email_input_1{
-          @extend .email_input;
-        }
-        .email_input_2{
-          @extend .email_input;
-          background-color: rgba($red,0.05);
-          border: solid red 1px;
-        }
-        .email_input_3{
-          @extend .email_input;
-        }
+      .email_form{
+        margin-top: 25px;
+        .email_input_line{
         
-        .check_btn{
-          @include small_btn();
+          display: flex;
+          justify-content: space-between;
+          margin-left: 1px;
+  
+          .email_input{
+            @include input_layout(400px);
+          }
+          .email_input_0{
+            @extend .email_input;
+          }
+          .email_input_1{
+            @extend .email_input;
+          }
+          .email_input_2{
+            @extend .email_input;
+            background-color: rgba($red,0.05);
+            border: solid red 1px;
+          }
+          .email_input_3{
+            @extend .email_input;
+          }
+          
+          .check_btn{
+            @include small_btn();
+          }
         }
-      }
+        .email_notice{
+          margin-top: 5px;
+          margin-left: 6px;
+        }
+
+        
       .auth{
+        margin-top: 31px;
         .auth_input_line{
           display: flex;
-          .auth_input_0{
+          .auth_input{
             @include input_layout(200px);
           } 
           .auth_check_btn{
             @include small_btn();
             margin-left: 20px;
           }
-        }
-        
-      }
-      
-
-
-
-      .pw_input{
-        display: flex;
-        width: 380px;
-        height: 60px;
-        display: flex;
-        width: 360px;
-        height: 60px;
-        align-items: center;
-        justify-content: space-between;
-        background-color: rgba($black,.05);
-        overflow: hidden;
-        border-radius: 10px;
-        margin-top: 26px;
-        
-        input{
-          background-color: rgba($black,0);
-          height: 60px;
-          width: 230px;
-          font-size: 20px;
-          color: rgba($black,1);
-          border-radius: 10px;
-          border: none;
-          margin-left: 22px;
-          &::placeholder{
-            color: rgba($black,0.3);
-          }
-          &:focus
+          .auth_notice
           {
-            outline: none;
+            margin-left: 6px;
           }
         }
         
-        .cancle{
-          width: 24px;
-          height: 24px;
-          margin-right: 24px;
-        }
-        .eye{
-          width: 30px;
-          height: 30px;
-          margin-right: 18px;
-        }
-        .eye_off{
-          width: 24.5px;
-          height: 24.5px;
-          margin-right: 18px;
-        }
-      }
-      .pw_input_0{
-        @extend .pw_input;
-      }
-      .pw_input_1{
-        @extend .pw_input;
-        background-color: rgba($red,0.05);
-        border: solid red 1px;
-      }
-      .pw_input_2{
-        @extend .pw_input;
-      }
-      .pw_input_3{
-        @extend .email_input;
-      }
-
-      .remember{
-        display: flex;
-        justify-content: space-between;
-        margin-top: 21px;
-        img{
-          margin-right: 6px;
-        }
-        
-        
-      }
-
-      .submit_input{
-        width: 360px;
-        height: 60px;
-        border-radius: 10px;
-        outline: none;
-        border: none;
-        color: rgba($gray,1);
-        background-color: rgba($green,1);
-        margin-top: 23px;
       }
       
+      }
+     
+    
       
-    }
-    .linkto{
-      margin-left: 30px;
-      margin-top: 31px;
-      .findPW{
-        display: flex;
-        img{
-          margin-right: 6px;
+
+
+      .pw_form{
+        margin-top: 35px;
+        .pw_input{
+          @include input_layout(400px);
+          margin-top: 19px;
+          
+        }
+        
+        .pw_input_0{
+          @extend .pw_input;
+        }
+        .pw_input_1{
+          @extend .pw_input;
+          background-color: rgba($red,0.05);
+          border: solid red 1px;
+        }
+        .pw_input_2{
+          @extend .pw_input;
+        }
+        .pw_input_3{
+          @extend .email_input;
+        }
+        
+        .pw_notice{
+          margin-top: 8px;
+          margin-left: 6px;
+        }
+        .pwcheck_input{
+          @include input_layout(400px);
+          margin-top: 38px;
+        }
+        .pwcheck_notice{
+          margin-top: 5px;
+        }
+
+      }
+
+
+      
+      .nickname_form{
+        margin-top: 40px;
+        .nick_input_line{
+          display: flex;
+          justify-content: space-between;
+          .nick_input{
+            @include input_layout(400px);
+          }
+          .nick_check_btn{
+            @include small_btn();
+          }
+        }
+        .nick_notice{
+          margin-top: 5px;
+          margin-left: 6px;
         }
       }
-      .signup{
-        margin-top: 33px;
-        display: flex;
-        img{
-          margin-right: 6px;
-        }
+      .signup_btn{
+        @include small_btn();
+        width: 523px;
+        height: 70px;
+        line-height: 70px;
+        font-size: 28px;        
+        font-weight: 600px;
+        margin-top: 32px;
       }
     }
+    
   }
 }
