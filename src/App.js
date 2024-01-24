@@ -6,8 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginContainer from "./container/LoginContainer";
 import PasswordSearchContainer from "./container/PasswordSearchContainer";
 import SignupContainer from "./container/SignupContainer";
-import SentimentWrite from "./pages/page2/SentimentWrite";
-import SentimentDetail from "./pages/page3/SentimentDetail";
+import SentimentWrite from "./pages/SentimentWrite/SentimentWrite";
+import SentimentDetail from "./pages/SentimentDetail/SentimentDetail";
 import MypageContainer from "./container/MypageContainer";
 import HomeContainer from "./container/HomeContainer";
 import SentimentLeagueContainer from "./container/SentimentLeagueContainer";
@@ -24,19 +24,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomeContainer />} />
-          <Route
-            path="/sentiment-league"
-            element={<SentimentLeagueContainer />}
-          ></Route>
-          <Route
-            path="/top-nav-search"
-            element={<TopNavSearchContainer />}
-          ></Route>
+          <Route path="/sentiment-league" element={<SentimentLeagueContainer />} />
+          <Route path="/top-nav-search" element={<TopNavSearchContainer />} />
           <Route path="/login" element={<LoginContainer />}></Route>
-          <Route
-            path="/passwordsearch"
-            element={<PasswordSearchContainer />}
-          ></Route>
+          <Route path="/passwordsearch" element={<PasswordSearchContainer />} />
           <Route path="/signup" element={<SignupContainer />}></Route>
 
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
@@ -63,7 +54,6 @@ function App() {
             path="/:content/related_nickname_more"
             element={<RelatedNicknameMoreContainer />}
           ></Route>
-          <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
         </Routes>
       </BrowserRouter>
     </>
