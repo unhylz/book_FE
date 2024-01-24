@@ -1,0 +1,116 @@
+@import "../../lib/scss/BSL.scss";
+
+* {
+    // border: 1px solid greenyellow; 
+}
+
+#board-detail-wrapper{
+    padding: 100px 0;
+
+    display: flex;
+    justify-content: center;
+
+    .detail-container{
+        width: 996px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+#detail-top {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: space-between;
+
+    .top-header {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 15px;
+        .book-info-box {
+            .sort {
+                font-size: 20px;
+                color: #5FCB75;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            .title { 
+                font-size: 32px;
+                font-weight: 600;
+                line-height: 140%;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            .title-author-box {
+                display: flex;
+                flex-direction: row;
+                .book-title {
+                    font-size: 22px;
+                    color: gray;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+                .book-author {
+                    font-size: 16px;
+                    color: gray;
+                    margin-top: 5px;
+                    font-weight: 600;
+                    margin-left: 5px;
+                }
+            }
+            .writer-info-box {
+                display: flex;
+                flex-direction: row;
+                .profile-image {
+                    width: 50px;
+                    height: 50px;
+                }
+                .nick-date-box {
+                    margin-left: 5px;
+                    .nickname{
+                        font-size: 20px;
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .date {
+                        display: flex;
+                        flex-direction: column;
+                        color: gray;
+                    }
+                }
+            }
+        }
+        .book-image-box {
+            display: flex;
+            padding-left: 100px;
+            .image {
+                margin-right: 10px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 20px;
+            }
+            .rating {
+                color: #5FCB75;
+                font-weight: bold;
+                margin-top: 5px;
+            }
+        }
+    }
+    .detail-top-main {
+        height: auto;
+        .detail-main-image {
+            align-content: center;
+            margin-bottom: 20px;
+            border: 1px solid black;
+        }
+        .detail-main-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        
+    }
+}
+
+

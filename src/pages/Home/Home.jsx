@@ -1,4 +1,5 @@
-// MainContent.js
+
+// Home.jsx
 import React, { useState, useEffect } from "react";
 import Header from "./components/header/Header";
 import SideAd from "../../pages/Home/components/advertisement/SideAd";
@@ -8,7 +9,9 @@ import Follow from "./components/follow/Follow";
 import Footer from "./components/footer/Footer";
 import "./Home.scss";
 
-export default function MainContent() {
+
+export default function Home() {
+
   const [selectedButton, setSelectedButton] = useState("sentiment");
 
   const handleButtonClick = (button) => {
@@ -55,7 +58,6 @@ export default function MainContent() {
 
             {/* 조건부 렌더링을 사용하여 버튼에 따라 다른 내용 표시 */}
             {selectedButton === "sentiment" && <Sentiment />}
-
             {selectedButton === "follow" && <Follow />}
           </div>
         </div>

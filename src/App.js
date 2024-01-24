@@ -6,12 +6,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginContainer from "./container/LoginContainer";
 import PasswordSearchContainer from "./container/PasswordSearchContainer";
 import SignupContainer from "./container/SignupContainer";
-import SentimentWrite from "./pages/page2/SentimentWrite";
-import SentimentDetail from "./pages/page3/SentimentDetail";
+import SentimentWrite from "./pages/SentimentWrite/SentimentWrite";
+import SentimentDetail from "./pages/SentimentDetail/SentimentDetail";
 import MypageContainer from "./container/MypageContainer";
 import HomeContainer from "./container/HomeContainer";
 import SentimentLeagueContainer from "./container/SentimentLeagueContainer";
 import TopNavSearchContainer from "./container/TopNavSearchContainer";
+import SentimentDetailContainer from "./container/SentimentDetailContainer";
+import BookDetailContainer from "./container/BookDetailContainer";
+import RelatedBookMoreContainer from "./container/RelatedBookMoreContainer";
 import PasswordChangeContainer from "./container/PasswordChangeContainer";
 
 function App() {
@@ -20,18 +23,28 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomeContainer />} />
+          <Route path="/sentiment-league" element={<SentimentLeagueContainer />} />
+          <Route path="/top-nav-search" element={<TopNavSearchContainer />} />
           <Route
             path="/sentiment-league"
             element={<SentimentLeagueContainer />}
           ></Route>
           <Route path="/top-nav-search" element={<TopNavSearchContainer/>}/>
           <Route path="/login" element={<LoginContainer />}></Route>
+          <Route path="/passwordsearch" element={<PasswordSearchContainer />} />
+          <Route path="/signup" element={<SignupContainer />}></Route>
+
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
           <Route path="/detail" element={<SentimentDetail></SentimentDetail>} />
           <Route path="/passwordsearch" element={<PasswordSearchContainer />}/>
           <Route path="/passwordchange" element={<PasswordChangeContainer/>}/>
           <Route path="/signup" element={<SignupContainer />}></Route>
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
+
+          <Route path="/sentiment/:id/:sentiment_title" element={<SentimentDetailContainer />} />
+          <Route path="/book/:content/:book_title" element={<BookDetailContainer />} />
+          <Route path="/:content/related_book_more" element={<RelatedBookMoreContainer />} />
+
         </Routes>
       </BrowserRouter>
     </>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
+import "./passwordSearch.scss"
 import "./PasswordSearch.scss"
 
 import BSL_logo from '../../assets/logos/BSL_logo.svg'
@@ -16,11 +17,10 @@ import notice_2 from '../../assets/notice/이메일을 입력해주세요..svg'
 import notice_3 from '../../assets/notice/계정 정보가 잘못됐습니다..svg'
 
 
-export default function PasswordSearch(props) 
-{
-  console.log(props)
-  const [isEyeOpen,setIsEyeOpen] = useState(false);
-  const [isRemember,setIsRemember] = useState(false);
+export default function PasswordSearch(props) {
+  console.log(props);
+  const [isEyeOpen, setIsEyeOpen] = useState(false);
+  const [isRemember, setIsRemember] = useState(false);
 
   return (
   <div className='bg_shadow'>
@@ -53,7 +53,7 @@ export default function PasswordSearch(props)
               본인 계정의 이메일로 인증번호 6자리를 보내드립니다.
           </div>
         </div>
-        <div className='pw_change_btn'>
+        <div className="pw_change_btn">
           <button>비밀번호 변경</button>
         </div>
       </form>
