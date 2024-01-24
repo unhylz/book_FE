@@ -8,7 +8,6 @@
   //border: 2px dashed green;
   width: 100%;
 
-
   .search-result {
     margin-top: 0;
 
@@ -33,116 +32,36 @@
       margin-top: 30px;
       //border: 2px dashed blue;
     }
+  }
+}
 
-    .related-book-container {
-      //border: 2px dashed brown;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      gap: 150px;
-      margin-top: 30px;
+.more-details {
+  display: flex;
+  justify-content: flex-end;
+  //border: 2px dashed red;
+  border-bottom: 2px solid rgba($black, 0.2);
+  padding-top: 15px;
+  padding-bottom: 30px;
 
-      .related-book-info {
-        //border: 2px dashed blue;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 220px;
+  .more-link {
+    //border: 2px dashed red;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-decoration: none;
+    color: $black;
 
-        .book-image {
-          //border: 2px dashed paleturquoise;
-          width: 220px;
-          height: 330px;
-          object-fit: cover;
-        }
-
-        .none-img-detail-info {
-          //border: 2px dashed orange;
-          width: 100%;
-
-          h3 {
-            //border: 2px dashed green;
-            margin: 0;
-            margin-top: 5px;
-            margin-bottom: 5px;
-            font-size: 18px;
-            font-weight: bold;
-          }
-
-          .more-book-link {
-            text-decoration: none;
-            color: $black;
-          }
-
-          .publish-info {
-            p {
-              //border: 2px dashed red;
-              margin: 0;
-              margin-bottom: 10px;
-              font-size: 13px;
-              font-weight: bold;
-              color: rgba($black, 0.7);
-            }
-          }
-
-          .vote-info {
-            //border: 2px dashed yellowgreen;
-            display: flex;
-            flex-direction: row;
-
-            p {
-              //border: 2px dashed yellowgreen;
-              margin: 0;
-              font-size: 16px;
-              color: rgba($black, 0.7);
-            }
-
-            .vote-avg {
-              color: $green;
-              font-weight: bold;
-            }
-
-            .vote-num {
-              font-size: 13px;
-              display: flex;
-              align-items: center;
-            }
-          }
-        }
-      }
+    h3 {
+      //border: 2px dashed red;
+      margin: 0;
     }
 
-    .more-books {
-      display: flex;
-      justify-content: flex-end;
+    img {
       //border: 2px dashed red;
-      border-bottom: 2px solid rgba($black, 0.2);
-      padding-top: 15px;
-      padding-bottom: 30px;
-
-      .more-book-link {
-        //border: 2px dashed red;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        text-decoration: none;
-        color: $black;
-
-        h3 {
-          //border: 2px dashed red;
-          margin: 0;
-        }
-
-        img {
-          //border: 2px dashed red;
-          width: 30px;
-          height: 30px;
-          margin: 0;
-          padding: 0;
-        }
-      }
+      width: 30px;
+      height: 30px;
+      margin: 0;
+      padding: 0;
     }
   }
 }
