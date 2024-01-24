@@ -15,7 +15,18 @@ import MasterIcon from "../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../assets/tiers/그랜드마스터.svg";
 import "./Sentiment.scss";
 
-function Sentiment() {
+function formatDateTime(dateTimeString) {
+  const dateTime = new Date(dateTimeString);
+  const year = String(dateTime.getFullYear()).slice(-2);
+  const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+  const day = String(dateTime.getDate()).padStart(2, "0");
+  const hours = String(dateTime.getHours()).padStart(2, "0");
+  const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
+}
+
+export default function Sentiment() {
   //const searchResults = sentimentDummy;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -56,7 +67,6 @@ function Sentiment() {
     <div>
       <div className="search-container">
         {/* 검색 결과 리스트 */}
-
         {displayedItems.map((result) => (
           <div key={result.id} className="search-result">
             <div className="info">
@@ -145,16 +155,3 @@ function Sentiment() {
     </div>
   );
 }
-
-function formatDateTime(dateTimeString) {
-  const dateTime = new Date(dateTimeString);
-  const year = String(dateTime.getFullYear()).slice(-2);
-  const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-  const day = String(dateTime.getDate()).padStart(2, "0");
-  const hours = String(dateTime.getHours()).padStart(2, "0");
-  const minutes = String(dateTime.getMinutes()).padStart(2, "0");
-
-  return `${year}/${month}/${day} ${hours}:${minutes}`;
-}
-
-export default Sentiment;
