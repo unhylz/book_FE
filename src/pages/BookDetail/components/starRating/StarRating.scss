@@ -1,0 +1,40 @@
+// StarRating.scss
+@import "../../../lib/scss/BSL.scss";
+
+// StarRating.module.scss
+
+.starRating {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.starContainer {
+  display: flex;
+  align-items: center;
+}
+
+.star {
+  width: 14px; /* Adjust the width to your desired size */
+  margin-right: 2px;
+  display: flex;
+  color: #f8d448;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: red;
+  opacity: 0.7;
+  z-index: 1;
+}
+
+.starContainer:hover .overlay {
+  display: none;
+}

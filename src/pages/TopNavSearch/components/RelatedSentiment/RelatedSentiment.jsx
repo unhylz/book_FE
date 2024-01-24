@@ -1,8 +1,8 @@
-// Sentiment.jsx
-import React, { useState } from "react";
+// RelatedSentiment.jsx
 
+import React from "react";
 import { Link } from "react-router-dom";
-import { sentimentDummy } from "./sentimentDummy";
+import moreIcon from "../../../../assets/icons/moreicon.svg";
 import starIcon from "../../../../assets/icons/star.svg";
 import boockmarkIcon from "../../../../assets/icons/bookmark.svg";
 import commentIcon from "../../../../assets/icons/comment.svg";
@@ -13,7 +13,7 @@ import GoldIcon from "../../../../assets/tiers/골드.svg";
 import DiaIcon from "../../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../assets/tiers/그랜드마스터.svg";
-import "./Sentiment.scss";
+import "./RelatedSentiment.scss";
 
 function formatDateTime(dateTimeString) {
   const dateTime = new Date(dateTimeString);
@@ -26,24 +26,7 @@ function formatDateTime(dateTimeString) {
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
 
-export default function Sentiment() {
-  //const searchResults = sentimentDummy;
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const itemsPerPage = 3; // 한 페이지에 보이는 항목 수
-  const totalItems = sentimentDummy.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  // 현재 페이지에 해당하는 데이터 계산
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const displayedItems = sentimentDummy.slice(startIndex, endIndex);
-
-  // 페이지 번호 클릭 시 해당 페이지로 이동하는 함수
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
+export default function RelatedSentiment({ searchResult, displayedItems }) {
   //티어 아이콘 색상 변경용
   const getTierIcon = (tier) => {
     const tierIcons = {
@@ -64,9 +47,8 @@ export default function Sentiment() {
   };
 
   return (
-    <div>
-      <div className="search-container">
-        {/* 검색 결과 리스트 */}
+    <>
+      <div className="related-sentiment-container">
         {displayedItems.map((result) => (
           <div key={result.id} className="search-result">
             <div className="info">
@@ -75,7 +57,7 @@ export default function Sentiment() {
                 className="book-link"
               >
                 <img
-                  src={`bookcover_dummy/${result.image_file}`}
+                  src={`/bookcover_dummy/${result.image_file}`}
                   alt={result.title}
                 />
               </Link>
@@ -135,23 +117,15 @@ export default function Sentiment() {
           </div>
         ))}
       </div>
-      {/* 페이지 번호 */}
-
-      <div className="pagination-container">
-        <div className="pagination">
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-            (pageNumber) => (
-              <button
-                key={pageNumber}
-                className={pageNumber === currentPage ? "active" : ""}
-                onClick={() => handlePageChange(pageNumber)}
-              >
-                {pageNumber}
-              </button>
-            )
-          )}
-        </div>
+      <div className="more-details">
+        <Link
+          to={`/${searchResult.content}/related_sentiment_more`}
+          className="more-link"
+        >
+          <h3>더보기</h3>
+          <img src={moreIcon} alt="moreIcon" className="more-icon" />
+        </Link>
       </div>
-    </div>
+    </>
   );
 }

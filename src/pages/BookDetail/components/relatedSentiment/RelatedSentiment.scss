@@ -1,29 +1,28 @@
 @import "../../../../lib/scss/BSL.scss";
 
-.search-container {
-  border-top: 1px solid rgba($black, 0.2);
-  display: flex;
-  align-self: flex-start;
-  text-align: left;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-top: 10px;
+.book-related-sentiment-container {
+  //margin-top: 30px;
+  //border: 2px dashed red;
+  margin-top: 0;
 
-  .search-result {
+  .book-search-result {
     display: flex;
-    margin: 10px;
-    //border: 2px dashed red;
+    //border: 2px dashed green;
     width: 100%;
     height: 100%;
     padding-bottom: 20px;
-    border-bottom: 1px solid rgba($black, 0.2);
+    padding-top: 20px;
+    margin: 0;
 
-    .info {
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba($black, 0.2);
+    }
+
+    .book-info {
       //border: 2px dashed blue;
       flex-grow: 1;
-      margin-left: 50px;
       display: flex;
+      margin-left: 10px;
 
       img {
         //border: 1px solid $black; //기본 책표지 이미지에 테두리 삭제 요청
@@ -80,8 +79,10 @@
         }
 
         .additional-info {
+          align-items: center;
           //border: 2px dashed peachpuff;
           display: flex;
+          align-items: center;
           flex-wrap: wrap;
           margin-bottom: 10px;
 
@@ -107,9 +108,9 @@
             margin-right: 20px;
 
             .tier-icon {
-              object-fit: fill;
               width: 12px;
               margin-left: 4px;
+              object-fit: fill;
             }
           }
 
@@ -192,7 +193,7 @@
       padding: 5px;
       align-self: flex-start;
       margin-top: 10px;
-      margin-right: 50px;
+      margin-right: 10px;
 
       .star-icon {
         margin: 0;
@@ -208,33 +209,6 @@
         font-weight: bold;
         font-size: 17px;
         color: $green;
-      }
-    }
-  }
-}
-
-.pagination-container {
-  .pagination {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 50px;
-    margin-right: 10px;
-
-    button {
-      background-color: white;
-      border: none;
-      color: #565656;
-      border-radius: 5px;
-      padding: 10px 15px;
-      cursor: pointer;
-      font-size: 15px;
-      //font-weight: bold;
-
-      &.active {
-        background-color: $green;
-        color: white;
-        cursor: grabbing;
       }
     }
   }

@@ -16,6 +16,8 @@ import SentimentDetailContainer from "./container/SentimentDetailContainer";
 import BookDetailContainer from "./container/BookDetailContainer";
 import RelatedBookMoreContainer from "./container/RelatedBookMoreContainer";
 import PasswordChangeContainer from "./container/PasswordChangeContainer";
+import RelatedSentimentMoreContainer from "./container/RelatedSentimentMoreContainer";
+import RelatedNicknameMoreContainer from "./container/RelatedNicknameMoreContainer";
 
 function App() {
   return (
@@ -41,10 +43,26 @@ function App() {
           <Route path="/signup" element={<SignupContainer />}></Route>
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
 
-          <Route path="/sentiment/:id/:sentiment_title" element={<SentimentDetailContainer />} />
-          <Route path="/book/:content/:book_title" element={<BookDetailContainer />} />
-          <Route path="/:content/related_book_more" element={<RelatedBookMoreContainer />} />
-
+          <Route
+            path="/sentiment/:id/:sentiment_title"
+            element={<SentimentDetailContainer />}
+          />
+          <Route
+            path="/book/:content/:book_title/:id"
+            element={<BookDetailContainer />}
+          ></Route>
+          <Route
+            path="/:content/related_book_more"
+            element={<RelatedBookMoreContainer />}
+          ></Route>
+          <Route
+            path="/:content/related_sentiment_more"
+            element={<RelatedSentimentMoreContainer />}
+          ></Route>
+          <Route
+            path="/:content/related_nickname_more"
+            element={<RelatedNicknameMoreContainer />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </>
