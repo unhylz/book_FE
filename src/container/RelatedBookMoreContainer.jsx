@@ -2,8 +2,6 @@
 import React from "react";
 import RelatedBookMore from "../pages/RelatedBookMore/RelatedBookMore";
 
-function RelatedBookMoreContainer() {
+export default function RelatedBookMoreContainer() {
   return <RelatedBookMore></RelatedBookMore>;
 }
-
-export default RelatedBookMoreContainer;

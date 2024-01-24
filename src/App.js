@@ -15,7 +15,8 @@ import TopNavSearchContainer from "./container/TopNavSearchContainer";
 import SentimentDetailContainer from "./container/SentimentDetailContainer";
 import BookDetailContainer from "./container/BookDetailContainer";
 import RelatedBookMoreContainer from "./container/RelatedBookMoreContainer";
-
+import RelatedSentimentMoreContainer from "./container/RelatedSentimentMoreContainer";
+import RelatedNicknameMoreContainer from "./container/RelatedNicknameMoreContainer";
 
 function App() {
   return (
@@ -47,16 +48,22 @@ function App() {
             element={<SentimentDetailContainer />}
           />
           <Route
-            path="/book/:content/:book_title"
+            path="/book/:content/:book_title/:id"
             element={<BookDetailContainer />}
           ></Route>
           <Route
             path="/:content/related_book_more"
             element={<RelatedBookMoreContainer />}
           ></Route>
-
+          <Route
+            path="/:content/related_sentiment_more"
+            element={<RelatedSentimentMoreContainer />}
+          ></Route>
+          <Route
+            path="/:content/related_nickname_more"
+            element={<RelatedNicknameMoreContainer />}
+          ></Route>
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
-
         </Routes>
       </BrowserRouter>
     </>
