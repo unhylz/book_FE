@@ -1,13 +1,12 @@
-// RelatedBookMore.jsx
+// RelatedNicknameMore.jsx
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
-import RelatedBookResults from "./components/RelatedBookResults";
-import "./RelatedBookMore.scss";
+import "./RelatedNicknameMore.scss";
 
-export default function RelatedBookMore() {
+export default function RelatedNicknameMore() {
   // 선택한 센티먼트 id와 title 변수
   const { content } = useParams();
   const navigate = useNavigate();
@@ -32,14 +31,10 @@ export default function RelatedBookMore() {
 
         {/* 2열 - 중앙 메인 부분 */}
         <div className="center">
-          <div className="results-contents">
-            <div className="results-container">
-              <p className="results">
-                {<strong>{`"${content}"`}</strong>} 관련 서적 검색 결과
-              </p>
-              <RelatedBookResults searchResult={content} />
+          <div className="contents">
+            <div>
+              <p>{<strong>{`"${content}"`}</strong>} 관련 닉네임 검색 결과</p>
             </div>
-            <p>페이지네이션 추가</p>
           </div>
         </div>
 
