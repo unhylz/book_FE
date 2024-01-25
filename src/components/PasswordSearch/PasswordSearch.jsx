@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./passwordSearch.scss"
-import "./PasswordSearch.scss"
 
 import BSL_logo from '../../assets/logos/BSL_logo.svg'
 import findPW_icon from '../../assets/icons/findPW.svg'
