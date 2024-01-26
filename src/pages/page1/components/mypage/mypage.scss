@@ -1,18 +1,38 @@
+@import "../../../../lib/scss/BSL.scss";
+
+
+.mypage-wrapper{
+  display: flex;
+  justify-content: space-around;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
 .mypage-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 1000px;
   width: 100%;
-  height: auto;
+  height: 971px;
   margin: 20px auto;
   padding: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid #000;
   border-radius: 8px;
-  background: #f9f9f9;
+  background: #FFF;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.left,
+  .right {
+    width: 300px;
+    height: 860px;
+    padding-left: 50px;
+    padding-right: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+  }
 .user-profile {
   display: flex;
   width: 100%;
@@ -32,14 +52,43 @@
   .round-image {
     border-radius: 50%;
     overflow: hidden;
-    width: 100px;
-    height: 100px;
+    width: 140px;
+    height: 140px;
     object-fit: cover;
   }
 
+  .edit-button1 {
+    display: flex;
+    width: 50px;
+    height: 18px;
+  }
+
+  .userdata-container {
+    text-align: left;
+    position: relative; 
+  }
+
+  .message-edit {
+    display: flex; 
+    justify-content:space-between; 
+    align-items: center;
+  }
+  .edited-message {
+    width: 473px;
+    height: 33px;
+    background: rgba(52, 52, 52, 0.10);
+  }
+
+  .edit-button2 {
+    color: #343434;
+    text-align: right;
+    right: 0;
+    font-family: Pretendard;
+    position: absolute;
+  }
       .name {
         margin: 10;
-        font-size: 2rem; // 폰트 사이즈 증가
+        font-size: 2rem; 
         color: #343434;
         font-family: Inter;
         font-size: 32px;
@@ -72,11 +121,12 @@
       max-width: 800px;
       margin-bottom: 20px;
     
-      .stat {
+      .stat, like-stat {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 100%;
+      }
         
         
         .number {
@@ -88,7 +138,7 @@
           color: #666;
         }
       }
-    }
+    
     
     .user-posts {
       width: 100%;
@@ -111,6 +161,33 @@
 
         .pagination {
           display: flex;
+          list-style-type: none;
         }
 
+        .follow-button {
+          display: flex;
+          width: 818px;
+          height: 62px;
+          font-size: 22px;
+          justify-content: center;
+          color: #5FCB75;
+          &.following { 
+            background-color: whitesmoke;
+            color: black;
+          }
         
+          &.not-following {
+            background-color: #5FCB75;
+            color: white;
+          }
+        }
+
+        .userDetail-container {
+          display: flex;
+          flex-direction: row;
+          justify-content: center; // 중앙 정렬
+          .detail-item {
+            margin: 0 10px; 
+          }
+        }
+

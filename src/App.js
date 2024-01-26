@@ -12,6 +12,9 @@ import MypageContainer from "./container/MypageContainer";
 import HomeContainer from "./container/HomeContainer";
 import SentimentLeagueContainer from "./container/SentimentLeagueContainer";
 import TopNavSearchContainer from "./container/TopNavSearchContainer";
+import Mypage_followerContainer from "./container/MypageFollowerContainer";
+import NotificationContainer from "./container/notificationContainer"
+import Mypage_followingContainer from "./container/MypageFollowing";
 
 function App() {
   return (
@@ -36,6 +39,11 @@ function App() {
           ></Route>
           <Route path="/signup" element={<SignupContainer />}></Route>
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
+          <Route path="/mypage_follower"
+           element={<Mypage_followerContainer></Mypage_followerContainer>} />
+          <Route path="/mypage_following"
+           element={<Mypage_followingContainer></Mypage_followingContainer>} />
+           <Route path="/notification" element={<NotificationContainer />}></Route>
         </Routes>
       </BrowserRouter>
     </>
