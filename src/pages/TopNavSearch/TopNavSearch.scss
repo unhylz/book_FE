@@ -3,14 +3,65 @@
 .search-contents {
   display: flex;
 
+  justify-content: flex-start;
+  flex-direction: column;
+  //border: 2px dashed green;
+  width: 100%;
+
   .search-result {
     margin-top: 0;
 
     p {
       margin: 0;
-      font-size: 17px;
+
+      font-size: 22px;
       text-align: left;
       color: $black;
+      margin-bottom: 30px;
+    }
+  }
+
+  .search-additional {
+    //border: 2px dashed orange;
+    border-top: 2px solid rgba($black, 0.2);
+    font-weight: bold;
+
+    h2 {
+      padding: 0;
+      margin: 0;
+      margin-top: 30px;
+      //border: 2px dashed blue;
+    }
+  }
+}
+
+.more-details {
+  display: flex;
+  justify-content: flex-end;
+  //border: 2px dashed red;
+  border-bottom: 2px solid rgba($black, 0.2);
+  padding-top: 15px;
+  padding-bottom: 30px;
+
+  .more-link {
+    //border: 2px dashed red;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-decoration: none;
+    color: $black;
+
+    h3 {
+      //border: 2px dashed red;
+      margin: 0;
+    }
+
+    img {
+      //border: 2px dashed red;
+      width: 30px;
+      height: 30px;
+      margin: 0;
+      padding: 0;
     }
   }
 }

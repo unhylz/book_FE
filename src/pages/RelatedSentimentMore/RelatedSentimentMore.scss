@@ -1,0 +1,22 @@
+@import "../../lib/scss/BSL.scss";
+
+.results-contents {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  //border: 2px dashed green;
+  width: 100%;
+
+  .results-container {
+    //border: 2px dashed red;
+    margin-top: 0;
+
+    .results {
+      //border: 2px solid;
+      margin: 0;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+  }
+}

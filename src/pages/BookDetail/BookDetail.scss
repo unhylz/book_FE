@@ -1,0 +1,186 @@
+@import "../../lib/scss/BSL.scss";
+
+.center {
+  //border: 2px dashed orange;
+
+  .book-detail-contents {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border: 1px solid $black;
+    border-radius: 15px;
+    padding: 80px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+
+    .book-detail-container {
+      //border: 2px dashed blue;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+
+      .book-row-container {
+        //border: 2px dashed greenyellow;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        .book-image-container {
+          //border: 2px dashed peru;
+          height: 400px;
+          width: 300px;
+          object-fit: fill;
+
+          .book-image {
+            //border: 2px dashed magenta;
+          }
+        }
+
+        .book-row-column {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          margin-left: 60px;
+          //border: 2px dashed green;
+          width: 100%;
+          height: 400px;
+
+          .book-detail-title {
+            //border: 2px dashed green;
+            margin: 0;
+            font-size: 35px;
+            font-weight: bold;
+            margin-bottom: 50px;
+            margin-top: 20px;
+          }
+
+          .book-detail-info {
+            //border: 2px dashed red;
+            width: 100%;
+            font-size: 17px;
+            color: rgba($black, 0.7);
+            margin-bottom: 35px;
+
+            .dynamic-content {
+              color: $black;
+            }
+          }
+
+          .book-detail-scope {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            //border: 2px dashed blue;
+
+            .book-detail-row {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+
+              .book-detail-column {
+                display: flex;
+                flex-direction: column;
+
+                .book-detail-vote-avg {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  //border: 2px dashed blue;
+                  height: 40px;
+                  .book-scope-title {
+                    font-size: 22px;
+                    color: rgba($black, 0.7);
+                    margin-right: 10px;
+                  }
+
+                  .book-vote {
+                    font-size: 22px;
+                    color: $green;
+                    font-weight: bold;
+                    margin-left: 5px;
+                  }
+
+                  .book-vote-num {
+                    margin-left: 5px;
+                    font-size: 15px;
+                    color: rgba($black, 0.7);
+                  }
+                }
+
+                .book-detail-my-vote {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  height: 40px;
+
+                  .book-scope-title {
+                    font-size: 22px;
+                    color: rgba($black, 0.7);
+                    margin-right: 10px;
+                  }
+
+                  .book-vote {
+                    font-size: 22px;
+                    color: rgba($black, 0.7);
+                    font-weight: bold;
+                    margin-left: 5px;
+                  }
+                }
+              }
+
+              .book-assess-btn {
+                //border: 2px dashed magenta;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: none;
+                border-radius: 5px;
+                background-color: $green;
+                color: white;
+                font-size: 16px;
+                font-weight: bold;
+                width: 145px;
+                height: 40px;
+                margin-right: 0;
+                margin-left: auto;
+
+                .assessment-icon {
+                  height: 25px;
+                  margin-right: 5px;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .book-intro-title {
+        //border: 2px dashed magenta;
+        font-size: 25px;
+        font-weight: bold;
+      }
+
+      .book-intro-detail {
+        //border: 2px dashed magenta;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .book-detail-sentiment {
+    //border: 2px dashed magenta;
+    display: flex;
+    flex-direction: column;
+
+    .book-related-sentiment {
+      font-size: 25px;
+      font-weight: bold;
+      //border: 2px dashed magenta;
+      margin: 0;
+      padding-top: 50px;
+      padding-bottom: 5px;
+    }
+  }
+}
