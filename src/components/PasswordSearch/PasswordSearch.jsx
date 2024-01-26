@@ -4,17 +4,19 @@ import { Link } from "react-router-dom";
 import "./passwordSearch.scss";
 import "./passwordSearch.scss";
 
-import BSL_logo from "../../assets/logos/BSL_logo.svg";
-import findPW_icon from "../../assets/icons/findPW.svg";
-import signup_icon from "../../assets/icons/signup.svg";
-import eye_icon from "../../assets/icons/eye.svg";
-import eye_off_icon from "../../assets/icons/eye_off.svg";
-import cancle_icon from "../../assets/icons/cancle.svg";
-import checkbox_green from "../../assets/icons/checkbox_green.svg";
-import checkbox_black from "../../assets/icons/checkbox_black.svg";
-import notice_1 from "../../assets/notice/비밀번호를 입력해주세요..svg";
-import notice_2 from "../../assets/notice/이메일을 입력해주세요..svg";
-import notice_3 from "../../assets/notice/계정 정보가 잘못됐습니다..svg";
+import "./passwordSearch.scss"
+import BSL_logo from '../../assets/logos/BSL_logo.svg'
+import findPW_icon from '../../assets/icons/findPW.svg'
+import signup_icon from '../../assets/icons/signup.svg'
+import eye_icon from '../../assets/icons/eye.svg'
+import eye_off_icon from '../../assets/icons/eye_off.svg'
+import cancle_icon from '../../assets/icons/cancle.svg'
+import checkbox_green from '../../assets/icons/checkbox_green.svg'
+import checkbox_black from '../../assets/icons/checkbox_black.svg'
+import notice_1 from '../../assets/notice/비밀번호를 입력해주세요..svg'
+import notice_2 from '../../assets/notice/이메일을 입력해주세요..svg'
+import notice_3 from '../../assets/notice/계정 정보가 잘못됐습니다..svg'
+
 
 export default function PasswordSearch(props) {
   console.log(props);
