@@ -1,7 +1,7 @@
 import React,{useState, useRef} from 'react'
 import PasswordChange from '../components/passwordChange/PasswordChange';
 
-export default function PasswordChangeContainer() {
+export default function PasswordChangeContainer(props) {
   
   
   const[pw,setPw] = useState("");
@@ -12,6 +12,12 @@ export default function PasswordChangeContainer() {
   const[pwCheckEye,setPwCheckEye]=useState(true);
   const[pwCheckState,setPwCheckState]=useState(0);
 
+  
+  const onSubmitPwChange = (e)=>{
+    e.preventDefault();
+    props.setState("login");
+  }
+
   const onPwChange = (e)=>{
     setPw(e.target.value)
     //유효성검사
@@ -21,6 +27,7 @@ export default function PasswordChangeContainer() {
   const onPwEyeClick = (e)=>{
     if(pwEye){setPwEye(false)}
     else{setPwEye(true)}
+    console.log("아아아")
   }
 
   const onPwCheckChange = (e)=>{
@@ -40,17 +47,13 @@ export default function PasswordChangeContainer() {
   }
 
 
-
-
   return (
     <PasswordChange
       onPwChange={onPwChange}
       onPwEyeClick={onPwEyeClick}
       onPwCheckChange={onPwCheckChange}
       onPwCheckEyeClick={onPwCheckEyeClick}
-
+      onSubmitPwChange={onSubmitPwChange}
     />
   )
 }
-
-//props.onPwCancleHandler
