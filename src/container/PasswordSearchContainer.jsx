@@ -1,16 +1,34 @@
-import React,{useState, useRef} from 'react'
+import React,{useState, useEffect, useRef} from 'react'
 import PasswordSearch from '../components/passwordSearch/PasswordSearch';
 
-export default function PasswordSearchContainer() {
+export default function PasswordSearchContainer(props) {
   
-  const [isEyeOpen,setIsEyeOpen] = useState(false);
-  const [isRemember,setIsRemember] = useState(false);
-
   const [email,setEmail] = useState("");
-  const [pw,setPw] = useState("");
-  const [remember,setRemember] = useState(false);
-  const [notice,setNotice] = useState(0);
+  const [authnum,setAuthnum] = useState("");
+  const [timer,setTimer] = useState("05:00");
 
+  let sec = 300;
+
+  useEffect(() => {
+    const id = setInterval(async () => {
+      if(sec===0){sec=300}
+      else{sec=sec-1}
+      setTimer(sec2timer(sec)); 
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const sec2timer = (sec)=>{
+    let t_min = Math.floor(sec/60);
+    let t_sec = sec%60;
+    let r_min = "";
+    let r_sec = "";
+    if(t_min<10){r_min = `0${t_min}`}
+    else{r_min = `${t_min}`}
+    if(t_sec<10){r_sec = `0${t_sec}`}
+    else{r_sec = `${t_sec}`}
+    return `${r_min}:${r_sec}`
+  }
 
   const emailInputRef = useRef(null);
   const emailInputFocus = ()=>{
@@ -21,67 +39,46 @@ export default function PasswordSearchContainer() {
     pwInputRef.current.focus();
   }
   
+  const onClickSendBtn = ()=>{
+    //email을 백엔드로 보내는 함수
+  }
+
+  const onClickResendBtn = ()=>{
+    //인증번호 재요청 함수
+  }
 
   const onSubmitHandler = (e)=>{
-    e.preventDefault()
-    console.log("hihihi")
-    
-    if(email===""){
-      setNotice(2);
-      emailInputFocus();
-      
-    }
-    else if(pw===""){
-      setNotice(1);
-      pwInputFocus();
-    }
-    else{
-      //로그인 api 함수 호출
-      console.log(`email:${email}, pw:${pw}, remember:${remember} 로그인 되었습니다.`)
-      let res="err"
-      if(res === "err"){
-        setNotice(3);
-        emailInputFocus();
-      }
-      else{setNotice(0)}
-  }}
+    //인증번호 검증 함수; await
+    e.preventDefault();
+    console.log("인증번호 검사 및 제출합니다.");
+    props.setState("passwordchange");
+
+  }
 
   const onEmailChange = (e)=>{
-      setEmail(e.target.value)
+    setEmail(e.target.value);
   }
 
-  const onPwChange = (e)=>{
-      setPw(e.target.value)
-  }
-  
-  const onEmailCancleHandler = (e)=>{
-    setEmail("");
-    emailInputFocus();
+  const onAuthChange = (e)=>{
+    setAuthnum(e.target.value);
   }
 
-  const onPwCancleHandler = (e)=>{
-    setPw("");
-    pwInputFocus();
-    //console.log("pw_init",pw);
-  }
+
 
 
   return (
     <PasswordSearch
+      email={email}
+      authnum={authnum}
+      timer={timer}
+      onClickSendBtn={onClickSendBtn}
+      onClickResendBtn={onClickResendBtn}
       onSubmitHandler={onSubmitHandler}
       onEmailChange={onEmailChange}
-      onPwChange={onPwChange}
-      onEmailCancleHandler={onEmailCancleHandler}
-      onPwCancleHandler={onPwCancleHandler}
-      notice={notice}
-      pw={pw}
-      email={email}
-      emailInputRef={emailInputRef}
-      emailInputFocus={emailInputFocus}
-      pwInputRef={pwInputRef}
-      pwInputFocus={pwInputFocus}
+      onAuthChange={onAuthChange}
     />
   )
 }
 
 //props.onPwCancleHandler
+

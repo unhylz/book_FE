@@ -2,7 +2,7 @@ import React,{useState, useRef} from 'react'
 import Signup from '../components/signup/Signup';
 import {isEmailDuplication, isAuth, isNickDuplication} from "../modules/api/account"
 
-export default function SignupContainer() {
+export default function SignupContainer(props) {
   
   const [isEyeOpen,setIsEyeOpen] = useState(false);
   const [isRemember,setIsRemember] = useState(false);
@@ -86,7 +86,10 @@ export default function SignupContainer() {
     const nickreg = /^(?=.*[a-zA-Z])(?=.*[ㄱ-ㅎ|ㅏ-ㅣ|가-힣])(?=.*[0-9]).{3,10}$/
     return(nickreg.test(nick))}
 
-
+  const onClickSignupBtn = (e)=>{
+    e.preventDefault();
+    props.setState("login");
+  }
   return (
     <Signup
       onEmailChange={onEmailChange}
@@ -102,6 +105,7 @@ export default function SignupContainer() {
       pw={pw}
       pwCheck={pwCheck}
       nick={nick}
+      onClickSignupBtn={onClickSignupBtn}
     />
   )
 }
