@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import "./passwordSearch.scss";
-import "./passwordSearch.scss";
-
-import "./passwordSearch.scss"
+import "./PasswordSearch.scss"
 import BSL_logo from '../../assets/logos/BSL_logo.svg'
 import findPW_icon from '../../assets/icons/findPW.svg'
 import signup_icon from '../../assets/icons/signup.svg'
@@ -24,57 +21,45 @@ export default function PasswordSearch(props) {
   const [isRemember, setIsRemember] = useState(false);
 
   return (
-    <div className="bg_shadow">
-      <div className="pwsearch_popup">
-        <Link to="/">
-          <img className="logo" src={BSL_logo}></img>
-        </Link>
-        <h2>비밀번호 찾기</h2>
-        <form>
-          <div className="input_form">
-            <div className="input_line">
-              <div className={`email_input_${props.notice}`}>
-                <input
-                  ref={props.emailInputRef}
-                  placeholder="이메일"
-                  onChange={props.onEmailChange}
-                  value={props.email}
-                />
-              </div>
-              <div className="send_btn">번호받기</div>
+  <div className='bg_shadow'>
+    <div className='pwsearch_popup'>
+      <Link to="/"><img className='logo' src={BSL_logo}></img></Link>
+      <div className="title">비밀번호 찾기</div>
+      <form>
+        <div className='input_form'>
+          <div className='input_line'>
+            <div className={`email_input_0`}>
+              <input ref={props.emailInputRef} placeholder='이메일' onChange={props.onEmailChange} value={props.email}/>
             </div>
-            <div className="input_notice_1">인증번호를 보냈습니다!</div>
-            <div className="input_notice_2">이메일을 입력해주세요.</div>
-            <div className="input_notice_3">
-              등록되지 않거나 형식에 맞지 않는 이메일입니다.
-            </div>
+            <div className="send_btn" onClick={props.onClickSendBtn}>번호받기</div>
           </div>
-          <div className="auth_form">
-            <div className="auth_line">
-              <div className={`auth_input`}>
-                <input
-                  ref={props.emailInputRef}
-                  placeholder="인증번호"
-                  onChange={props.onEmailChange}
-                  value={props.email}
-                />
-              </div>
-              <div className="resend">재전송</div>
-              <div className="timer">props.time</div>
-            </div>
-            <div className="notice">인증번호가 올바르지 않습니다!</div>
-            <div className="explain">
-              본인 계정의 이메일을 입력하세요.
-              <br />
+          <div className="input_notices">
+            <div className='input_notice_1'>인증번호를 보냈습니다!</div>
+            {/* <div className='input_notice_2'>이메일을 입력해주세요.</div>
+            <div className='input_notice_3'>등록되지 않거나 형식에 맞지 않는 이메일입니다.</div> */}
+          </div>
+        </div>
+        <div className='auth_form'>
+        <div className='auth_line'>
+          <div className={`auth_input`}>
+            <input type={'number'} ref={props.emailInputRef} placeholder='인증번호' onChange={props.onAuthChange} value={props.authnum}/>
+          </div>
+          <div className='resend' onClick={props.onClickResendBtn}>재전송</div>
+          <div className='timer'>{props.timer}</div>
+          </div>
+          <div className="notices">
+            <div className='notice'>인증번호가 올바르지 않습니다!</div>
+          </div>
+          <div className='explain'>
+              본인 계정의 이메일을 입력하세요.<br/> 
               본인 계정의 이메일로 인증번호 6자리를 보내드립니다.
-            </div>
           </div>
-
-          <div className="pw_change_btn">
-            <button>비밀번호 변경</button>
-          </div>
-        </form>
-      </div>
+        </div>
+        <div className="pw_change_btn">
+          <button onClick={props.onSubmitHandler}>비밀번호 변경</button>
+        </div>
+      </form>
     </div>
-  );
+  </div>
+  )
 }
