@@ -18,6 +18,7 @@ import RelatedBookMoreContainer from "./container/RelatedBookMoreContainer";
 import PasswordChangeContainer from "./container/PasswordChangeContainer";
 import RelatedSentimentMoreContainer from "./container/RelatedSentimentMoreContainer";
 import RelatedNicknameMoreContainer from "./container/RelatedNicknameMoreContainer";
+import AcountModalContainer from "./container/AcountModalContainer";
 
 function App() {
   return (
@@ -35,6 +36,8 @@ function App() {
           <Route path="/login" element={<LoginContainer />}></Route>
           <Route path="/passwordsearch" element={<PasswordSearchContainer />} />
           <Route path="/signup" element={<SignupContainer />}></Route>
+          <Route path="/modal" element={<AcountModalContainer state={"login"}/>}></Route>
+          
 
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
           <Route path="/detail" element={<SentimentDetail></SentimentDetail>} />
