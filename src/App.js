@@ -18,6 +18,9 @@ import RelatedBookMoreContainer from "./container/RelatedBookMoreContainer";
 import PasswordChangeContainer from "./container/PasswordChangeContainer";
 import RelatedSentimentMoreContainer from "./container/RelatedSentimentMoreContainer";
 import RelatedNicknameMoreContainer from "./container/RelatedNicknameMoreContainer";
+import Mypage_followerContainer from "./container/MypageFollowerContainer";
+import NotificationContainer from "./container/notificationContainer"
+import Mypage_followingContainer from "./container/MypageFollowing";
 import AcountModalContainer from "./container/AcountModalContainer";
 
 function App() {
@@ -66,6 +69,11 @@ function App() {
             path="/:content/related_nickname_more"
             element={<RelatedNicknameMoreContainer />}
           ></Route>
+          <Route path="/mypage_follower"
+           element={<Mypage_followerContainer></Mypage_followerContainer>} />
+          <Route path="/mypage_following"
+           element={<Mypage_followingContainer></Mypage_followingContainer>} />
+           <Route path="/notification" element={<NotificationContainer />}></Route>
         </Routes>
       </BrowserRouter>
     </>
