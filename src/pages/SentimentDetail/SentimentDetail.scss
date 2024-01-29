@@ -68,11 +68,20 @@
                 }
                 .nick-date-box {
                     margin-left: 5px;
-                    .nickname{
-                        font-size: 20px;
-                        display: flex;
-                        flex-direction: column;
-                    }
+										.nickname-tier {
+											display: flex;
+											flex-direction: row;
+											.nickname{
+													font-size: 20px;
+													display: flex;
+													flex-direction: column;
+											}
+											.tier-icon {
+												object-fit: fill;
+												width: 12px;
+												margin-left: 4px;
+											}
+										}
                     .date {
                         display: flex;
                         flex-direction: column;
@@ -114,3 +123,23 @@
 }
 
 
+#detail-bottom {
+  .update-delete-box {
+		display: flex;
+		flex-direction: row;
+		margin-left: 80%;
+	}
+	.bottom-button-box {
+		display: flex;
+		flex-direction: row;
+		.like-box {
+			display: flex;
+			flex-direction: row;
+		}
+		.recommand-box {
+			display: flex;
+			flex-direction: row;
+			margin-left: 70%;
+		}
+	}
+}

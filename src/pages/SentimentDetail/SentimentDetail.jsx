@@ -3,19 +3,34 @@
 // 이 파일이 홈페이지에서 센티먼트 항목 클릭하면 연결 돼요!
 // 센티먼트 페이지 만들고 나중에 여기로 옮기면 될 것 같아요:)
 import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
+import CommentItem from "./Comment/Comment";
+import SentimentDetailDummy from "./SentimentDetailDummy";
+import likeBlackIcon from "../../assets/icons/like_black.png";
+import bookmarkBlackIcon from "../../assets/icons/bookmark_black.png";
+import editIcon from "../../assets/icons/edit_Img.png";
+import deleteIcon from "../../assets/icons/delete_Img.png";
+import userImg from "../../assets/icons/user_Img.png";
+import starIcon from "../../assets/icons/star.svg";
+import bookmarkIcon from "../../assets/icons/bookmark.svg";
+import commentIcon from "../../assets/icons/comment.svg";
+import likeIcon from "../../assets/icons/like.svg";
+import RookieIcon from "../../assets/tiers/루키.svg";
+import SilverIcon from "../../assets/tiers/실버.svg";
+import GoldIcon from "../../assets/tiers/골드.svg";
+import DiaIcon from "../../assets/tiers/다이아.svg";
+import MasterIcon from "../../assets/tiers/마스터.svg";
+import GrandMasterIcon from "../../assets/tiers/그랜드마스터.svg";
 import "./SentimentDetail.scss";
-import InsertImg from "./insert_Img.png";
-import BookImg from "./book_image_1.svg";
 
 export default function SentimentDetail() {
   // 선택한 센티먼트 id와 title 변수
   const { content, sentiment_title } = useParams();
   console.log("검색어가 있으면 ", content);
+  console.log(sentiment_title);
 
   const navigate = useNavigate();
 
@@ -23,15 +38,23 @@ export default function SentimentDetail() {
     navigate("/");
   };
 
-  const sentimentData = {
-    sort: 'Sentiment',
-    title: '플러터 프로그래밍 책 후기',
-    book: 'Must Have 코드팩토리의 플러터 프로그래밍',
-    author: '(최지호/골든래빗)',
-    name: 'Paul',
-    date: '23/12/18(월요일) * 15:05',
-    text: '플러터 프로그래밍을 인강이 아닌 책으로 배워봤다.\n이 책에서는 플러터를 포함하여 Dart언어와 Firebase를 추가로 알려준다.\n640페이지의 많은 양으로 자세히 배울 수 있다.',
-    star: '★★★★★ 5.0',
+  //티어 아이콘 색상 변경용
+  const getTierIcon = (tier) => {
+    const tierIcons = {
+      루키: RookieIcon,
+      실버: SilverIcon,
+      골드: GoldIcon,
+      다이아: DiaIcon,
+      마스터: MasterIcon,
+      그랜드마스터: GrandMasterIcon,
+    };
+
+    const DefaultIcon = () => null;
+    const formattedTier = tier.toLowerCase().replace(/\s/g, "");
+
+    const SelectedIcon = tierIcons[formattedTier] || DefaultIcon;
+
+    return SelectedIcon;
   };
 
   // 페이지 이동시 스크롤바 위치 최상단으로 가도록
@@ -41,39 +64,51 @@ export default function SentimentDetail() {
 
 
   //상단 컴포넌트
-  const DetailTop = () => {
+  const DetailTop = ({Sentiments}) => {
+
+    const { id } = useParams(); 
+
+    console.log(id);
+    //console.log(content.title);
+    //console.log(SentimentDetailDummy[id-1].title);
 
 
   return (
     <div id="detail-top">
       <div className="top-header">
         <div className="book-info-box">
-          <div className="sort">{sentimentData.sort}</div>
-          <div className="title">{sentimentData.title}</div>
+          <div className="sort">Sentiment</div>
+          <div className="title">{SentimentDetailDummy[id-1].title}</div>
           <div className="title-author-box">
-            <div className="book-title">{sentimentData.book}</div>
-            <div className="book-author">{sentimentData.author}</div>
+            <div className="book-title">{SentimentDetailDummy[id-1].book}</div>
+            <div className="book-author">{SentimentDetailDummy[id-1].author}</div>
           </div>
           <div className="writer-info-box">
-            <FaUserCircle className="profile-image"/>
+            <img src={userImg} alt="userImg" className="profile-image" />
             <div className="nick-date-box">
-              <div className="nickname">Paul</div>
-              <div className="date">2023/12/18(월요일) 15:05</div>
+              <div className="nickname-tier">
+                <div className="nickname">{SentimentDetailDummy[id-1].name}</div>
+                <img
+                  src={getTierIcon(SentimentDetailDummy[id-1].tier)}
+                  alt="tier"
+                  className="tier-icon"
+                />
+              </div>
+              <div className="date">{SentimentDetailDummy[id-1].date}</div>
             </div>
           </div>
         </div>
         <div className="book-image-box">
           <div className="image">
-            <img src = {BookImg} alt="Book Cover"/>
-            <div className="rating">★★★★★ 5.0</div>
+            <img src = {`bookcover_dummy/${SentimentDetailDummy[id-1].imagefile}`} alt="Book Cover"/>
+            <div className="rating">{SentimentDetailDummy[id-1].star}</div>
           </div>
         </div>
       </div>
 
       <div className="detail-top-main">
-      <img className="detail-main-image" style={{width:"1100px", height:"1100px"}} src={InsertImg} alt="책 내용 사진" />
-        <div className="detail-main-text">{sentimentData.text}</div>
-        
+      <img className="detail-main-image" style={{width:"1100px", height:"1100px"}} src={`./${SentimentDetailDummy[id-1].insertImg}`} alt="책 내용 사진" />
+        <div className="detail-main-text">{SentimentDetailDummy[id-1].text}</div>
       </div>
     </div>
   );
@@ -87,42 +122,37 @@ const DetailBottom = () => {
   return (
     <div id='detail-bottom'>
       <div className="update-delete-box">
-        <div className="update-button">{`수정하기`}</div>
-        <div className="delete-button">{`삭제하기`}</div>
+        <div className="update-button">
+          <img src={editIcon} style={{width:"20px"}} alt="editIcon" className="edit-icon"/>
+          {`수정하기`}
+        </div>
+        <div className="delete-button">
+          <img src={deleteIcon} style={{width:"20px"}} alt="deleteIcon" className="delete-icon"/>
+          {`삭제하기`}</div>
       </div>
       <div className="bottom-button-box">
         <div className="like-box">
-          <div className="like">{`좋아요 ${12}`}</div>
-          <div className="comment">{`댓글 ${3}`}</div>
-          <div className="scrap">{`스크랩 ${0}`}</div>
+          <div className="like">
+            <img src={likeIcon} alt="like" className="like-icon" />
+            {`${12}`}
+          </div>
+          <div className="comment">
+            <img src={commentIcon} alt="comment" className="comment-icon"/>
+            {`${3}`}
+          </div>
+          <div className="scrap">
+            <img src={bookmarkIcon} alt="bookmark" className="bookmark-icon"/>
+            {`${0}`}
+          </div>
         </div>
         <div className="recommand-box">
-          <div className="recommand-button">{`추천하기`}</div>
-          <div className="scrap-button">{`스크랩`}</div>
-        </div>
-      </div>
-      <div className="comment-box">
-        <div className="comment-container">
-          <div className='list-top'>
-            <div className='profile-box'>
-              <FaUserCircle className="userimg"/>
-            </div>
-            <div className='info-box'>
-              <div className='nickname'>{`닉네임 A`}</div>
-              <div className='tier'></div>
-              <div className='time'>{`2023/12/18 15:10`}</div>
-            </div>
+          <div className="recommand-button">
+            <img src={likeBlackIcon} style={{width:"20px"}} alt="likeBlack" className="like-black-icon"/>
+            {`추천하기`}
           </div>
-          <div className='comment-main'>
-            <div className='content'> {`플러터 어렵나요?`} </div>
-          </div>
-      </div>
-        <div className="divider"></div>
-        <div className="input-container">
-            <textarea className="textarea" placeholder="댓글을 작성하세요"></textarea>
-            <div className="comment-button-box">
-              <div className="disable-button">{'작성하기'}</div>
-            </div>
+          <div className="scrap-button">
+            <img src={bookmarkBlackIcon} style={{width:"20px"}} alt="bookmarkBlack" className="bookmark-black-icon" />
+            {`스크랩`}</div>
         </div>
       </div>
     </div>
@@ -147,7 +177,7 @@ const DetailBottom = () => {
 
             <DetailTop />
             <DetailBottom />
-
+            <CommentItem />
           </div>
         </div>
 
