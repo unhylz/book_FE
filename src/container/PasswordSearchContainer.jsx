@@ -1,5 +1,5 @@
-import React,{useState, useEffect, useRef} from 'react'
-import PasswordSearch from '../components/passwordSearch/PasswordSearch';
+import React,{useState, useRef, useEffect} from 'react'
+import PasswordSearch from '../components/PasswordSearch/PasswordSearch';
 
 export default function PasswordSearchContainer(props) {
   

@@ -73,7 +73,8 @@ function App() {
            element={<Mypage_followerContainer></Mypage_followerContainer>} />
           <Route path="/mypage_following"
            element={<Mypage_followingContainer></Mypage_followingContainer>} />
-           <Route path="/notification" element={<NotificationContainer />}></Route>
+           <Route path="/notification" 
+           element={<NotificationContainer />}></Route>
         </Routes>
       </BrowserRouter>
     </>

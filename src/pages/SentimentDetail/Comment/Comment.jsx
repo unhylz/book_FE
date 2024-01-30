@@ -1,5 +1,6 @@
 import './Comment.scss';
 import { FaUserCircle } from "react-icons/fa";
+import Notification from '../../page1/notification/notification';
 
 
 
@@ -18,9 +19,7 @@ export default function CommentItem() {
                 </div>
             </div>
             <div className='comment-main'>
-                <div className='content'>
-                    {`플러터 어렵나요?`}
-                </div>
+            <div className='content'>{Notification.content}</div>
             </div>
         </div>
     )
