@@ -52,7 +52,7 @@ export default function CommentItem() {
 						</div>
 					</div>
 					<div className='comment-main'>
-					<div className='content'>{Notification.content}</div>
+					<div className='content'>{result.content}</div>
 					</div>
 				</div>
 			))}

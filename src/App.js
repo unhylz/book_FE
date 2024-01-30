@@ -7,7 +7,6 @@ import LoginContainer from "./container/LoginContainer";
 import PasswordSearchContainer from "./container/PasswordSearchContainer";
 import SignupContainer from "./container/SignupContainer";
 import SentimentWrite from "./pages/SentimentWrite/SentimentWrite";
-import SentimentDetail from "./pages/SentimentDetail/SentimentDetail";
 import MypageContainer from "./container/MypageContainer";
 import HomeContainer from "./container/HomeContainer";
 import SentimentLeagueContainer from "./container/SentimentLeagueContainer";
@@ -43,9 +42,7 @@ function App() {
           
 
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
-          <Route path="/passwordsearch" element={<PasswordSearchContainer />}/>
           <Route path="/passwordchange" element={<PasswordChangeContainer/>}/>
-          <Route path="/signup" element={<SignupContainer />}></Route>
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
 
           <Route
