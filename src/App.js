@@ -43,7 +43,6 @@ function App() {
           
 
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
-          <Route path="/detail" element={<SentimentDetail></SentimentDetail>} />
           <Route path="/passwordsearch" element={<PasswordSearchContainer />}/>
           <Route path="/passwordchange" element={<PasswordChangeContainer/>}/>
           <Route path="/signup" element={<SignupContainer />}></Route>
