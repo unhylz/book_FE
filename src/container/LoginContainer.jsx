@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import Login from "../components/login/Login";
+import { isLoginTrue } from "../modules/api/account";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginContainer(props) {
   const [isEyeOpen, setIsEyeOpen] = useState(false);
@@ -9,6 +11,8 @@ export default function LoginContainer(props) {
   const [pw, setPw] = useState("");
   const [remember, setRemember] = useState(false);
   const [notice, setNotice] = useState(0);
+
+  const navigate = useNavigate()
 
   const emailInputRef = useRef(null);
   const emailInputFocus = () => {
@@ -34,12 +38,13 @@ export default function LoginContainer(props) {
       console.log(
         `email:${email}, pw:${pw}, remember:${remember} 로그인 되었습니다.`
       );
-      let res = "err";
-      if (res === "err") {
+      let res = isLoginTrue(email,pw)
+      if (res) {
+        setNotice(0);
+        navigate("/")
+      } else {
         setNotice(3);
         emailInputFocus();
-      } else {
-        setNotice(0);
       }
     }
   };
