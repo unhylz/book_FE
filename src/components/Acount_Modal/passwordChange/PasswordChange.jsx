@@ -79,7 +79,7 @@ export default function PasswordChange(props)
         8~16자의 영문 대/소문자, 숫자, 특수문자를 사용해주세요.<br/>
         새 비밀번호를 등록하여 비밀번호를 재설정 합니다.
         </div>
-          <button className='check_btn' onClick={props.onSubmitPwChange}>확인</button>
+        <button className='check_btn'>확인</button>
       </form>
     </div>  
   </div>

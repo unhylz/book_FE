@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Login from "../components/login/Login";
 
-export default function LoginContainer() {
+export default function LoginContainer(props) {
   const [isEyeOpen, setIsEyeOpen] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
 
@@ -63,6 +63,16 @@ export default function LoginContainer() {
     //console.log("pw_init",pw);
   };
 
+  const onClickPwSearchBtn = (e)=>{
+    props.setState("passwordsearch")
+    console.log("onClickPwSearchBtn")
+  }
+
+  const onClickSignupBtn = (e)=>{
+    props.setState("signup")
+    console.log("onClickSignupBtns")
+  }
+
   return (
     <Login
       onSubmitHandler={onSubmitHandler}
@@ -77,6 +87,8 @@ export default function LoginContainer() {
       emailInputFocus={emailInputFocus}
       pwInputRef={pwInputRef}
       pwInputFocus={pwInputFocus}
+      onClickPwSearchBtn={onClickPwSearchBtn}
+      onClickSignupBtn={onClickSignupBtn}
     />
   );
 }

@@ -21,6 +21,7 @@ import RelatedNicknameMoreContainer from "./container/RelatedNicknameMoreContain
 import Mypage_followerContainer from "./container/MypageFollowerContainer";
 import NotificationContainer from "./container/notificationContainer"
 import Mypage_followingContainer from "./container/MypageFollowing";
+import AcountModalContainer from "./container/AcountModalContainer";
 
 function App() {
   return (
@@ -38,6 +39,8 @@ function App() {
           <Route path="/login" element={<LoginContainer />}></Route>
           <Route path="/passwordsearch" element={<PasswordSearchContainer />} />
           <Route path="/signup" element={<SignupContainer />}></Route>
+          <Route path="/modal" element={<AcountModalContainer state={"login"}/>}></Route>
+          
 
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
           <Route path="/detail" element={<SentimentDetail></SentimentDetail>} />
