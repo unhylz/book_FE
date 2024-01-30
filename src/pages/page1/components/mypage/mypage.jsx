@@ -56,10 +56,10 @@ function MyPage() {
           {currentPage === 1 && (
             <>
               <UserProfile userData={userData} />
-              <UserStats userData={userData} />
               <button className={`follow-button ${isFollowing ? 'following' : 'not-following'}`} onClick={toggleFollow}>
                 {isFollowing ? "언팔로우" : "팔로우"}
               </button>
+              <UserStats userData={userData} />
             </>
           )}  
           <UserPosts currentPosts={currentPosts} />
