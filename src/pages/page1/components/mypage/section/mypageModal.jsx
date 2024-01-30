@@ -1,70 +1,34 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+import React, { useState } from 'react';
+import "./mypageModal.scss"
 
-function MypageModal() {
-  const [show, setShow] = useState(false);
-  const [message, setMessage] = useState(''); // 메시지 상태 초기화
-  const [tempMessage, setTempMessage] = useState(''); // 임시 메시지 상태
+function MypageModal({ isOpen, onClose, onSubmit }) {
+  const [inputValue, setInputValue] = useState('');
 
-  const handleClose = () => {
-    setShow(false);
-    setTempMessage(message); // 모달을 닫을 때 임시 메시지를 현재 메시지로 리셋
-  }
-  
-  const handleShow = () => {
-    setShow(true);
-    setTempMessage(message); // 모달을 열 때 임시 메시지를 현재 메시지로 설정
-  }
-
-  const handleSaveChanges = () => {
-    if (tempMessage.length <= 40) {
-        setMessage(tempMessage); // 부모 컴포넌트의 setMessage 함수를 호출
-        alert('Message updated: ' + tempMessage);
-        handleClose(); // 모달 닫기
-      } else {
-        alert('Message should be 40 characters or less.'); // 메시지 길이 검증
-      }
-  }
-
-  const handleInputChange = (e) => {
-    setTempMessage(e.target.value); // 입력 필드 값 변경 시 임시 메시지 업데이트
-  }
+  const handleSubmit = () => {
+    if (inputValue.length <= 40) {
+      onSubmit(inputValue);
+      onClose();
+    } else {
+      alert('입력은 40자 이내로 제한됩니다.');
+    }
+  };
 
   return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </Button>
-
-      <Modal show={show} onHide={handleClose} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group>
-              <Form.Label>자기소개 (40자 이내)</Form.Label>
-              <Form.Control
-                type="text"
-                value={tempMessage}
-                onChange={handleInputChange}
-                maxLength="40"
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSaveChanges}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    isOpen && (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h2>메시지 수정</h2>
+          <input
+            type="text"
+            placeholder="40자 이내로 입력하세요"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <button onClick={handleSubmit}>확인</button>
+          <button onClick={onClose}>취소</button>
+        </div>
+      </div>
+    )
   );
 }
 

@@ -7,6 +7,7 @@ import GoldIcon from "../../../assets/tiers/골드.svg";
 import DiaIcon from "../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../assets/tiers/그랜드마스터.svg";
+import Notification from '../../page1/notification/notification';
 
 
 
@@ -51,7 +52,7 @@ export default function CommentItem() {
 						</div>
 					</div>
 					<div className='comment-main'>
-						<div className='content'>{result.content}</div>
+					<div className='content'>{Notification.content}</div>
 					</div>
 				</div>
 			))}
