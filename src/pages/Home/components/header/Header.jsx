@@ -1,16 +1,26 @@
 // Header.jsx
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import BSL_logo from "../../../../assets/logos/BSL_logo.svg";
 import topSearch from "../../../../assets/icons/topSearch.svg";
 import leagueIcon from "../../../../assets/icons/league.svg";
 import writeIcon from "../../../../assets/icons/write.svg";
+import notificationIcon from "../../../../assets/icons/notification.svg";
+import { userDummy } from "./userDummy.js";
+//import LoginContext from "../../../../modules/api/login_context";
 import "./Header.scss";
 
-export default function Header({ onLogoClick, defaultSearchContent }) {
+export default function Header({
+  onLogoClick,
+  defaultSearchContent,
+  setModalState,
+}) {
   const [content, setContent] = useState(defaultSearchContent || "");
   const navigate = useNavigate();
   const nowContent = useRef();
+  const { userName, image } = userDummy[0];
+  //const { isLoggedIn } = useContext(LoginContext); // 로그인 상태 컨텍스트 사용
+  const isLoggedIn = true;
 
   const handleLogoClick = () => {
     // 로고 클릭 시 홈으로 이동하면서 sentiment-btn이 선택된 상태로 변경
@@ -27,12 +37,22 @@ export default function Header({ onLogoClick, defaultSearchContent }) {
     navigate("/write");
   };
 
+  const handleNotificationClick = () => {
+    navigate("/notification");
+  };
+
+  const handleMypageClick = () => {
+    navigate("/mypage");
+  };
+
   const handleLoginClick = () => {
-    navigate("/login");
+    //navigate("/login");
+    setModalState("login");
   };
 
   const handleSignupClick = () => {
-    navigate("/signup");
+    //navigate("/signup");
+    setModalState("signup");
   };
 
   const handleSearchButtonClick = () => {
@@ -91,6 +111,8 @@ export default function Header({ onLogoClick, defaultSearchContent }) {
         />
       </div>
       {/* 로그인, 회원가입 버튼 등 */}
+
+      {/* isLoggedIn && <div>로그인 되었습니다.</div> */}
       <div className="buttons">
         <button className="league-btn" onClick={handleLeagueClick}>
           <img src={leagueIcon} alt="League" className="league-icon" />
@@ -100,12 +122,44 @@ export default function Header({ onLogoClick, defaultSearchContent }) {
           <img src={writeIcon} alt="Write" className="write-icon" />
           Write
         </button>
-        <button className="login-btn" onClick={handleLoginClick}>
-          로그인
-        </button>
-        <button className="signup-btn" onClick={handleSignupClick}>
-          회원가입
-        </button>
+
+        {!isLoggedIn && (
+          <>
+            <button className="login-btn" onClick={handleLoginClick}>
+              로그인
+            </button>
+            <button className="signup-btn" onClick={handleSignupClick}>
+              회원가입
+            </button>
+          </>
+        )}
+        {isLoggedIn && (
+          <>
+            <button
+              className="notification-btn"
+              onClick={handleNotificationClick}
+            >
+              <img
+                src={notificationIcon}
+                alt="Notification"
+                className="notification-icon"
+              />
+              Notification
+            </button>
+            <button className="mypage-btn" onClick={handleMypageClick}>
+              <div className="icon-container">
+                <div className="image-container">
+                  <img
+                    src={`/user_image_dummy/${image}`}
+                    alt="MyPage"
+                    className="mypage-icon"
+                  />
+                </div>
+              </div>
+              {userName}
+            </button>
+          </>
+        )}
       </div>
     </header>
   );

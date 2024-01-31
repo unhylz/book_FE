@@ -1,56 +1,122 @@
 // RelatedSentimentResults.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { bookDummy } from "../../TopNavSearch/bookDummy";
+import { sentimentDummy } from "../../Home/components/sentiment/sentimentDummy.js";
+import starIcon from "../../../assets/icons/star.svg";
+import boockmarkIcon from "../../../assets/icons/bookmark.svg";
+import commentIcon from "../../../assets/icons/comment.svg";
+import likeIcon from "../../../assets/icons/like.svg";
+import RookieIcon from "../../../assets/tiers/루키.svg";
+import SilverIcon from "../../../assets/tiers/실버.svg";
+import GoldIcon from "../../../assets/tiers/골드.svg";
+import DiaIcon from "../../../assets/tiers/다이아.svg";
+import MasterIcon from "../../../assets/tiers/마스터.svg";
+import GrandMasterIcon from "../../../assets/tiers/그랜드마스터.svg";
 import "./RelatedSentimentResults.scss";
 
+function formatDateTime(dateTimeString) {
+  const dateTime = new Date(dateTimeString);
+  const year = String(dateTime.getFullYear()).slice(-2);
+  const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+  const day = String(dateTime.getDate()).padStart(2, "0");
+  const hours = String(dateTime.getHours()).padStart(2, "0");
+  const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
+}
+
 export default function RelatedSentimentResults({ searchResult }) {
-  const displayedItems = bookDummy.slice(0, 8);
+  const displayedItems = sentimentDummy.slice(30, 36);
+
+  //티어 아이콘 색상 변경용
+  const getTierIcon = (tier) => {
+    const tierIcons = {
+      루키: RookieIcon,
+      실버: SilverIcon,
+      골드: GoldIcon,
+      다이아: DiaIcon,
+      마스터: MasterIcon,
+      그랜드마스터: GrandMasterIcon,
+    };
+
+    const DefaultIcon = () => null;
+    const formattedTier = tier.toLowerCase().replace(/\s/g, "");
+
+    const SelectedIcon = tierIcons[formattedTier] || DefaultIcon;
+
+    return SelectedIcon;
+  };
 
   return (
     <>
-      <div className="related-book-results">
-        {displayedItems &&
-          Array.isArray(displayedItems) &&
-          displayedItems.length > 0 &&
-          displayedItems.map((result) => (
-            <div key={result.id} className="search-result">
-              <div className="related-book-info">
-                <Link
-                  to={{
-                    pathname: `/book/${searchResult}/${result.book_title}`,
-                    state: { bookInfo: result }, // 책 정보를 상태로 전달
-                  }}
-                  className="more-book-link"
-                >
-                  <img
-                    src={`/bookcover_dummy/${result.image_file}`}
-                    alt={result.title}
-                    className="book-image"
-                  />
-                </Link>
-                <div className="none-img-detail-info">
+      <div className="related-sentiment-results">
+        {displayedItems.map((result) => (
+          <div key={result.id} className="related-sentiment-search-result">
+            <div className="info">
+              <Link
+                to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                className="book-link"
+              >
+                <img
+                  src={`/bookcover_dummy/${result.image_file}`}
+                  alt={result.title}
+                />
+              </Link>
+              <div className="none-img">
+                <div className="detail-info">
                   <Link
-                    to={`/book/${searchResult}/${result.book_title}`}
-                    className="more-book-link"
+                    to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                    className="book-link"
                   >
-                    <h3>{result.book_title}</h3>
+                    <h3>{result.sentiment_title}</h3>
                   </Link>
-                  <div className="publish-info">
-                    <p>
-                      {result.publish_year}년 | {result.author} |{" "}
-                      {result.publisher}
-                    </p>
+                  <p>
+                    <strong>{result.book_title}</strong> ({result.author}/
+                    {result.publisher})
+                  </p>
+                </div>
+                <div className="additional-info">
+                  <div className="nickname">
+                    <p>닉네임: {result.nickname} </p>
                   </div>
-                  <div className="vote-info">
-                    <p>평균평점: </p>
-                    <p className="vote-avg">{result.vote_avg}</p>
-                    <p className="vote-num">({result.vote}명 참여)</p>
+                  <div className="tier">
+                    <p>티어: </p>
+                    <img
+                      src={getTierIcon(result.tier)}
+                      alt="result.tier"
+                      className="tier-icon"
+                    />
                   </div>
+                  <div className="likes">
+                    <img src={likeIcon} alt="like" className="like-icon" />
+                    <p>{result.likes}</p>
+                  </div>
+                  <div className="comments">
+                    <img
+                      src={commentIcon}
+                      alt="comment"
+                      className="comment-icon"
+                    />
+                    <p>{result.comments}</p>
+                  </div>
+                  <div className="bookmarks">
+                    <img
+                      src={boockmarkIcon}
+                      alt="bookmark"
+                      className="bookmark-icon"
+                    />
+                    <p>{result.bookmarks}</p>
+                  </div>
+                  <p className="datetime">{formatDateTime(result.datetime)}</p>
                 </div>
               </div>
             </div>
-          ))}
+            <div className="rating-info">
+              <img src={starIcon} alt="star" className="star-icon" />
+              <p>{result.rating.toFixed(1)}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </>
   );

@@ -1,87 +1,112 @@
 import React,{useState, useRef} from 'react'
 import Signup from '../components/signup/Signup';
+import {isEmailDuplication, isAuth, isNickDuplication} from "../modules/api/account"
 
-export default function SignupContainer() {
+export default function SignupContainer(props) {
   
   const [isEyeOpen,setIsEyeOpen] = useState(false);
   const [isRemember,setIsRemember] = useState(false);
 
   const [email,setEmail] = useState("");
+  const [emailState, setEmailState] = useState(0);
+
+  const [auth,setAuth] = useState("");
+  const [authState, setAuthState] = useState(0);
+
   const [pw,setPw] = useState("");
-  const [remember,setRemember] = useState(false);
-  const [notice,setNotice] = useState(0);
+  const [pwState,setPwState] = useState(0);
 
-
-  const emailInputRef = useRef(null);
-  const emailInputFocus = ()=>{
-    emailInputRef.current.focus();
-  }
-  const pwInputRef = useRef(null);
-  const pwInputFocus = ()=>{
-    pwInputRef.current.focus();
-  }
+  const [pwCheck,setPwCheck] = useState("");
+  const [pwCheckState,setPwCheckState] = useState(0);
   
-
-  const onSubmitHandler = (e)=>{
-    e.preventDefault()
-    console.log("hihihi")
-    
-    if(email===""){
-      setNotice(2);
-      emailInputFocus();
-      
-    }
-    else if(pw===""){
-      setNotice(1);
-      pwInputFocus();
-    }
-    else{
-      //로그인 api 함수 호출
-      console.log(`email:${email}, pw:${pw}, remember:${remember} 로그인 되었습니다.`)
-      let res="err"
-      if(res === "err"){
-        setNotice(3);
-        emailInputFocus();
-      }
-      else{setNotice(0)}
-  }}
-
-  const onEmailChange = (e)=>{
-      setEmail(e.target.value)
-  }
-
-  const onPwChange = (e)=>{
-      setPw(e.target.value)
-  }
+  const [nick,setNick] = useState("");
+  const [nickState,setNickState] = useState(0);
   
-  const onEmailCancleHandler = (e)=>{
-    setEmail("");
-    emailInputFocus();
+  const onEmailChange = (e) => {
+    setEmail(e.target.value);
+    checkEmail();
+  }
+  const onAuthChange = (e) => {
+    setAuth(e.target.value);
   }
 
-  const onPwCancleHandler = (e)=>{
-    setPw("");
-    pwInputFocus();
-    //console.log("pw_init",pw);
+  const onPwChange = (e) => {
+    setPw(e.target.value);
+    checkPw();
   }
 
+  const onPwCheckChange = (e) => {
+    setPwCheck(e.target.value);
+    if(checkPwCheck())
+    {setPwCheckState(2)}//비밀번호가 같습니다.
+    else
+    {setPwCheckState(1)}//비밀번호가 다릅니다.
+  }
 
+  const onNickChange = (e) => {
+    setNick(e.target.value);
+  }
+
+  const onEmailBtnClick = (e) => {
+    //이메일이 유효하면, 이메일 중복여부를 검사한다.
+    if(checkEmail(true))
+    {
+      if(isEmailDuplication(email))
+      {setEmailState(2)}//중복된이메일입니다.
+      else{setEmailState(3)}//이메일이 확인되었습니다.
+    }
+    else{setEmailState(1)}//이메일 형식이 올바르지 않습니다.
+  }
+
+  const onAuthBtnClick = (e) => {}
+
+  const onNickBtnClick = (e) => {
+    if(checkNick(true))
+    {
+      if(isNickDuplication(nick))
+      {setNickState(2)}//중복된이메일입니다.
+      else{setNickState(3)}//이메일이 확인되었습니다.
+    }
+    else{setNickState(1)}//이메일 형식이 올바르지 않습니다.
+
+  }
+
+  const checkEmail = (e) => {
+    const emailreg = /^(?=.*[a-zA-Z])(?=.*[_-])(?=.*[0-9]).{5,20}$/
+    return(emailreg.test(email))}
+
+  const checkPw = (e) => {
+    const pwreg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/
+    return(pwreg.test(pw))}
+  const checkPwCheck = ()=> {
+    return(pw===pwCheck)
+  }
+
+  const checkNick = (e) => {
+    const nickreg = /^(?=.*[a-zA-Z])(?=.*[ㄱ-ㅎ|ㅏ-ㅣ|가-힣])(?=.*[0-9]).{3,10}$/
+    return(nickreg.test(nick))}
+
+  const onClickSignupBtn = (e)=>{
+    e.preventDefault();
+    props.setState("login");
+  }
   return (
     <Signup
-      onSubmitHandler={onSubmitHandler}
       onEmailChange={onEmailChange}
+      onAuthChange={onAuthChange}
       onPwChange={onPwChange}
-      onEmailCancleHandler={onEmailCancleHandler}
-      onPwCancleHandler={onPwCancleHandler}
-      notice={notice}
-      pw={pw}
+      onPwCheckChange={onPwCheckChange}
+      onNickChange={onNickChange}
+      onEmailBtnClick={onEmailBtnClick}
+      onAuthBtnClick={onAuthBtnClick}
+      onNickBtnClick={onNickBtnClick}
       email={email}
-      emailInputRef={emailInputRef}
-      emailInputFocus={emailInputFocus}
-      pwInputRef={pwInputRef}
-      pwInputFocus={pwInputFocus}
+      auth={auth}
+      pw={pw}
+      pwCheck={pwCheck}
+      nick={nick}
+      onClickSignupBtn={onClickSignupBtn}
     />
   )
 }
 
-//props.onPwCancleHandler

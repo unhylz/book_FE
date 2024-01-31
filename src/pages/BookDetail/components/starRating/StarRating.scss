@@ -1,40 +1,35 @@
 // StarRating.scss
-@import "../../../lib/scss/BSL.scss";
+@import "../../../../lib/scss/BSL.scss";
 
-// StarRating.module.scss
-
-.starRating {
-  display: inline-flex;
-  align-items: center;
-  position: relative;
-}
-
-.starContainer {
+.star-container {
   display: flex;
   align-items: center;
-}
+  width: 100%;
+  flex-direction: column;
+  gap: 15px;
 
-.star {
-  width: 14px; /* Adjust the width to your desired size */
-  margin-right: 2px;
-  display: flex;
-  color: #f8d448;
+  .rating-set {
+    display: flex;
+    margin: 0;
+    margin-left: 10px;
+    margin-right: 5px;
 
-  &:last-of-type {
-    margin-right: 0;
+    .star_icon {
+      svg {
+        width: 30px;
+        height: 30px;
+        fill: rgba($black, 0.3);
+        stroke: $green;
+        stroke-width: 0;
+
+        use {
+          fill: $green;
+        }
+      }
+
+      & + .star_icon {
+        margin-left: 5px;
+      }
+    }
   }
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background-color: red;
-  opacity: 0.7;
-  z-index: 1;
-}
-
-.starContainer:hover .overlay {
-  display: none;
 }

@@ -1,5 +1,5 @@
 // TopNavSearch.jsx
-import React from "react";
+import React, { useState } from "react";
 
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../Home/components/header/Header";
@@ -10,6 +10,7 @@ import { sentimentDummy } from "../Home/components/sentiment/sentimentDummy";
 import RelatedBook from "./components/RelatedBook/RelatedBook";
 import RelatedSentiment from "./components/RelatedSentiment/RelatedSentiment";
 import RelatedNickname from "./components/RelatedNickname/RelatedNickname";
+import AcountModalContainer from "../../container/AcountModalContainer";
 import "./TopNavSearch.scss";
 
 function TopNavSearch() {
@@ -19,13 +20,19 @@ function TopNavSearch() {
   const displayedItems1 = bookDummy.slice(3, 6);
   const displayedItems2 = sentimentDummy.slice(30, 33);
   //const displayedItems3 = nicknameDummy.slice(0, 3);
+  const [modalState, setModalState] = useState(null);
+
   const handleLogoClick = () => {
     navigate("/");
   };
 
   return (
     <div>
-      <Header onLogoClick={handleLogoClick} defaultSearchContent={content} />
+      <Header
+        onLogoClick={handleLogoClick}
+        defaultSearchContent={content}
+        setModalState={setModalState}
+      />
       <div className="main-content">
         {/* 1열 - 왼쪽 사이드 광고 부분 */}
         <div className="left">
@@ -77,6 +84,7 @@ function TopNavSearch() {
         </div>
       </div>
       <Footer />
+      {modalState && <AcountModalContainer state={modalState} />}
     </div>
   );
 }

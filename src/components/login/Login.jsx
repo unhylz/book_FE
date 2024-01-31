@@ -104,10 +104,10 @@ export default function Login(props) {
           />
         </form>
         <div className="linkto">
-          <div className="findPW">
+          <div className="findPW" onClick={props.onClickPwSearchBtn}>
             <img src={findPW_icon} /> 비밀번호 찾기
           </div>
-          <div className="signup">
+          <div className="signup" onClick={props.onClickSignupBtn}>
             <img src={signup_icon} /> 회원가입 하기
           </div>
         </div>

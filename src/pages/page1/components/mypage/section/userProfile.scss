@@ -1,0 +1,128 @@
+.user-profile {
+  display: flex;
+  width: 100%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative; 
+  flex-direction: row; 
+
+  .nameAndTier{
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    gap: 10px; 
+    height: 50px;
+  }
+
+  @media (min-width: 768px) {
+    /* 화면 너비가 768px 이상인 경우에만 적용되는 스타일 */
+    flex-direction: row; /* 데스크톱 레이아웃으로 변경 */
+  }
+
+  .img-container {
+    margin-right: 20px;
+    flex-direction: row; 
+    justify-content: start;
+  }
+  .round-image {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+  }
+
+  .edit-button1 {
+    display: flex;
+    width: 50px;
+    height: 18px;
+  }
+
+  .last-tier {
+    color: #5FCB75;
+    border-radius: 8px;
+    text-align: center;
+    width: 170px;
+    border: 2px solid #000;
+  }
+  .userdata-container {
+    flex-grow: 1; /* 사용 가능한 공간을 모두 차지하도록 설정 */
+    text-align: left;
+    position: relative; 
+  }
+
+  .message-edit {
+    display: flex; 
+    justify-content:space-between; 
+    align-items: center;
+
+    .message-box {
+      width: 600px;
+    }
+  }
+  .edited-message {
+    background: rgba(52, 52, 52, 0.10);
+    padding: 5px 10px; /* 공통 스타일을 추가 */
+    border-radius: 4px;
+    font-size: 1rem;
+  
+    @media (max-width: 768px) {
+      /* 화면 너비가 768px 이하인 경우 */
+      width: 100%; /* 너비를 100%로 설정하여 가로 스크롤 없이 화면에 맞추기 */
+      height: auto; /* 높이 자동으로 조절 */
+    }
+  }
+  
+  .edit-button2 {
+    display: inline-flex;
+    color: #000;
+    font-weight: bold;
+    outline: none;
+    border-radius: 4px;
+    border: none;
+    align-items: center;
+    cursor: pointer;
+    height: 2.25rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 1rem;
+  
+    @media (max-width: 768px) {
+      /* 화면 너비가 768px 이하인 경우 */
+      width: 100%; /* 너비를 100%로 설정하여 가로 스크롤 없이 화면에 맞추기 */
+      margin-top: 10px; /* 상단 여백 추가 */
+    }
+  }
+      .name {
+        margin: 10;
+        font-size: 2rem; 
+        color: #343434;
+        font-family: Inter;
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+      }
+      .email {
+        font-size: 0.95rem;
+        color: rgba(52, 52, 52, 0.50);
+      }
+      .edit-button {
+        padding: 5px 10px;
+        margin-top: 10px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    }
+
+    .userDetail-container {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+    }

@@ -7,6 +7,13 @@ import "./RelatedBookResults.scss";
 export default function RelatedBookResults({ searchResult }) {
   const displayedItems = bookDummy.slice(0, 8);
 
+  function formatPublishYear(dateTimeString) {
+    const dateTime = new Date(dateTimeString);
+    const year = String(dateTime.getFullYear()).slice(-4);
+
+    return `${year}`;
+  }
+
   return (
     <>
       <div className="related-book-results">
@@ -18,7 +25,7 @@ export default function RelatedBookResults({ searchResult }) {
               <div className="related-book-info">
                 <Link
                   to={{
-                    pathname: `/book/${searchResult}/${result.book_title}`,
+                    pathname: `/book/${searchResult}/${result.book_title}/${result.id}`,
                     state: { bookInfo: result }, // 책 정보를 상태로 전달
                   }}
                   className="more-book-link"
@@ -31,14 +38,14 @@ export default function RelatedBookResults({ searchResult }) {
                 </Link>
                 <div className="none-img-detail-info">
                   <Link
-                    to={`/book/${searchResult}/${result.book_title}`}
+                    to={`/book/${searchResult}/${result.book_title}/${result.id}`}
                     className="more-book-link"
                   >
                     <h3>{result.book_title}</h3>
                   </Link>
                   <div className="publish-info">
                     <p>
-                      {result.publish_year}년 | {result.author} |{" "}
+                      {formatPublishYear(result.publish)}년 | {result.author} |{" "}
                       {result.publisher}
                     </p>
                   </div>
