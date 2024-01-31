@@ -25,7 +25,7 @@ export default function Mypage_follower() {
 
     try {
       // 팔로우 상태 업데이트를 서버에 요청
-      const response = await axios.post('http://localhost:3001/users/{user-id}/follow', {
+      const response = await axios.post('http://localhost:3000/users/{user-id}/follow', {
         followerId: follower.id, // 팔로우 대상 사용자의 ID
         isFollow: !follower.isFollow, // 현재 팔로우 상태를 반전시킵니다.
       });

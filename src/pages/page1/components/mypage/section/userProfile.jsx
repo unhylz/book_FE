@@ -10,7 +10,7 @@ import GrandMasterIcon from "../../../../../assets/tiers/그랜드마스터.svg"
 import "./userProfile.scss"
 import flag from "../../../../../assets/icons/lets-icons-flag-finish-alt.svg"
 import profileImg from "../../../../../assets/icons/ellipse-4.svg"
-import MypageModal from './mypageModal'; // 모달 컴포넌트를 import합니다
+import MypageModal from './mypageModal';
 
 
 function UserProfile({ userData, handleImageChange }) {
