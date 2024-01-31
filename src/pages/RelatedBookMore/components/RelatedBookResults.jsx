@@ -7,6 +7,13 @@ import "./RelatedBookResults.scss";
 export default function RelatedBookResults({ searchResult }) {
   const displayedItems = bookDummy.slice(0, 8);
 
+  function formatPublishYear(dateTimeString) {
+    const dateTime = new Date(dateTimeString);
+    const year = String(dateTime.getFullYear()).slice(-4);
+
+    return `${year}`;
+  }
+
   return (
     <>
       <div className="related-book-results">
@@ -38,7 +45,7 @@ export default function RelatedBookResults({ searchResult }) {
                   </Link>
                   <div className="publish-info">
                     <p>
-                      {result.publish_year}년 | {result.author} |{" "}
+                      {formatPublishYear(result.publish)}년 | {result.author} |{" "}
                       {result.publisher}
                     </p>
                   </div>
