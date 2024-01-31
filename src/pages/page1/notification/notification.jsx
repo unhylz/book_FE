@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import Header from '../../Home/components/header/Header';
-import SideAd from '../../Home/components/advertisement/SideAd';
-import NotificationItem from '../notification/notification_item';
-import CommentItem from '../../SentimentDetail/Comment/Comment';
-
+import React, { useState, useEffect } from "react";
+import Header from "../../Home/components/header/Header";
+import SideAd from "../../Home/components/advertisement/SideAd";
+import NotificationItem from "../notification/notification_item";
+import CommentItem from "../../SentimentDetail/Comment/Comment";
+import AcountModalContainer from "../../../container/AcountModalContainer";
 
 export default function Notification() {
-  const [comments, setComments] = useState(['플러터 어렵나요?']); // 댓글 상태
+  const [comments, setComments] = useState(["플러터 어렵나요?"]); // 댓글 상태
   const [notificationsData, setNotificationsData] = useState([]); // 알림 상태
+  const [modalState, setModalState] = useState(null);
 
   // 댓글이 변경될 때마다 알림 데이터 업데이트
   useEffect(() => {
@@ -33,15 +34,15 @@ export default function Notification() {
 
   return (
     <div>
-      <Header onLogoClick={handleButtonClick} />
-      <div className='mypage-wrapper'>
+      <Header onLogoClick={handleButtonClick} setModalState={setModalState} />
+      <div className="mypage-wrapper">
         <div className="left">
           <SideAd />
         </div>
         <div className="mypage-container">
           <div className="notifications-container">
             {notificationsData.map((notification, index) => (
-              <NotificationItem 
+              <NotificationItem
                 key={index}
                 id={notification.id}
                 title={notification.title}
@@ -55,6 +56,7 @@ export default function Notification() {
           <SideAd />
         </div>
       </div>
+      {modalState && <AcountModalContainer state={modalState} />}
     </div>
   );
 }
