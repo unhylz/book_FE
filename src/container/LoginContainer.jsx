@@ -1,7 +1,9 @@
 import React, { useState, useRef } from "react";
 import Login from "../components/login/Login";
+import { isLoginTrue } from "../modules/api/account";
+import { useNavigate } from "react-router-dom";
 
-export default function LoginContainer() {
+export default function LoginContainer(props) {
   const [isEyeOpen, setIsEyeOpen] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
 
@@ -9,6 +11,8 @@ export default function LoginContainer() {
   const [pw, setPw] = useState("");
   const [remember, setRemember] = useState(false);
   const [notice, setNotice] = useState(0);
+
+  const navigate = useNavigate()
 
   const emailInputRef = useRef(null);
   const emailInputFocus = () => {
@@ -34,12 +38,13 @@ export default function LoginContainer() {
       console.log(
         `email:${email}, pw:${pw}, remember:${remember} 로그인 되었습니다.`
       );
-      let res = "err";
-      if (res === "err") {
+      let res = isLoginTrue(email,pw)
+      if (res) {
+        setNotice(0);
+        navigate("/")
+      } else {
         setNotice(3);
         emailInputFocus();
-      } else {
-        setNotice(0);
       }
     }
   };
@@ -63,6 +68,16 @@ export default function LoginContainer() {
     //console.log("pw_init",pw);
   };
 
+  const onClickPwSearchBtn = (e)=>{
+    props.setState("passwordsearch")
+    console.log("onClickPwSearchBtn")
+  }
+
+  const onClickSignupBtn = (e)=>{
+    props.setState("signup")
+    console.log("onClickSignupBtns")
+  }
+
   return (
     <Login
       onSubmitHandler={onSubmitHandler}
@@ -77,6 +92,8 @@ export default function LoginContainer() {
       emailInputFocus={emailInputFocus}
       pwInputRef={pwInputRef}
       pwInputFocus={pwInputFocus}
+      onClickPwSearchBtn={onClickPwSearchBtn}
+      onClickSignupBtn={onClickSignupBtn}
     />
   );
 }

@@ -1,67 +1,42 @@
+@import "../../../../lib/scss/BSL.scss";
+
+* {
+  //border: 1px solid greenyellow; 
+}
+
+.mypage-wrapper{
+  display: flex;
+  justify-content: space-around;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
 .mypage-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 1000px;
   width: 100%;
-  height: auto;
+  height: 971px;
   margin: 20px auto;
   padding: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid #000;
   border-radius: 8px;
-  background: #f9f9f9;
+  background: #FFF;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.user-profile {
-  display: flex;
-  width: 100%;
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  position: relative; 
-  flex-direction: row; 
-
-  .img-container {
-    margin-right: 20px;
-    flex-direction: row; 
-    justify-content: start;
-  }
-  .round-image {
-    border-radius: 50%;
-    overflow: hidden;
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
+.left,
+  .right {
+    width: 300px;
+    //height: 860px;
+    padding-left: 50px;
+    padding-right: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
   }
 
-      .name {
-        margin: 10;
-        font-size: 2rem; // 폰트 사이즈 증가
-        color: #343434;
-        font-family: Inter;
-        font-size: 32px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: normal;
-      }
-      .email {
-        font-size: 0.95rem;
-        color: rgba(52, 52, 52, 0.50);
-      }
-      .edit-button {
-        padding: 5px 10px;
-        margin-top: 10px;
-        background: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-    }
-    
     .user-stats {
       display: flex;
       justify-content: space-between;
@@ -70,13 +45,14 @@
       border-radius: 10px;
       width: 100%;
       max-width: 800px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     
-      .stat {
+      .stat, like-stat {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 100%;
+      }
         
         
         .number {
@@ -88,7 +64,7 @@
           color: #666;
         }
       }
-    }
+    
     
     .user-posts {
       width: 100%;
@@ -109,8 +85,27 @@
           color: #FFD700; // 별점
         } 
 
-        .pagination {
+
+        .follow-button {
           display: flex;
+          width: 818px;
+          font-size: 22px;
+          justify-content: center;
+          //팔로우 버튼 테두리 없애기 및 버튼 ui 수정
+          border: none;
+          padding: 10px;
+          color: #5FCB75;
+          margin-bottom: 10px;
+          margin-top: 20px;
+          font-weight: bold;
+          &.following { 
+            background-color: #eee;
+            color: black;
+          }
+        
+          &.not-following {
+            background-color: #5FCB75;
+            color: #eee;
+          }
         }
 
-        

@@ -141,7 +141,7 @@ export default function Signup(props)
             </div>
           </div>
 
-          <div className='signup_btn'>회원가입</div> 
+          <div className='signup_btn' onClick={props.onClickSignupBtn}>회원가입</div> 
 
       </form>
     </div>

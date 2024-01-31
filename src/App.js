@@ -7,7 +7,6 @@ import LoginContainer from "./container/LoginContainer";
 import PasswordSearchContainer from "./container/PasswordSearchContainer";
 import SignupContainer from "./container/SignupContainer";
 import SentimentWrite from "./pages/SentimentWrite/SentimentWrite";
-import SentimentDetail from "./pages/SentimentDetail/SentimentDetail";
 import MypageContainer from "./container/MypageContainer";
 import HomeContainer from "./container/HomeContainer";
 import SentimentLeagueContainer from "./container/SentimentLeagueContainer";
@@ -18,6 +17,10 @@ import RelatedBookMoreContainer from "./container/RelatedBookMoreContainer";
 import PasswordChangeContainer from "./container/PasswordChangeContainer";
 import RelatedSentimentMoreContainer from "./container/RelatedSentimentMoreContainer";
 import RelatedNicknameMoreContainer from "./container/RelatedNicknameMoreContainer";
+import Mypage_followerContainer from "./container/MypageFollowerContainer";
+import NotificationContainer from "./container/notificationContainer"
+import Mypage_followingContainer from "./container/MypageFollowing";
+import AcountModalContainer from "./container/AcountModalContainer";
 
 function App() {
   return (
@@ -35,12 +38,11 @@ function App() {
           <Route path="/login" element={<LoginContainer />}></Route>
           <Route path="/passwordsearch" element={<PasswordSearchContainer />} />
           <Route path="/signup" element={<SignupContainer />}></Route>
+          <Route path="/modal" element={<AcountModalContainer state={"login"}/>}></Route>
+          
 
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
-          <Route path="/detail" element={<SentimentDetail></SentimentDetail>} />
-          <Route path="/passwordsearch" element={<PasswordSearchContainer />}/>
           <Route path="/passwordchange" element={<PasswordChangeContainer/>}/>
-          <Route path="/signup" element={<SignupContainer />}></Route>
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
 
           <Route
@@ -63,6 +65,12 @@ function App() {
             path="/:content/related_nickname_more"
             element={<RelatedNicknameMoreContainer />}
           ></Route>
+          <Route path="/mypage_follower"
+           element={<Mypage_followerContainer></Mypage_followerContainer>} />
+          <Route path="/mypage_following"
+           element={<Mypage_followingContainer></Mypage_followingContainer>} />
+           <Route path="/notification" 
+           element={<NotificationContainer />}></Route>
         </Routes>
       </BrowserRouter>
     </>
