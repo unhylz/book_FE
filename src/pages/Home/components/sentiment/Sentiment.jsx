@@ -75,7 +75,7 @@ export default function Sentiment() {
                 className="book-link"
               >
                 <img
-                  src={`bookcover_dummy/${result.image_file}`}
+                  src={`/bookcover_dummy/${result.image_file}`}
                   alt={result.title}
                 />
               </Link>

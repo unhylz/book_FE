@@ -8,7 +8,7 @@ import assessmentIcon from "../../assets/icons/assessment.svg";
 import RelatedSentiment from "./components/relatedSentiment/RelatedSentiment";
 import { bookDummy } from "../TopNavSearch/bookDummy.js";
 import { sentimentDummy } from "../Home/components/sentiment/sentimentDummy";
-//import StarRating from "react-star-rating-component";
+import StarRating from "./components/starRating/StarRating.jsx";
 import "./BookDetail.scss";
 
 export default function BookDetail() {
@@ -51,6 +51,10 @@ export default function BookDetail() {
 
     return `${year}.${month}.${day}`;
   }
+
+  const handleWriteClick = () => {
+    navigate("/write");
+  };
 
   return (
     <div>
@@ -104,31 +108,40 @@ export default function BookDetail() {
                     <div className="book-detail-row">
                       <div className="book-detail-column">
                         <div className="book-detail-vote-avg">
-                          <p className="book-scope-title">평균</p>
-                          {/* bookDummy.js vote_avg 값 -> className="book-vote-star"*/}
-                          <div className="book-vote-star">
-                            {/* <StarRating popularity={getBookById(bookId).vote_avg} /> */}
+                          <div className="book-vote-title">
+                            <p className="book-scope-title">평균</p>
+                            <p className="book-scope-title">평가</p>
                           </div>
-                          <p className="book-vote">
-                            {getBookById(bookId).vote_avg}
-                          </p>
-                          <p className="book-vote-num">
-                            (총 {getBookById(bookId).vote}명)
-                          </p>
-                        </div>
-                        <div className="book-detail-my-vote">
-                          <p className="book-scope-title">평가</p>
-                          {/* bookDummy.js my_vote 값 -> className="book-vote-star"*/}
                           <div className="book-vote-star">
-                            {/* <StarRating popularity={getBookById(bookId).my_vote} /> */}
+                            <StarRating
+                              averageRates={[
+                                getBookById(bookId).vote_avg,
+                                getBookById(bookId).my_vote,
+                              ]}
+                            />
                           </div>
-                          <p className="book-vote">
-                            {getBookById(bookId).my_vote}
-                          </p>
+                          <div className="book-vote-value">
+                            <div className="book-vote-avg-value">
+                              <p className="book-vote1">
+                                {getBookById(bookId).vote_avg}
+                              </p>
+                              <p className="book-vote-num">
+                                (총 {getBookById(bookId).vote}명)
+                              </p>
+                            </div>
+                            <div className="book-vote-my-value">
+                              <p className="book-vote2">
+                                {getBookById(bookId).my_vote}
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
-                      <button className="book-assess-btn">
+                      <button
+                        className="book-assess-btn"
+                        onClick={handleWriteClick}
+                      >
                         <img
                           src={assessmentIcon}
                           alt="assessmentIcon"

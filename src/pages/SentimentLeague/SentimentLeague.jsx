@@ -1,22 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import MainAd from "../Home/components/advertisement/MainAd";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Ranking from "./components/ranking/Ranking";
 import Footer from "../Home/components/footer/Footer";
+import AcountModalContainer from "../../container/AcountModalContainer";
 import "./SentimentLeague.scss";
 
 function SentimentLeague() {
   const navigate = useNavigate();
-
+  const [modalState, setModalState] = useState(null);
   const handleLogoClick = () => {
     navigate("/");
   };
 
   return (
     <div>
-      <Header onLogoClick={handleLogoClick} />
+      <Header onLogoClick={handleLogoClick} setModalState={setModalState} />
       <div className="main-title">
         <div className="tilte-info">
           <div className="title">SentimentLeague</div>
@@ -46,6 +47,7 @@ function SentimentLeague() {
         </div>
       </div>
       <Footer />
+      {modalState && <AcountModalContainer state={modalState} />}
     </div>
   );
 }
