@@ -1,21 +1,25 @@
-
 // Home.jsx
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Header from "./components/header/Header";
 import SideAd from "../../pages/Home/components/advertisement/SideAd";
 import MainAd from "../../pages/Home/components/advertisement/MainAd";
 import Sentiment from "./components/sentiment/Sentiment";
 import Follow from "./components/follow/Follow";
 import Footer from "./components/footer/Footer";
+import AcountModalContainer from "../../container/AcountModalContainer";
 import "./Home.scss";
 
-
 export default function Home() {
-
   const [selectedButton, setSelectedButton] = useState("sentiment");
+  const [modalState, setModalState] = useState(null);
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
+  };
+
+  const handleCloseModal = () => {
+    setModalState(null);
   };
 
   useEffect(() => {
@@ -25,7 +29,11 @@ export default function Home() {
 
   return (
     <div>
-      <Header onLogoClick={handleButtonClick} />
+      <Header
+        onLogoClick={handleButtonClick}
+        setModalState={setModalState}
+        onCloseModal={handleCloseModal}
+      />
       <div className="main-content">
         {/* 1열 - 왼쪽 사이드 광고 부분 */}
         <div className="left">
@@ -68,6 +76,7 @@ export default function Home() {
         </div>
       </div>
       <Footer />
+      {modalState && <AcountModalContainer state={modalState} />}
     </div>
   );
 }
