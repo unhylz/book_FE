@@ -1,94 +1,94 @@
 @import "../../../../lib/scss/BSL.scss";
 
-.mypage-wrapper{
-    display: flex;
-    justify-content: space-around;
-    padding-top: 50px;
-    padding-bottom: 50px;
-  }
+.mypage-wrapper {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
 
-  .mypage-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 1000px;
-    width: 100%;
-    height: 971px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #000;
-    border-radius: 8px;
-    background: #FFF;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+.mypage-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1000px;
+  width: 100%;
+  height: 971px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-  .left,
-  .right {
-    width: 300px;
-    height: 860px;
-    padding-left: 50px;
-    padding-right: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-  }
+.left,
+.right {
+  width: 300px;
+  height: 860px;
+  padding-left: 50px;
+  padding-right: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .user-list {
-    width: 90%;
-    height: 150px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  
-  .follower-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .follower-image {
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-  }
-  
-  .follower-info {
-    flex-grow: 1;
-    margin-left: 15px;
-  }
-  
-  .follower-name {
-    margin: 0;
-    font-size: 1.2em;
-  }
-  
-  .follower-bio {
-    margin: 5px 0;
-    color: #666;
-  }
-  
-  .follower-status {
-    padding: 5px 10px;
-    width: 70px;
-    height: 40px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .follower-status.followed {
-    background-color: gray; /* 팔로우된 상태일 때의 배경색 */
-    color: white; /* 팔로우된 상태일 때의 텍스트 색상 */
-    font-size: 15px;
-  }
-  
-  .follower-status.not-followed {
-    background-color: green; /* 팔로우되지 않은 상태일 때의 배경색 */
-    color: white; /* 팔로우되지 않은 상태일 때의 텍스트 색상 */
-    font-size: 15px;
-  }
+.user-list {
+  width: 90%;
+  height: 150px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.follower-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.follower-image {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.follower-info {
+  flex-grow: 1;
+  margin-left: 15px;
+}
+
+.follower-name {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.follower-bio {
+  margin: 5px 0;
+  color: #666;
+}
+
+.follower-status {
+  padding: 5px 10px;
+  width: 70px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.follower-status.followed {
+  background-color: gray; /* 팔로우된 상태일 때의 배경색 */
+  color: white; /* 팔로우된 상태일 때의 텍스트 색상 */
+  font-size: 15px;
+}
+
+.follower-status.not-followed {
+  background-color: $green; /* 팔로우되지 않은 상태일 때의 배경색 */
+  color: white; /* 팔로우되지 않은 상태일 때의 텍스트 색상 */
+  font-size: 15px;
+}
