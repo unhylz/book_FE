@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
+import RelatedNicknameResults from "./components/RelatedNicknameResults";
 import "./RelatedNicknameMore.scss";
 
 export default function RelatedNicknameMore() {
@@ -31,10 +32,18 @@ export default function RelatedNicknameMore() {
 
         {/* 2열 - 중앙 메인 부분 */}
         <div className="center">
-          <div className="contents">
-            <div>
-              <p>{<strong>{`"${content}"`}</strong>} 관련 닉네임 검색 결과</p>
+          <div className="nickname-results-contents">
+            <div className="nickname-results-container">
+              <div className="nickname-results">
+                <p>{<strong>{`"${content}"`}</strong>} 관련 닉네임 검색 결과</p>
+                <p>
+                  총 <strong>10</strong> 명
+                </p>
+              </div>
+
+              <RelatedNicknameResults searchResult={content} />
             </div>
+            <p>페이지네이션 추가</p>
           </div>
         </div>
 
