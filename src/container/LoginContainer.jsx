@@ -2,8 +2,11 @@ import React, { useState, useRef } from "react";
 import Login from "../components/login/Login";
 import { isLoginTrue } from "../modules/api/account";
 import { useNavigate } from "react-router-dom";
+//import { useLoginContext } from "../modules/api/contexts/LoginContext"; // 컨텍스트 가져오기
 
 export default function LoginContainer(props) {
+  //const { login, setIsLoggedIn } = useLoginContext(); // 컨텍스트에서 setIsLoggedIn 가져오기
+
   const [isEyeOpen, setIsEyeOpen] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
 
@@ -12,7 +15,7 @@ export default function LoginContainer(props) {
   const [remember, setRemember] = useState(false);
   const [notice, setNotice] = useState(0);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const emailInputRef = useRef(null);
   const emailInputFocus = () => {
@@ -38,10 +41,13 @@ export default function LoginContainer(props) {
       console.log(
         `email:${email}, pw:${pw}, remember:${remember} 로그인 되었습니다.`
       );
-      let res = isLoginTrue(email,pw)
+      let res = isLoginTrue(email, pw);
+      console.log("res: ", res);
+
       if (res) {
+        //setIsLoggedIn(true); // setIsLoggedIn을 컨텍스트로 전달
         setNotice(0);
-        navigate("/")
+        navigate("/");
       } else {
         setNotice(3);
         emailInputFocus();
@@ -68,15 +74,15 @@ export default function LoginContainer(props) {
     //console.log("pw_init",pw);
   };
 
-  const onClickPwSearchBtn = (e)=>{
-    props.setState("passwordsearch")
-    console.log("onClickPwSearchBtn")
-  }
+  const onClickPwSearchBtn = (e) => {
+    props.setState("passwordsearch");
+    console.log("onClickPwSearchBtn");
+  };
 
-  const onClickSignupBtn = (e)=>{
-    props.setState("signup")
-    console.log("onClickSignupBtns")
-  }
+  const onClickSignupBtn = (e) => {
+    props.setState("signup");
+    console.log("onClickSignupBtns");
+  };
 
   return (
     <Login
