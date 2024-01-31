@@ -52,6 +52,10 @@ export default function BookDetail() {
     return `${year}.${month}.${day}`;
   }
 
+  const handleWriteClick = () => {
+    navigate("/write");
+  };
+
   return (
     <div>
       <Header onLogoClick={handleLogoClick} defaultSearchContent={content} />
@@ -134,7 +138,10 @@ export default function BookDetail() {
                         </div>
                       </div>
 
-                      <button className="book-assess-btn">
+                      <button
+                        className="book-assess-btn"
+                        onClick={handleWriteClick}
+                      >
                         <img
                           src={assessmentIcon}
                           alt="assessmentIcon"

@@ -184,6 +184,11 @@
                 margin-right: 0;
                 margin-left: auto;
 
+                cursor: pointer;
+
+                :active {
+                  cursor: grabbing;
+                }
                 .assessment-icon {
                   height: 25px;
                   margin-right: 5px;
