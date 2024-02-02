@@ -17,6 +17,7 @@ import GrandMasterIcon from "../../../../../assets/tiers/그랜드마스터.svg"
 import "../mypage.scss";
 import Pagination from "./pagenation";
 import axios from "axios";
+import "../mypageScrap.scss"
 
 /*function fetchTotalItems() {
   // 서버의 특정 엔드포인트에서 전체 아이템 수를 가져옴
@@ -98,8 +99,9 @@ export default function MypageScrap() {
                 <div className="left">
                     <SideAd />
                 </div>
+                <div className="main-container">
+                <strong className="Title">스크랩</strong>
                 <div className="mypage-container">
-                    <strong>스크랩</strong>
                     <div className="search-container">
                         {currentPosts.map((result) => (
                             <div key={result.id} className="search-result">
@@ -163,18 +165,24 @@ export default function MypageScrap() {
                     </div>
                   </div>
                 </div>
+                
               ))}
             </div>
+            </div>
+            <div className="pagination-container">
+        <div className="pagination">
+        <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(totalItems / itemsPerPage)}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      </div>
           </div>
           <div className="right">
           <SideAd />
           </div>
           <div>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
     </div>
           </div>
           <Footer />
