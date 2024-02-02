@@ -22,3 +22,10 @@ export const isNickDuplication = (nick)=>{
     return(false)
   }
 }
+
+export const isLoginTrue = (email,pw)=>{
+  if(email==="admin@naver.com"){
+    if(pw==="admin1234!") {return true}
+    else return false
+  }else return false
+}

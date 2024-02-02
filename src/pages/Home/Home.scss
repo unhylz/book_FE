@@ -19,7 +19,7 @@
 
   .center {
     width: 100%;
-    display: felx;
+    display: flex;
     flex-direction: column;
   }
 
@@ -65,9 +65,9 @@
     &:hover {
       border: 1.5px solid rgba($green, 0.7);
       color: $green;
-      cursor: grabbing;
+      cursor: pointer;
     }
-    cursor: grabbing;
+    cursor: pointer;
   }
 
   .sentiment-btn.active {

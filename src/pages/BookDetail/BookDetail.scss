@@ -89,43 +89,81 @@
                   align-items: center;
                   //border: 2px dashed blue;
                   height: 40px;
-                  .book-scope-title {
-                    font-size: 22px;
-                    color: rgba($black, 0.7);
-                    margin-right: 10px;
+
+                  .book-vote-title {
+                    //border: 2px dashed red;
+                    height: 100px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    .book-scope-title {
+                      font-size: 22px;
+                      color: rgba($black, 0.7);
+                      //border: 2px dashed red;
+                      margin: 0;
+                      height: 50%;
+                      align-items: center;
+                      display: flex;
+                    }
                   }
 
-                  .book-vote {
-                    font-size: 22px;
-                    color: $green;
-                    font-weight: bold;
-                    margin-left: 5px;
+                  .book-vote-star {
+                    //border: 2px dashed orange;
+                    height: 100px;
+                    display: flex;
+                    align-items: center;
                   }
 
-                  .book-vote-num {
-                    margin-left: 5px;
-                    font-size: 15px;
-                    color: rgba($black, 0.7);
-                  }
-                }
+                  .book-vote-value {
+                    //border: 2px dashed purple;
+                    align-items: center;
+                    display: flex;
+                    height: 100px;
+                    flex-direction: column;
 
-                .book-detail-my-vote {
-                  display: flex;
-                  flex-direction: row;
-                  align-items: center;
-                  height: 40px;
+                    .book-vote-avg-value {
+                      display: flex;
+                      flex-direction: row;
+                      width: 100%;
+                      height: 50%;
+                      //border: 2px dashed black;
+                      align-items: center;
+                      justify-content: flex-start;
 
-                  .book-scope-title {
-                    font-size: 22px;
-                    color: rgba($black, 0.7);
-                    margin-right: 10px;
-                  }
+                      .book-vote1 {
+                        //border: 2px dashed red;
 
-                  .book-vote {
-                    font-size: 22px;
-                    color: rgba($black, 0.7);
-                    font-weight: bold;
-                    margin-left: 5px;
+                        font-size: 22px;
+                        color: $green;
+                        font-weight: bold;
+                      }
+
+                      .book-vote-num {
+                        //border: 2px dashed red;
+                        margin-left: 5px;
+                        font-size: 15px;
+                        color: rgba($black, 0.7);
+                      }
+                    }
+
+                    .book-vote-my-value {
+                      display: flex;
+                      flex-direction: row;
+                      width: 100%;
+                      height: 50%;
+                      //border: 2px dashed black;
+                      align-items: center;
+                      justify-content: flex-start;
+
+                      .book-vote2 {
+                        //border: 2px dashed red;
+
+                        font-size: 22px;
+                        color: $green;
+                        font-weight: bold;
+                      }
+                    }
                   }
                 }
               }
@@ -146,6 +184,11 @@
                 margin-right: 0;
                 margin-left: auto;
 
+                cursor: pointer;
+
+                :active {
+                  cursor: grabbing;
+                }
                 .assessment-icon {
                   height: 25px;
                   margin-right: 5px;

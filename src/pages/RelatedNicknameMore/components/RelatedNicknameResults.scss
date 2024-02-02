@@ -1,0 +1,63 @@
+@import "../../../lib/scss/BSL.scss";
+
+.related-nickname-results {
+  //border: 2px dashed blue;
+  border-top: 1px solid rgba($black, 0.2);
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+  padding-top: 30px;
+  margin-bottom: 20px;
+
+  .related-nickname-results-container {
+    //border: 2px dashed orange;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 150px;
+    width: 100%;
+    margin-right: 30px;
+    margin-left: 30px;
+
+    .related-nickname-results-list {
+      //border: 2px dashed orange;
+      width: 100%;
+
+      .related-follower-card {
+        display: flex;
+        align-items: center;
+        //border: 2px dashed red;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding: 10px;
+        //border-bottom: 1px solid #ddd;
+        padding-top: 20px;
+        padding-bottom: 20px;
+
+        &:not(:last-child) {
+          border-bottom: 1px solid rgba($black, 0.2);
+        }
+
+        .related-follower-image {
+          border-radius: 50%;
+          width: 80px;
+          height: 80px;
+          object-fit: cover;
+        }
+
+        .related-follower-info {
+          flex-grow: 1;
+          margin-left: 15px;
+        }
+
+        .related-follower-name {
+          margin: 0;
+          font-size: 1.2em;
+        }
+      }
+    }
+  }
+}
