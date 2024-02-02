@@ -21,6 +21,7 @@ import Mypage_followerContainer from "./container/MypageFollowerContainer";
 import NotificationContainer from "./container/notificationContainer"
 import Mypage_followingContainer from "./container/MypageFollowing";
 import AcountModalContainer from "./container/AcountModalContainer";
+import MypageScrapContainer from "./container/MypageScrapContainer";
 
 function App() {
   return (
@@ -71,6 +72,8 @@ function App() {
            element={<Mypage_followingContainer></Mypage_followingContainer>} />
            <Route path="/notification" 
            element={<NotificationContainer />}></Route>
+           <Route path="/MypageScrap"
+           element={<MypageScrapContainer></MypageScrapContainer>}></Route>
         </Routes>
       </BrowserRouter>
     </>

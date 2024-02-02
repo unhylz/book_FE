@@ -15,13 +15,28 @@ function MyPage() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [posts, setPosts] = useState(postdata);
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 5;
+  const postsPerPage = 3;
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
   const [modalState, setModalState] = useState(null);
+  const [userData, setUserData] = useState(null); 
 
-  const userData = {
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(`http://3.37.54.220:3000/users/{user-id}/mypage`); 
+      setUserData(response.data); // 서버에서 받은 데이터를 상태에 저장
+    } catch (error) {
+      console.error("사용자 데이터 가져오기 실패:", error);
+    }
+  };
+
+  useEffect(() => {
+    setSelectedButton("sentiment");
+    fetchUserData(); 
+  }, []);
+
+  /*const userData = {
     name: "Paul",
     email: "abc1234@naver.com",
     tier: "그랜드마스터",
@@ -31,7 +46,7 @@ function MyPage() {
     follow: 55,
     comments: 432,
     imageUrl: "사용자_이미지_URL",
-  };
+  };*/
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
@@ -45,6 +60,25 @@ function MyPage() {
     setSelectedButton("sentiment");
   }, []);
 
+  const renderPageContent = () => {
+    return (
+      <>
+        {currentPage === 1 && (
+          <>
+            <UserProfile userData={userData} />
+            <UserStats userData={userData} />
+          </>
+        )}
+        <UserPosts currentPosts={currentPosts} />
+      </>
+    );
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    // 새 페이지에 따라 게시물 업데이트 로직 필요
+  };
+
   return (
     <div>
       <Header onLogoClick={handleButtonClick} setModalState={setModalState} />
@@ -53,11 +87,11 @@ function MyPage() {
           <SideAd />
         </div>
         <div className="mypage-container">
-          {currentPage === 1 && (
+          {userData ? (
             <>
               <UserProfile userData={userData} />
               <button
-                className={`follow-button ${
+                className={`follow-button ${  
                   isFollowing ? "following" : "not-following"
                 }`}
                 onClick={toggleFollow}
@@ -66,6 +100,9 @@ function MyPage() {
               </button>
               <UserStats userData={userData} />
             </>
+          ) : (
+            // 데이터가 로드되는 동안 사용자에게 로딩 메시지나 표시기를 보여줄 수 있습니다.
+            <p>사용자 데이터를 불러오는 중...</p>
           )}
           <UserPosts currentPosts={currentPosts} />
         </div>
