@@ -4,7 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
-import assessmentIcon from "../../assets/icons/assessment.svg";
+import assessmentIcon1 from "../../assets/icons/assessment1.svg";
+import assessmentIcon2 from "../../assets/icons/assessment2.svg";
 import RelatedSentiment from "./components/relatedSentiment/RelatedSentiment";
 import { bookDummy } from "../TopNavSearch/bookDummy.js";
 import { sentimentDummy } from "../Home/components/sentiment/sentimentDummy";
@@ -18,6 +19,9 @@ export default function BookDetail() {
   //const location = useLocation();
   const bookId = parseInt(id, 10);
   const displayedItems2 = sentimentDummy.slice(33, 36);
+
+  //확인용
+  const isAssessed = true;
 
   console.log(book_title);
 
@@ -52,8 +56,12 @@ export default function BookDetail() {
     return `${year}.${month}.${day}`;
   }
 
-  const handleWriteClick = () => {
+  const handleWriteClick1 = () => {
     navigate("/write");
+  };
+
+  const handleWriteClick2 = () => {
+    alert("평가가 완료된 책입니다.");
   };
 
   return (
@@ -137,18 +145,36 @@ export default function BookDetail() {
                           </div>
                         </div>
                       </div>
-
-                      <button
-                        className="book-assess-btn"
-                        onClick={handleWriteClick}
-                      >
-                        <img
-                          src={assessmentIcon}
-                          alt="assessmentIcon"
-                          className="assessment-icon"
-                        />
-                        평가하기
-                      </button>
+                      {!isAssessed && (
+                        <>
+                          <button
+                            className="book-assess-btn1"
+                            onClick={handleWriteClick1}
+                          >
+                            <img
+                              src={assessmentIcon1}
+                              alt="assessmentIcon1"
+                              className="assessment-icon1"
+                            />
+                            평가하기
+                          </button>
+                        </>
+                      )}
+                      {isAssessed && (
+                        <>
+                          <button
+                            className="book-assess-btn2"
+                            onClick={handleWriteClick2}
+                          >
+                            <img
+                              src={assessmentIcon2}
+                              alt="assessmentIcon2"
+                              className="assessment-icon2"
+                            />
+                            평가완료
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
