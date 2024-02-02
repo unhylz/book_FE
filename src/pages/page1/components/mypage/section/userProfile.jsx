@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { sentimentDummy } from "../../../../Home/components/sentiment/sentimentDummy";
 import RookieIcon from "../../../../../assets/tiers/루키.svg";
 import SilverIcon from "../../../../../assets/tiers/실버.svg";
 import GoldIcon from "../../../../../assets/tiers/골드.svg";
@@ -11,11 +10,6 @@ import "./userProfile.scss"
 import flag from "../../../../../assets/icons/lets-icons-flag-finish-alt.svg"
 import profileImg from "../../../../../assets/icons/ellipse-4.svg"
 import MypageModal from './mypageModal';
-
-import "./userProfile.scss";
-import flag from "../../../../../assets/icons/lets-icons-flag-finish-alt.svg";
-import profileImg from "../../../../../assets/icons/ellipse-4.svg";
-import MypageModal from "./mypageModal"; // 모달 컴포넌트를 import합니다
 
 function UserProfile({ userData, handleImageChange }) {
   const [message, setMessage] = useState("");
