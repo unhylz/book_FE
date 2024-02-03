@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import './passwordSearch.scss'
+import './PasswordSearch.scss'
 import BSL_logo from '../../assets/logos/BSL_logo.svg'
 import findPW_icon from '../../assets/icons/findPW.svg'
 import signup_icon from '../../assets/icons/signup.svg'
@@ -21,7 +21,7 @@ export default function PasswordSearch(props) {
   const [isRemember, setIsRemember] = useState(false);
 
   return (
-  <div className='bg_shadow'>
+  <div className='bg_shadow' onClick={props.onClickBg}>
     <div className='pwsearch_popup'>
       <Link to="/"><img className='logo' src={BSL_logo}></img></Link>
       <div className="title">비밀번호 찾기</div>

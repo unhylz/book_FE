@@ -63,6 +63,11 @@ export default function PasswordSearchContainer(props) {
     setAuthnum(e.target.value);
   }
 
+  const onClickBg = (e) => {
+    if(e.target.classList.contains("bg_shadow")){
+      props.setState(null)
+    }}
+
 
 
 
@@ -76,6 +81,7 @@ export default function PasswordSearchContainer(props) {
       onSubmitHandler={onSubmitHandler}
       onEmailChange={onEmailChange}
       onAuthChange={onAuthChange}
+      onClickBg={onClickBg}
     />
   )
 }

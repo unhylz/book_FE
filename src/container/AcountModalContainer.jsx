@@ -24,7 +24,7 @@ export default function AcountModalContainer(props) {
   return (
     <>
       {state === "login" ? (
-        <LoginContainer setState={setState} />
+        <LoginContainer setState={setState}/>
       ) : state === "passwordsearch" ? (
         <PasswordSearchContainer setState={setState} />
       ) : state === "passwordchange" ? (

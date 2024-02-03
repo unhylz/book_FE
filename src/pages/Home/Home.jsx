@@ -12,7 +12,7 @@ import "./Home.scss";
 
 export default function Home() {
   const [selectedButton, setSelectedButton] = useState("sentiment");
-  const [modalState, setModalState] = useState(null);
+  const [modalState, setModalState] = useState("login");
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
