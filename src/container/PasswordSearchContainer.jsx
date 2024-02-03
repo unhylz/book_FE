@@ -1,11 +1,12 @@
 import React,{useState, useRef, useEffect} from 'react'
-import PasswordSearch from '../components/passwordSearch/PasswordSearch';
+import PasswordSearch from '../components/PasswordSearch/PasswordSearch';
 
 export default function PasswordSearchContainer(props) {
   
   const [email,setEmail] = useState("");
   const [authnum,setAuthnum] = useState("");
   const [timer,setTimer] = useState("05:00");
+  const [test,setTest] = useState();
 
   let sec = 300;
 
