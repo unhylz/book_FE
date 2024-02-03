@@ -5,6 +5,7 @@ import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
 import RelatedNicknameResults from "./components/RelatedNicknameResults";
+import sortIcon from "../../assets/icons/sort.svg";
 import "./RelatedNicknameMore.scss";
 
 export default function RelatedNicknameMore() {
@@ -14,6 +15,10 @@ export default function RelatedNicknameMore() {
 
   const handleLogoClick = () => {
     navigate("/");
+  };
+
+  const handleSortClick = () => {
+    alert("정렬 기능 구현 예정");
   };
 
   // 페이지 이동시 스크롤바 위치 최상단으로 가도록
@@ -34,13 +39,20 @@ export default function RelatedNicknameMore() {
         <div className="center">
           <div className="nickname-results-contents">
             <div className="nickname-results-container">
-              <div className="nickname-results">
-                <p>{<strong>{`"${content}"`}</strong>} 관련 닉네임 검색 결과</p>
-                <p>
-                  총 <strong>10</strong> 명
-                </p>
+              <div className="results-title">
+                <div className="nickname-results">
+                  <p>
+                    {<strong>{`"${content}"`}</strong>} 관련 닉네임 검색 결과
+                  </p>
+                  <p>
+                    총 <strong>10</strong> 명
+                  </p>
+                </div>
+                <button className="sort-btn" onClick={handleSortClick}>
+                  <img src={sortIcon} alt="Sort" className="sort-icon" />
+                  관련순
+                </button>
               </div>
-
               <RelatedNicknameResults searchResult={content} />
             </div>
             <p>페이지네이션 추가</p>

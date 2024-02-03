@@ -69,10 +69,12 @@ export default function RelatedSentiment({ searchResult, displayedItems }) {
                   >
                     <h3>{result.sentiment_title}</h3>
                   </Link>
-                  <p>
-                    <strong>{result.book_title}</strong> ({result.author}/
-                    {result.publisher})
-                  </p>
+                  <div className="sub-title">
+                    <p>
+                      <strong>{result.book_title}</strong> ({result.author}/
+                      {result.publisher})
+                    </p>
+                  </div>
                 </div>
                 <div className="additional-info">
                   <div className="nickname">

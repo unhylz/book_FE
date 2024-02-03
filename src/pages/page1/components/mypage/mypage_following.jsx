@@ -4,7 +4,6 @@ import Header from "../../../../pages/Home/components/header/Header";
 import followersData from "../../../../modules/api/dummy_follower";
 import "./mypage.scss";
 import "../mypage/mypage_follower.scss";
-import ellipse4 from "../../../../assets/followers/ellipse-4.svg";
 
 export default function Mypage_follower() {
   const [followers, setFollowers] = useState(followersData);

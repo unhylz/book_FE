@@ -1,22 +1,23 @@
-import React from 'react';
-import "../../../../Home/components/sentiment/Sentiment.scss";
+import React from "react";
 
-const Pagination = ({ totalPages, currentPage, onPageChange }) => {
+function Pagination({ currentPage, totalPages, onPageChange }) {
   return (
     <div className="pagination-container">
       <div className="pagination">
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index + 1}
-            className={currentPage === index + 1 ? 'active' : ''}
-            onClick={() => onPageChange(index + 1)}
-          >
-            {index + 1}
-          </button>
-        ))}
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+          (pageNumber) => (
+            <button
+              key={pageNumber}
+              className={pageNumber === currentPage ? "active" : ""}
+              onClick={() => onPageChange(pageNumber)}
+            >
+              {pageNumber}
+            </button>
+          )
+        )}
       </div>
     </div>
   );
-};
+}
 
 export default Pagination;

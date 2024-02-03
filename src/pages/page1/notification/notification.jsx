@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../Home/components/header/Header";
 import SideAd from "../../Home/components/advertisement/SideAd";
+import Footer from "../../Home/components/footer/Footer";
 import NotificationItem from "../notification/notification_item";
 import CommentItem from "../../SentimentDetail/Comment/Comment";
 import AcountModalContainer from "../../../container/AcountModalContainer";
+import axios from "axios";
 
 export default function Notification() {
   const [comments, setComments] = useState(["플러터 어렵나요?"]); // 댓글 상태
@@ -57,6 +59,7 @@ export default function Notification() {
         </div>
       </div>
       {modalState && <AcountModalContainer state={modalState} />}
+      <Footer />
     </div>
   );
 }
