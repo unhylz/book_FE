@@ -4,6 +4,9 @@
   -moz-user-select: none;
   -ms-use-select: none;
   user-select: none;
+  ::-webkit-scrollbar{
+    display: none
+  };
  }
 
 @import "../../lib/scss/BSL.scss";
@@ -53,13 +56,19 @@
     width: 24px;
     height: 24px;
     margin-right: 24px;
-  }}
+  }
+  .error{
+    margin-right: 19px;
+  }
+}
 
+  
 
 .bg_shadow{
+
   
     z-index: 99;
-    position: absolute;
+    position: fixed;
 
     width: 100%;
     height: 100%;
@@ -107,6 +116,9 @@
   
           .email_input{
             @include input_layout(400px);
+            input{
+              width: 350px;
+            }
           }
           .email_input_0{
             @extend .email_input;
@@ -130,6 +142,9 @@
         .email_notice{
           margin-top: 5px;
           margin-left: 6px;
+          .email_notice_1{color: rgba($red,1);}
+          .email_notice_2{color: rgba($red,1);}
+          .email_notice_3{color: rgba($green,1);}
         }
 
         
@@ -147,6 +162,9 @@
           .auth_notice
           {
             margin-left: 6px;
+            .auth_notice_1{color: rgba($green,1);}
+            .auth_notice_2{color: rgba($red,1);}
+            .auth_notice_3{color: rgba($green,1);}
           }
         }
         
@@ -163,6 +181,9 @@
         .pw_input{
           @include input_layout(400px);
           margin-top: 19px;
+          input{
+            width:280px;
+          }
           
         }
         
@@ -178,7 +199,7 @@
           @extend .pw_input;
         }
         .pw_input_3{
-          @extend .email_input;
+          @extend .pw_input;
         }
         
         .pw_notice{
@@ -188,6 +209,9 @@
         .pwcheck_input{
           @include input_layout(400px);
           margin-top: 38px;
+          input{
+            width:280px;
+          }
         }
         .pwcheck_notice{
           margin-top: 5px;

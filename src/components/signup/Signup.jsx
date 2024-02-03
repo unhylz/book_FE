@@ -18,7 +18,7 @@ export default function Signup(props)
   const [isRemember,setIsRemember] = useState(false);
 
   return (
-  <div className='bg_shadow'>
+  <div className='bg_shadow' onClick={props.onClickBg}>
     <div className='signup_popup'>
 
       <form>
@@ -29,8 +29,6 @@ export default function Signup(props)
             <div className='email_input_line'>
               <div className={`email_input`}>
                 <input ref={props.pwInputRef} placeholder='이메일' onChange={props.onEmailChange} value={props.email}/>
-                <div>@</div>
-                <div>naver.com</div>
                 {isEyeOpen ?
                 <img className='check' src={check_icon} onClick={()=>{}}/>
                 :<img className='error' src={error_icon} onClick={()=>{}}/>
@@ -58,7 +56,7 @@ export default function Signup(props)
                   <img className='eye' src={eye_icon} onClick={()=>{}}/>
                   :<img className='eye_off' src={eye_off_icon} onClick={()=>{}}/>
                   }
-                  {isEyeOpen ?
+                  {props.authState===0 ?
                   <img className='check' src={check_icon} onClick={()=>{}}/>
                   :<img className='error' src={error_icon} onClick={()=>{}}/>
                   }
@@ -125,7 +123,7 @@ export default function Signup(props)
                 <img className='check' src={check_icon} onClick={()=>{}}/>
                 :<img className='error' src={error_icon} onClick={()=>{}}/>}
               </div>
-              <div className='nick_check_btn'>중복확인</div>
+              <div className='nick_check_btn' onClick={props.onNickBtnClick}>중복확인</div>
             </div>
             
             <div className='nick_notice'>

@@ -18,7 +18,7 @@ export default function PasswordChangeContainer(props) {
     props.setState("login");
   }
 
-  const onPwChange = (e)=>{
+  const onPwChange = (e)=>{ 
     setPw(e.target.value)
     //유효성검사
     if(testPw(pw)){setPwState(0)}
@@ -26,7 +26,7 @@ export default function PasswordChangeContainer(props) {
   }
   const onPwEyeClick = (e)=>{
     if(pwEye){setPwEye(false)}
-    else{setPwEye(true)}
+    else{setPwEye(true)}  
     console.log("아아아")
   }
 
@@ -46,6 +46,13 @@ export default function PasswordChangeContainer(props) {
     return(pwreg.test(pw))
   }
 
+  const onClickBg = (e) => {
+    if(e.target.classList.contains("bg_shadow")){
+      props.setState(null)
+    }
+  
+  }
+
 
   return (
     <PasswordChange
@@ -54,6 +61,7 @@ export default function PasswordChangeContainer(props) {
       onPwCheckChange={onPwCheckChange}
       onPwCheckEyeClick={onPwCheckEyeClick}
       onSubmitPwChange={onSubmitPwChange}
+      onClickBg={onClickBg}
     />
   )
 }
