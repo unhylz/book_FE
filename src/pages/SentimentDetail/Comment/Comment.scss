@@ -6,71 +6,116 @@
 .comment-list-item {
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	margin-left: 60px;
+	margin-right: 60px;
+	padding-left: 15px;
 
 	.comment-result{
-		.list-top{
+		border-bottom: 1px solid gray;
+		padding-top: 20px;
+		padding-bottom: 20px;
+		.comment-header {
 			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
 			align-items: center;
-			gap: 8px;
+			.list-top{
+				display: flex;
+				align-items: center;
+				gap: 8px;
 
-			.profile-box {
-				width: 32px;
-				height: 32px;
-				.userimg {
+				.profile-box {
+					width: 32px;
+					height: 32px;
+					.userimg {
 						width: 100%;
 						height: 100%;
+					}
 				}
-			}
-			.info-box {
-				display: flex;
-				flex-direction: column;
-				.name-tier{
+				.info-box {
 					display: flex;
-					flex-direction: row;
-					.nickname {
+					flex-direction: column;
+					.name-tier{
+						display: flex;
+						flex-direction: row;
+						.nickname {
+							font-size: 16px;
+							font-weight: bold;
+							line-height: 140%;
+						}
+						.tier-icon {
+							object-fit: fill;
+							width: 12px;
+							margin-left: 4px;
+						}
+					}
+					.time {
+						color: rgba(0,0,0,0.5);
 						font-size: 16px;
-						font-weight: bold;
+						font-weight: medium;
 						line-height: 140%;
 					}
-					.tier-icon {
-						object-fit: fill;
-						width: 12px;
-						margin-left: 4px;
+				}
+			}
+			.like-recomment-container {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				border: 2px solid black;
+				border-radius: 10px;
+				width: 84px;
+				height: 25px;
+				justify-content: space-evenly;
+				cursor: pointer;
+				margin-right: 20px;
+				.like {
+					.comment-like-icon{
+						width: 20px;
+						height: 20px;
+						padding-top: 3px;
 					}
 				}
-				.time {
-					color: rgba(0,0,0,0.5);
-					font-size: 16px;
-					font-weight: medium;
-					line-height: 140%;
+				.divider {
+					height: 25px;
+					border: 1.5px solid black;
 				}
-				
+				.recomment {
+					.recomment-icon{
+						width: 20px;
+						height: 20px;
+						padding-top: 3px;
+					}
+				}
 			}
 		}
 		.content {
 			font-size: 18px;
 			font-weight: bold;
 			line-height: 150%;
+			margin-top: 15px;
 		}
 	}
 	.input-container {
+		margin-top: 20px;
 		display: flex;
 		flex-direction: row;
 		width: 100%;
-		height: 90px;
+		height: 120px;
 		.textarea {
 			width: 82%;
 			padding-left: 16px;
 			padding-top: 16px;
+			border: 1.5px solid black;
+			border-right: none;
 		}
 		.comment-button {
-			width: 18%;
+			width: 16%;
 			background-color: #5fcb75;
 			color: white;
 			font-weight: bold;
-			font-size: 20px;
-			border: 1px solid black;
+			font-size: 24px;
+			border: 1.5px solid black;
+			cursor: pointer;
 		}
 	}
 }

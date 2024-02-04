@@ -26,6 +26,9 @@ import MasterIcon from "../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../assets/tiers/그랜드마스터.svg";
 import "./SentimentDetail.scss";
 
+import insertImg from "./insert_Img.png";
+import bookcover1 from "./book_image_1.svg";
+
 export default function SentimentDetail() {
   // 선택한 센티먼트 id와 title 변수
   const { content, sentiment_title } = useParams();
@@ -58,9 +61,9 @@ export default function SentimentDetail() {
   };
 
   // 페이지 이동시 스크롤바 위치 최상단으로 가도록
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
 
 
   //상단 컴포넌트
@@ -99,15 +102,15 @@ export default function SentimentDetail() {
           </div>
         </div>
         <div className="book-image-box">
-          <div className="image">
-            <img src = {`bookcover_dummy/${SentimentDetailDummy[id-1].imagefile}`} alt="Book Cover"/>
+          <div className="image-box">
+            <img className="image" src = {bookcover1} alt="Book Cover"/>
             <div className="rating">{SentimentDetailDummy[id-1].star}</div>
           </div>
         </div>
       </div>
 
       <div className="detail-top-main">
-      <img className="detail-main-image" style={{width:"1100px", height:"1100px"}} src={`./${SentimentDetailDummy[id-1].insertImg}`} alt="책 내용 사진" />
+      <img className="detail-main-image" style={{width:"1100px", height:"1100px"}} src={insertImg} alt="책 내용 사진" />
         <div className="detail-main-text">{SentimentDetailDummy[id-1].text}</div>
       </div>
     </div>
@@ -123,36 +126,38 @@ const DetailBottom = () => {
     <div id='detail-bottom'>
       <div className="update-delete-box">
         <div className="update-button">
-          <img src={editIcon} style={{width:"20px"}} alt="editIcon" className="edit-icon"/>
-          {`수정하기`}
+          <img src={editIcon} alt="editIcon" className="edit-icon"/>
+          <div className="edit-text">수정하기</div>
         </div>
         <div className="delete-button">
-          <img src={deleteIcon} style={{width:"20px"}} alt="deleteIcon" className="delete-icon"/>
-          {`삭제하기`}</div>
+          <img src={deleteIcon} alt="deleteIcon" className="delete-icon"/>
+          <div className="delete-text">삭제하기</div>
+        </div>
       </div>
       <div className="bottom-button-box">
         <div className="like-box">
           <div className="like">
             <img src={likeIcon} alt="like" className="like-icon" />
-            {`${12}`}
+            <div className="like-count">12</div>
           </div>
           <div className="comment">
             <img src={commentIcon} alt="comment" className="comment-icon"/>
-            {`${3}`}
+            <div className="comment-count">3</div>
           </div>
           <div className="scrap">
-            <img src={bookmarkIcon} alt="bookmark" className="bookmark-icon"/>
-            {`${0}`}
+            <img src={bookmarkIcon} alt="scrap" className="scrap-icon"/>
+            <div className="scrap-count">0</div>
           </div>
         </div>
         <div className="recommand-box">
           <div className="recommand-button">
-            <img src={likeBlackIcon} style={{width:"20px"}} alt="likeBlack" className="like-black-icon"/>
-            {`추천하기`}
+            <img src={likeBlackIcon}  alt="likeBlack" className="recommand-black-icon"/>
+            <div className="recommand-text">추천하기</div>
           </div>
           <div className="scrap-button">
-            <img src={bookmarkBlackIcon} style={{width:"20px"}} alt="bookmarkBlack" className="bookmark-black-icon" />
-            {`스크랩`}</div>
+            <img src={bookmarkBlackIcon} alt="bookmarkBlack" className="scrap-black-icon" />
+            <div className="scrap-text">스크랩</div>
+          </div>
         </div>
       </div>
     </div>
@@ -172,7 +177,7 @@ const DetailBottom = () => {
         </div>
 
         {/* 2열 - 중앙 메인 부분 */}
-        <div className="center">
+        <div style={{width:'auto'}} className="center">
           <div className="contents">
 
             <DetailTop />

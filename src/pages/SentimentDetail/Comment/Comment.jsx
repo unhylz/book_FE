@@ -8,7 +8,8 @@ import DiaIcon from "../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../assets/tiers/그랜드마스터.svg";
 import Notification from '../../page1/notification/notification';
-
+import recommentIcon from "../../../assets/icons/comment.svg";
+import likeIcon from "../../../assets/icons/like.svg";
 
 
 export default function CommentItem() {
@@ -35,24 +36,34 @@ export default function CommentItem() {
 		<div className='comment-list-item'>
 			{CommentDummy.map((result) => (
 				<div key={result.id} className="comment-result">
-					<div className='list-top'>
-						<div className='profile-box'>
-							<img src={`../../../assets/icons/${result.profileImage}`} alt="Img" className="profile-image" style={{width: "50px", height: "50px"}}/>
-						</div>
-						<div className='info-box'>
-							<div className='name-tier'>
-								<div className='nickname'>{result.nickname}</div>
-								<img
-									src={getTierIcon(result.tier)}
-									alt="result.tier"
-									className="tier-icon"
-								/>
+					<div className='comment-header'>
+						<div className='list-top'>
+							<div className='profile-box'>
+								<img src={userImg} alt="Img" className="profile-image" style={{width: "36px", height: "36px"}}/>
 							</div>
-							<div className='time'>{result.writeDateTime}</div>
+							<div className='info-box'>
+								<div className='name-tier'>
+									<div className='nickname'>{result.nickname}</div>
+									<img src={getTierIcon(result.tier)} alt="result.tier" className="tier-icon" />
+								</div>
+								<div className='time'>{result.writeDateTime}</div>
+							</div>
+						</div>
+						<div className='like-recomment-container'>
+							<div className="like">
+								<img src={likeIcon} alt="like" className="comment-like-icon" />
+							</div>
+							<div className='divider'></div>
+							<div className="recomment">
+								<img src={recommentIcon} alt="recomment" className="recomment-icon"/>
+							</div>
 						</div>
 					</div>
 					<div className='comment-main'>
-					<div className='content'>{result.content}</div>
+						<div className='content'>{result.content}</div>
+						<div className='comment-like-count'>
+							
+						</div>
 					</div>
 				</div>
 			))}

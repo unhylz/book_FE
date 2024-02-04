@@ -66,7 +66,7 @@ export default function Home() {
 
             {/* 조건부 렌더링을 사용하여 버튼에 따라 다른 내용 표시 */}
             {selectedButton === "sentiment" && <Sentiment />}
-            {selectedButton === "follow" && <Follow />}
+            {selectedButton === "follow" && <Sentiment />}
           </div>
         </div>
 
