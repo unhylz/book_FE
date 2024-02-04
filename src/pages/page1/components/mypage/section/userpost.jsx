@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { Link } from "react-router-dom";
 import { sentimentDummy } from "../../../../Home/components/sentiment/sentimentDummy";
 import starIcon from "../../../../../assets/icons/star.svg";
@@ -12,7 +11,6 @@ import GoldIcon from "../../../../../assets/tiers/골드.svg";
 import DiaIcon from "../../../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../../assets/tiers/그랜드마스터.svg";
-import "../../../../Home/components/sentiment/Sentiment.scss";
 import Pagination from "./pagenation";
 
 function formatDateTime(dateTimeString) {
@@ -140,17 +138,11 @@ export default function Sentiment() {
       <hr/>
       <div className="pagination-container">
         <div className="pagination">
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-            (pageNumber) => (
-              <button
-                key={pageNumber}
-                className={pageNumber === currentPage ? "active" : ""}
-                onClick={() => handlePageChange(pageNumber)}
-              >
-                {pageNumber}
-              </button>
-            )
-          )}
+        <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(totalItems / itemsPerPage)}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
     </div>

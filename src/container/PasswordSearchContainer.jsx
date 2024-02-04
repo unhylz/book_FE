@@ -6,6 +6,7 @@ export default function PasswordSearchContainer(props) {
   const [email,setEmail] = useState("");
   const [authnum,setAuthnum] = useState("");
   const [timer,setTimer] = useState("05:00");
+  const [test,setTest] = useState();
 
   let sec = 300;
 
@@ -63,6 +64,11 @@ export default function PasswordSearchContainer(props) {
     setAuthnum(e.target.value);
   }
 
+  const onClickBg = (e) => {
+    if(e.target.classList.contains("bg_shadow")){
+      props.setState(null)
+    }}
+
 
 
 
@@ -76,6 +82,7 @@ export default function PasswordSearchContainer(props) {
       onSubmitHandler={onSubmitHandler}
       onEmailChange={onEmailChange}
       onAuthChange={onAuthChange}
+      onClickBg={onClickBg}
     />
   )
 }

@@ -5,6 +5,7 @@ import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
 import RelatedSentimentResults from "./components/RelatedSentimentResults";
+import sortIcon from "../../assets/icons/sort.svg";
 import "./RelatedSentimentMore.scss";
 
 export default function RelatedSentimentMore() {
@@ -14,6 +15,10 @@ export default function RelatedSentimentMore() {
 
   const handleLogoClick = () => {
     navigate("/");
+  };
+
+  const handleSortClick = () => {
+    alert("정렬 기능 구현 예정");
   };
 
   // 페이지 이동시 스크롤바 위치 최상단으로 가도록
@@ -34,9 +39,16 @@ export default function RelatedSentimentMore() {
         <div className="center">
           <div className="results-contents">
             <div className="results-container">
-              <p className="results">
-                {<strong>{`"${content}"`}</strong>} 센티먼트 검색 결과
-              </p>
+              <div className="results-title">
+                <p className="results">
+                  {<strong>{`"${content}"`}</strong>} 센티먼트 검색 결과
+                </p>
+                <button className="sort-btn" onClick={handleSortClick}>
+                  <img src={sortIcon} alt="Sort" className="sort-icon" />
+                  관련순
+                </button>
+              </div>
+
               <RelatedSentimentResults searchResult={content} />
             </div>
             <p>페이지네이션 추가</p>

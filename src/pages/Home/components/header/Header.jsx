@@ -6,6 +6,8 @@ import topSearch from "../../../../assets/icons/topSearch.svg";
 import leagueIcon from "../../../../assets/icons/league.svg";
 import writeIcon from "../../../../assets/icons/write.svg";
 import notificationIcon from "../../../../assets/icons/notification.svg";
+import bellIcon from "../../../../assets/icons/bell.svg";
+import logoutIcon from "../../../../assets/icons/logout.svg";
 import { userDummy } from "./userDummy.js";
 //import LoginContext from "../../../../modules/api/login_context";
 import "./Header.scss";
@@ -20,7 +22,10 @@ export default function Header({
   const nowContent = useRef();
   const { userName, image } = userDummy[0];
   //const { isLoggedIn } = useContext(LoginContext); // 로그인 상태 컨텍스트 사용
+
+  //확인용!!
   const isLoggedIn = true;
+  const isNotified = true;
 
   const handleLogoClick = () => {
     // 로고 클릭 시 홈으로 이동하면서 sentiment-btn이 선택된 상태로 변경
@@ -39,6 +44,10 @@ export default function Header({
 
   const handleNotificationClick = () => {
     navigate("/notification");
+  };
+
+  const handleLogoutClick = () => {
+    alert("로그아웃 기능 구현 필요");
   };
 
   const handleMypageClick = () => {
@@ -139,12 +148,29 @@ export default function Header({
               className="notification-btn"
               onClick={handleNotificationClick}
             >
-              <img
-                src={notificationIcon}
-                alt="Notification"
-                className="notification-icon"
-              />
+              {isNotified && (
+                <>
+                  <img
+                    src={bellIcon}
+                    alt="Notification"
+                    className="notification-icon"
+                  />
+                </>
+              )}
+              {!isNotified && (
+                <>
+                  <img
+                    src={notificationIcon}
+                    alt="Notification"
+                    className="notification-icon"
+                  />
+                </>
+              )}
               Notification
+            </button>
+            <button className="logout-btn" onClick={handleLogoutClick}>
+              <img src={logoutIcon} alt="Logout" className="logout-icon" />
+              Logout
             </button>
             <button className="mypage-btn" onClick={handleMypageClick}>
               <div className="icon-container">
