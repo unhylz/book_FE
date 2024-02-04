@@ -1,7 +1,7 @@
 import axios from "axios"
 
-const url = "http://3.37.54.220:3000"
-
+// const url = "http://3.37.54.220:3000"
+const url = ""
 
 export const isEmailDuplication = (email)=>{
   if(email==="중복"){
@@ -36,11 +36,11 @@ export const isLoginTrue = (email,pw)=>{
 }
 
 export const postLogin = (email,password) => {
-  axios.post(`${url}/users/login`, {
+  axios.post('/users/login', {
     email,
     password
   },
-  { withCredentials: true })
+  { withCredentials: true })  
   .then(function (response) {
     console.log("postLoginRES",response);
     return true
