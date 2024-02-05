@@ -60,6 +60,9 @@
   .error{
     margin-right: 19px;
   }
+  .check{
+    margin-right: 19px;
+  }
 }
 
   
@@ -152,6 +155,7 @@
         margin-top: 31px;
         .auth_input_line{
           display: flex;
+          align-items: flex-end;
           .auth_input{
             @include input_layout(200px);
           } 
@@ -159,13 +163,22 @@
             @include small_btn();
             margin-left: 20px;
           }
-          .auth_notice
-          {
-            margin-left: 6px;
-            .auth_notice_1{color: rgba($green,1);}
-            .auth_notice_2{color: rgba($red,1);}
-            .auth_notice_3{color: rgba($green,1);}
+          .resend{
+            height: 20px;
+            text-decoration : underline;
+            margin-left: 18px;
           }
+          .timer{
+            margin-left: 12px;
+            color: rgba($green,1);
+          } 
+        .auth_notice
+        {
+          margin-left: 6px;
+          .auth_notice_1{color: rgba($green,1);}
+          .auth_notice_2{color: rgba($red,1);}
+          .auth_notice_3{color: rgba($green,1);}
+        }
         }
         
       }
@@ -205,6 +218,10 @@
         .pw_notice{
           margin-top: 8px;
           margin-left: 6px;
+          height: 14px;
+          .pw_notice_0{}
+          .pw_notice_1{color: rgba($red,1);}
+          .pw_notice_2{color: rgba($green,1);}
         }
         .pwcheck_input{
           @include input_layout(400px);
@@ -215,6 +232,10 @@
         }
         .pwcheck_notice{
           margin-top: 5px;
+          height: 14px;
+          .pwcheck_notice_0{}
+          .pwcheck_notice_1{color: rgba($red,1);}
+          .pwcheck_notice_2{color: rgba($green,1);}
         }
 
       }
@@ -222,7 +243,7 @@
 
       
       .nickname_form{
-        margin-top: 40px;
+        margin-top: 18px;
         .nick_input_line{
           display: flex;
           justify-content: space-between;
@@ -236,6 +257,10 @@
         .nick_notice{
           margin-top: 5px;
           margin-left: 6px;
+          
+          .nick_notice_1{color: rgba($red,1); height: 14px;}
+          .nick_notice_2{color: rgba($red,1);  height: 14px;}
+          .nick_notice_3{color: rgba($green,1);  height: 14px;} 
         }
       }
       .signup_btn{
@@ -245,7 +270,7 @@
         line-height: 70px;
         font-size: 28px;        
         font-weight: 600px;
-        margin-top: 32px;
+        margin-top: 17px;
       }
     }
     

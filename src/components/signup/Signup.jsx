@@ -56,12 +56,14 @@ export default function Signup(props)
                   <img className='eye' src={eye_icon} onClick={()=>{}}/>
                   :<img className='eye_off' src={eye_off_icon} onClick={()=>{}}/>
                   }
-                  {props.authState===0 ?
+                  {props.authState===3 ?
                   <img className='check' src={check_icon} onClick={()=>{}}/>
                   :<img className='error' src={error_icon} onClick={()=>{}}/>
                   }
                 </div>
-                  <div className='auth_check_btn'>인증확인</div>
+                <div className='auth_check_btn'>인증확인</div>
+                <div className='resend'>재전송</div>
+                <div className='timer'>{props.timer}</div>
               </div>
               <div className='auth_notice'>
                 {[<div className='auth_notice_0'></div>,
@@ -81,7 +83,7 @@ export default function Signup(props)
               <img className='eye' src={eye_icon} onClick={()=>{}}/>
               :<img className='eye_off' src={eye_off_icon} onClick={()=>{}}/>
               }
-              {isEyeOpen ?
+              {props.pwState===2 ?
               <img className='check' src={check_icon} onClick={()=>{}}/>
               :<img className='error' src={error_icon} onClick={()=>{}}/>
               }
@@ -91,8 +93,10 @@ export default function Signup(props)
               <div>8~16자의 영문 대/소문자, 숫자, 특수문자를 사용해 주세요.</div>
               {[
               <div className='pw_notice_0'></div>,
-              <div className='pw_notice_1'>비밀번호 양식이 올바르지 않습니다.</div>]
-              [props.pwstate]}
+              <div className='pw_notice_1'>비밀번호 양식이 올바르지 않습니다.</div>,
+              <div className='pw_notice_2'>사용가능한 비밀번호 입니다.</div>
+              ]
+              [props.pwState]}
             </div>
             <div className='pwcheck_input'>
               <input ref={props.pwInputRef} type={isEyeOpen ? 'text':'password'} placeholder='비밀번호 확인' onChange={props.onPwCheckChange} value={props.pwCheck}/>
@@ -100,16 +104,16 @@ export default function Signup(props)
               <img className='eye' src={eye_icon} onClick={()=>{}}/>
               :<img className='eye_off' src={eye_off_icon} onClick={()=>{}}/>
               }
-              {isEyeOpen ?
+              {props.pwCheckState===2 ?
               <img className='check' src={check_icon} onClick={()=>{}}/>
               :<img className='error' src={error_icon} onClick={()=>{}}/>
               }
             </div>
             <div className='pwcheck_notice'>
             {[
-              <div className='warn_notice_0 '></div>,
-              <div className='warn_notice_1 '>비밀번호가 다릅니다!</div>,
-              <div className='warn_notice_2'>비밀번호가 같습니다!</div>]
+              <div className='pwcheck_notice_0 '></div>,
+              <div className='pwcheck_notice_1 '>비밀번호가 다릅니다!</div>,
+              <div className='pwcheck_notice_2'>비밀번호가 같습니다!</div>]
               [props.pwCheckState]}
             </div>
 
@@ -134,7 +138,7 @@ export default function Signup(props)
                 <div className='nick_notice_0'></div>,
                 <div className='nick_notice_1'>해당 닉네임은 사용할 수 없습니다!</div>,
                 <div className='nick_notice_2'>중복된 닉네임은 사용할 수 없습니다.</div>,
-                <div className='nicEk_notice_3'>닉네임을 사용이 가능합니다!</div>,
+                <div className='nick_notice_3'>닉네임이 사용 가능합니다!</div>,
                 ][props.nickState]}
             </div>
           </div>
