@@ -21,7 +21,7 @@ function Header() {
                     작성하기
                 </button>
                 <div className='user-box'>
-                    사용자
+                    Paul
                 </div>
             </div>
         </header>

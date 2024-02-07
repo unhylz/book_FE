@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import Login from "../components/login/Login";
-import { isLoginTrue } from "../modules/api/account";
+import { isLoginTrue, postLogin } from "../modules/api/account";
 import { useNavigate } from "react-router-dom";
 //import { useLoginContext } from "../modules/api/contexts/LoginContext"; // 컨텍스트 가져오기
 
@@ -39,15 +39,15 @@ export default function LoginContainer(props) {
     } else {
       //로그인 api 함수 호출
       console.log(
-        `email:${email}, pw:${pw}, remember:${remember} 로그인 되었습니다.`
+        `email:${email}, pw:${pw}, remember:${remember} 로그인을 시도합니다.`
       );
-      let res = isLoginTrue(email, pw);
+      let res = postLogin(email,pw);
       console.log("res: ", res);
 
       if (res) {
         //setIsLoggedIn(true); // setIsLoggedIn을 컨텍스트로 전달
         setNotice(0);
-        navigate("/");
+        props.setState(null)
       } else {
         setNotice(3);
         emailInputFocus();
@@ -84,6 +84,12 @@ export default function LoginContainer(props) {
     console.log("onClickSignupBtns");
   };
 
+  const onClickBg = (e) => {
+    if(e.target.classList.contains("bg_shadow")){
+      props.setState(null)
+    }
+  }
+
   return (
     <Login
       onSubmitHandler={onSubmitHandler}
@@ -100,6 +106,8 @@ export default function LoginContainer(props) {
       pwInputFocus={pwInputFocus}
       onClickPwSearchBtn={onClickPwSearchBtn}
       onClickSignupBtn={onClickSignupBtn}
+      onClickBg={onClickBg}
+      setState={props.setState}
     />
   );
 }

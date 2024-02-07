@@ -1,5 +1,5 @@
 // RelatedSentimentResults.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { sentimentDummy } from "../../Home/components/sentiment/sentimentDummy.js";
 import starIcon from "../../../assets/icons/star.svg";
@@ -13,6 +13,7 @@ import DiaIcon from "../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../assets/tiers/그랜드마스터.svg";
 import "./RelatedSentimentResults.scss";
+import axios from "axios";
 
 function formatDateTime(dateTimeString) {
   const dateTime = new Date(dateTimeString);
