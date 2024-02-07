@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Login from "../components/login/Login";
-import { isLoginTrue, postLogin, searchSentimen } from "../modules/api/account";
+import { isLoginTrue, postLogin} from "../modules/api/account";
 import { useNavigate } from "react-router-dom";
 //import { useLoginContext } from "../modules/api/contexts/LoginContext"; // 컨텍스트 가져오기
 
@@ -26,9 +26,6 @@ export default function LoginContainer(props) {
     pwInputRef.current.focus();
   };
 
-  useEffect(()=>{
-    searchSentimen();
-  })
 
   const onSubmitHandler = (e) => {
     e.preventDefault()
