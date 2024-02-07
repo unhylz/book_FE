@@ -6,14 +6,60 @@ import GoldIcon from "../../../../../assets/tiers/골드.svg";
 import DiaIcon from "../../../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../../assets/tiers/그랜드마스터.svg";
+import profileImg from "../../../../../assets/icons/profileImg.svg.svg"
 import "./userProfile.scss"
 import flag from "../../../../../assets/icons/lets-icons-flag-finish-alt.svg"
-import profileImg from "../../../../../assets/icons/ellipse-4.svg"
 import MypageModal from './mypageModal';
+import FileInput from "./FileInput";
+import axios from "axios";
 
-function UserProfile({ userData, handleImageChange }) {
+function UserProfile({ userData }) {
+  const [files, setFiles] = useState([]);
   const [message, setMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태를 관리합니다.
+
+  const [fileReaderThumbnail, setFileReaderThumbnail] = useState();
+  const [URLThumbnail, setURLThumbnail] = useState();
+
+  const createImageURL = (fileBlob) => { 
+    if(URLThumbnail)URL.revokeObjectURL(URLThumbnail);
+    const url = URL.createObjectURL(fileBlob);
+
+    setURLThumbnail(url);
+  };
+
+
+  const onImageChange = (e) => {
+    const { files } = e.target;
+
+    if (!files || !files[0]) return;
+
+    const uploadImage = files[0];
+
+    createImageURL(uploadImage);
+  };
+
+  const uploadImage = () => {
+    if (!files) return;
+
+    const formData = new FormData();
+    formData.append('image', files);
+
+     axios.patch("/users/1/mypage", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then((response) => {
+        console.log('Image uploaded successfully:', response.data);
+        alert("서버에 등록이 완료되었습니다!");
+      })
+      .catch((error) => {
+        console.error('Error uploading image:', error);
+      });
+  };
+ 
+  
 
   const navigate = useNavigate();
 
@@ -49,80 +95,39 @@ function UserProfile({ userData, handleImageChange }) {
       마스터: MasterIcon,
       그랜드마스터: GrandMasterIcon,
     };
-
-    const DefaultIcon = () => null;
-    const formattedTier = tier.toLowerCase().replace(/\s/g, "");
-
-    const SelectedIcon = tierIcons[formattedTier] || DefaultIcon;
-
-    return SelectedIcon;
+    return tierIcons[tier];
   };
+    
 
-  async function handleImageChange(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const response = await fetch(
-        "http://localhost:3001/users/{user-id}/mypage",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      if (response.ok) {
-        // 서버로부터의 응답 처리
-        const data = await response.json();
-        console.log("Image uploaded successfully:", data);
-        // 여기에서 추가적인 상태 업데이트나 UI 반응을 처리할 수 있습니다.
-      } else {
-        // 서버 에러 처리
-        console.error("Server error:", response);
-      }
-    } catch (error) {
-      // 네트워크 에러 처리
-      console.error("Network error:", error);
-    }
-  }
 
   return (
     <div className="user-profile">
       <div className="img-container">
         <div className="round-image">
-          <img src={profileImg} alt="Profile" />
-          <input
-            type="file"
-            id="imageInput"
-            hidden="hidden"
-            onChange={handleImageChange}
-          />
+        {URLThumbnail ? (
+            <img src={URLThumbnail} alt="thumbnail" />
+          ) : (
+            <img src={userData[0].profile_image}/>
+          )}
         </div>
-        <button
-          className="edit-button1"
-          onClick={() => document.getElementById("imageInput").click()}
-        >
-          Edit
-        </button>
+        <FileInput label="Edit" onChange={onImageChange} />
+        <button onClick={uploadImage}>upload</button>
       </div>
       <div className="userdata-container">
         <div className="last-tier">
           <strong>Season 1: Master</strong>
         </div>
         <div className="nameAndTier">
-          <h2 className="name">{userData.name}</h2>
+          <h2 className="name">{userData[0].nickname}</h2>
           <div className="tier">
             <img
-              src={getTierIcon(userData.tier)}
+              src={getTierIcon(userData[0].tier)}
               alt="userData.tier"
               className="tier-icon"
             />
           </div>
         </div>
-        <p className="email">{userData.email}</p>
+        <p className="email">{userData[0].email}</p>
         <div className="message-edit">
           <div className="message-box">
             <h5>{message}</h5>
@@ -143,16 +148,16 @@ function UserProfile({ userData, handleImageChange }) {
             className="follower-count detail-item"
             onClick={goToMypageFollowing}
           >
-            <strong>팔로워: {userData.follower}</strong>
+            <strong>팔로워: {userData[0].follower_num}</strong>
           </div>
           <div
             className="follow-count detail-item"
             onClick={goToMypageFollower}
           >
-            <strong>팔로우: {userData.follow}</strong>
+            <strong>팔로우: {userData[0].following_num}</strong>
           </div>
           <div className="user-tier detail-item">
-            <strong>티어 : {userData.tier}</strong>
+            <strong>티어 : {userData[0].tier}</strong>
           </div>
         </div>
       </div>

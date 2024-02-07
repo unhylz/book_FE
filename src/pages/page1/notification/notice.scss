@@ -8,15 +8,17 @@ body,
 }
 
 .notifications-container {
-    display: flex;
-    flex-direction: row;
+    display:flex;
+    flex-flow:column;
     margin-right: auto;
+    gap: 20px;
   }
   
   .notification-item {
     display: flex;
     align-items: center;
     margin-left: 100px;
+    column-gap: 30px;
   }
   
   .notification-icon {

@@ -3,7 +3,6 @@ import Header from "../../Home/components/header/Header";
 import SideAd from "../../Home/components/advertisement/SideAd";
 import Footer from "../../Home/components/footer/Footer";
 import NotificationItem from "../notification/notification_item";
-import CommentItem from "../../SentimentDetail/Comment/Comment";
 import AcountModalContainer from "../../../container/AcountModalContainer";
 import axios from "axios";
 
@@ -11,23 +10,24 @@ export default function Notification() {
   const [comments, setComments] = useState(["플러터 어렵나요?"]); // 댓글 상태
   const [notificationsData, setNotificationsData] = useState([]); // 알림 상태
   const [modalState, setModalState] = useState(null);
+  const [isNotified, setIsNotified] = useState(false);
+  const [userState, setUserstate] = useState(1);
 
-  // 댓글이 변경될 때마다 알림 데이터 업데이트
   useEffect(() => {
-    if (comments.length > 0) {
-      const newNotification = {
-        id: notificationsData.length + 1,
-        title: "새 댓글",
-        date: new Date().toLocaleDateString(),
-        content: comments[comments.length - 1],
-      };
-      setNotificationsData([...notificationsData, newNotification]);
-    }
-  }, [comments]);
+    axios.get(`users/${userState}/notifications`)
+    .then(response => {
+      setNotificationsData(response.data);
+      setIsNotified(true);
+    })
+    .catch(error => console.error(error));
+  }, []);
 
-  // 댓글 추가 함수 (실제 사용 시에는 API 호출 등을 통해 구현)
   const addComment = (newComment) => {
     setComments([...comments, newComment]);
+  };
+
+  const handleNotificationClick = () => {
+    setIsNotified(false); // 알림 클릭 시, 알림 여부 상태 변경
   };
 
   const handleButtonClick = () => {
