@@ -9,6 +9,7 @@ import notificationIcon from "../../../../assets/icons/notification.svg";
 import bellIcon from "../../../../assets/icons/bell.svg";
 import logoutIcon from "../../../../assets/icons/logout.svg";
 import { userDummy } from "./userDummy.js";
+
 //import LoginContext from "../../../../modules/api/login_context";
 import "./Header.scss";
 
@@ -22,10 +23,10 @@ export default function Header({
   const nowContent = useRef();
   const { userName, image } = userDummy[0];
   //const { isLoggedIn } = useContext(LoginContext); // 로그인 상태 컨텍스트 사용
-
   //확인용!!
   const isLoggedIn = true;
-  const isNotified = true;
+  //Notification 알람처리
+  const [isNotified,setIsNotified] = useState(false);
 
   const handleLogoClick = () => {
     // 로고 클릭 시 홈으로 이동하면서 sentiment-btn이 선택된 상태로 변경
@@ -44,6 +45,7 @@ export default function Header({
 
   const handleNotificationClick = () => {
     navigate("/notification");
+    setIsNotified(false);
   };
 
   const handleLogoutClick = () => {

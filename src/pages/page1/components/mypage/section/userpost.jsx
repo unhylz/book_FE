@@ -63,7 +63,6 @@ export default function Sentiment() {
 
   return (
     <div>
-      <p1><strong></strong></p1>
       <div className="search-container">
         {/* 검색 결과 리스트 */}
         {displayedItems.map((result) => (

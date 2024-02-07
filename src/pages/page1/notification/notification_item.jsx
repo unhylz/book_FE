@@ -7,8 +7,11 @@ export default function NotificationItem({ id, title, date, content }) {
   const navigate = useNavigate();
 
   const handleItemClick = () => {
-    // 여기서 id와 title을 사용하여 경로를 설정합니다.
-    navigate(`/sentiment/${id}/${title}`);
+    if (title.includes("댓글")) {
+      navigate(`/sentiment/${id}/${title}`);
+    } else if (title.includes("티어")) {
+      navigate("/mypage"); 
+    };
   };
 
   return (
