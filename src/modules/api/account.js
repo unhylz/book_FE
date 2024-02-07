@@ -111,10 +111,3 @@ export const sendAuth = (email)=>{
   });
 }
 
-  export const searchSentimen = (keyword)=>{
-    axios.get(`/search/book`,
-    {params: {sentiment:""}},
-    {withCredentials:true})
-    .then((res)=>{console.log(res)})
-    .catch((err)=>{console.log(err)})
-  }
