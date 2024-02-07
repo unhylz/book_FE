@@ -68,7 +68,10 @@ export default function CommentItem() {
 				</div>
 			))}
 			<div className="input-container">
-				<textarea className="textarea" placeholder="댓글을 작성하세요"></textarea>
+				<div className='text-box'>
+					<textarea className="textarea" placeholder="댓글을 작성하세요"></textarea>
+					<div className='text-count'>0/300</div>
+				</div>
 				<button className='comment-button'>{'작성하기'}</button>
 			</div>
 		</div>
