@@ -20,7 +20,7 @@ export default function Login(props) {
   const [isRemember, setIsRemember] = useState(false);
 
   return (
-    <div className="bg_shadow" onClick={props.onClickBg}>
+    <div className="bg_shadow" onMouseDown={props.onClickBg}>
       <div className="login_popup">
         <Link to="/">
           <img className="logo" src={BSL_logo}></img>

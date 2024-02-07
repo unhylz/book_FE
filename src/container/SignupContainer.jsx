@@ -24,6 +24,29 @@ export default function SignupContainer(props) {
   const [nick,setNick] = useState("");
   const [nickState,setNickState] = useState(0);
   
+  //timer
+  const [timer,setTimer] = useState("05:00");
+  let sec = 300;
+  useEffect(() => {
+    const id = setInterval(async  () => {
+      if(sec===0){sec=300}
+      else{sec=sec-1}
+      setTimer(sec2timer(sec)); 
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+  const sec2timer = (sec)=>{
+    let t_min = Math.floor(sec/60);
+    let t_sec = sec%60;
+    let r_min = "";
+    let r_sec = "";
+    if(t_min<10){r_min = `0${t_min}`}
+    else{r_min = `${t_min}`}
+    if(t_sec<10){r_sec = `0${t_sec}`}
+    else{r_sec = `${t_sec}`}
+    return `${r_min}:${r_sec}`
+  }
+
   const onEmailChange = (e) => {
     setEmail(e.target.value);
     checkEmail();
@@ -34,16 +57,34 @@ export default function SignupContainer(props) {
 
   const onPwChange = (e) => {
     setPw(e.target.value);
-    checkPw();
+    console.log(pw,pwState);
   }
+  const isPwMounted = useRef(false);
+  useEffect(()=>{
+    if(isPwMounted.current)
+    {
+      if(checkPw()){setPwState(2)}
+      else{setPwState(1)}
+    }
+    else {isPwMounted.current = true;}
+  },[pw])
+
 
   const onPwCheckChange = (e) => {
     setPwCheck(e.target.value);
-    if(checkPwCheck())
-    {setPwCheckState(2)}//비밀번호가 같습니다.
-    else
-    {setPwCheckState(1)}//비밀번호가 다릅니다.
+    console.log(pw,pwCheck);
   }
+  const isPwCheckMounted = useRef(false);
+  useEffect(()=>{
+    if(isPwCheckMounted.current)
+    {
+      if(pw===pwCheck){setPwCheckState(2)}
+      else{setPwCheckState(1)}
+    }
+    else {isPwCheckMounted.current = true;}
+  },[pwCheck,pw])
+
+
 
   const onNickChange = (e) => {
     setNick(e.target.value);
@@ -83,8 +124,11 @@ export default function SignupContainer(props) {
   const checkPw = (e) => {
     const pwreg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/
     return(pwreg.test(pw))}
+
   const checkPwCheck = ()=> {
-    return(pw===pwCheck)
+    if (pwCheck.length==0)
+    {return false}
+    else{return(pw===pwCheck)}
   }
 
   const checkNick = (e) => {
@@ -113,8 +157,15 @@ export default function SignupContainer(props) {
     <Signup
       onEmailChange={onEmailChange}
       onAuthChange={onAuthChange}
+
+      pw={pw}
+      pwState={pwState}
       onPwChange={onPwChange}
+
+      pwCheck={pwCheck}
+      pwCheckState={pwCheckState}
       onPwCheckChange={onPwCheckChange}
+
       onNickChange={onNickChange}
       onEmailBtnClick={onEmailBtnClick}
       onAuthBtnClick={onAuthBtnClick}
@@ -122,11 +173,13 @@ export default function SignupContainer(props) {
       email={email}
       emailState={emailState}
       auth={auth}
-      pw={pw}
-      pwCheck={pwCheck}
+      
       nick={nick}
+      nickState={nickState}
       onClickSignupBtn={onClickSignupBtn}
       onClickBg={onClickBg}
+
+      timer={timer}
     />
   )
 
