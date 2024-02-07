@@ -18,7 +18,7 @@ export default function Signup(props)
   const [isRemember,setIsRemember] = useState(false);
 
   return (
-  <div className='bg_shadow' onClick={props.onClickBg}>
+  <div className='bg_shadow' onMouseDown={props.onClickBg}>
     <div className='signup_popup'>
 
       <form>

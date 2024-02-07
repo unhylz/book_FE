@@ -1,5 +1,6 @@
 import React,{useState, useRef, useEffect} from 'react'
 import PasswordSearch from '../components/PasswordSearch/PasswordSearch';
+import {sendAuth} from '../modules/api/account';
 
 export default function PasswordSearchContainer(props) {
   
@@ -42,6 +43,9 @@ export default function PasswordSearchContainer(props) {
   
   const onClickSendBtn = ()=>{
     //email을 백엔드로 보내는 함수
+    console.log('email',email)
+    sendAuth(email);
+    
   }
 
   const onClickResendBtn = ()=>{

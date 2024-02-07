@@ -52,7 +52,7 @@ export const postLogin = (email,password) => {
 }
 
 export const postSignup = (email,password,nickname) => {
-  axios.post(`${url}/users/signin`, {
+  axios.post(`/users/signin`, {
     email,
     password, 
     nickname
@@ -69,7 +69,7 @@ export const postSignup = (email,password,nickname) => {
 }
 
 export const checkEmailDup = (email) => {
-  axios.post(`${url}/users/signin/emailcheck`, 
+  axios.post(`/users/signin/emailcheck`, 
     {email:email}
   )
   .then(function (response) {
@@ -83,7 +83,7 @@ export const checkEmailDup = (email) => {
 }
 
 export const checkNickDup = (nickname) => {
-  axios.post(`${url}/users/signin/nickcheck`, {
+  axios.post(`/users/signin/nickcheck`, {
     nickname
   })
   .then(function (response) {
@@ -95,3 +95,26 @@ export const checkNickDup = (nickname) => {
     return false
   });
 }
+
+export const sendAuth = (email)=>{
+  axios.post(`/users/auth`, {
+    email
+  },
+  {withCredentials:true})
+  .then(function (response) {
+    console.log(response);
+    return true
+  })
+  .catch(function (error) {
+    console.log(error);
+    return false
+  });
+}
+
+  export const searchSentimen = (keyword)=>{
+    axios.get(`/search/book`,
+    {params: {sentiment:""}},
+    {withCredentials:true})
+    .then((res)=>{console.log(res)})
+    .catch((err)=>{console.log(err)})
+  }
