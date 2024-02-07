@@ -7,6 +7,9 @@ import Footer from "../Home/components/footer/Footer";
 import RelatedSentimentResults from "./components/RelatedSentimentResults";
 import sortIcon from "../../assets/icons/sort.svg";
 import "./RelatedSentimentMore.scss";
+import axios from "axios";
+
+const url = "http://3.37.54.220:3000";
 
 export default function RelatedSentimentMore() {
   // 선택한 센티먼트 id와 title 변수
@@ -25,6 +28,27 @@ export default function RelatedSentimentMore() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  console.log("검색 searchResult: ", content);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `/search/sentiment?query=${encodeURIComponent(content)}`
+        );
+        console.log("센티먼트 데이터 확인용", response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (content) {
+      fetchData();
+
+      console.log("확인");
+    }
+  }, [content]);
 
   return (
     <div>

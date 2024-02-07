@@ -1,6 +1,6 @@
 // RelatedSentiment.jsx
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import moreIcon from "../../../../assets/icons/moreicon.svg";
 import starIcon from "../../../../assets/icons/star.svg";
@@ -14,6 +14,7 @@ import DiaIcon from "../../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../assets/tiers/그랜드마스터.svg";
 import "./RelatedSentiment.scss";
+import axios from "axios";
 
 function formatDateTime(dateTimeString) {
   const dateTime = new Date(dateTimeString);
@@ -25,6 +26,9 @@ function formatDateTime(dateTimeString) {
 
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
+
+//const url = "http://3.37.54.220:3000";
+//const url = "";
 
 export default function RelatedSentiment({ searchResult, displayedItems }) {
   //티어 아이콘 색상 변경용
