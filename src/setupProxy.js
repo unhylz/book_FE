@@ -1,17 +1,19 @@
 // src/setupProxy.js
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 module.exports = function (app) {
+  /*
   app.use(
-    createProxyMiddleware('/users', {
-      target: 'http://3.37.54.220:3000',
+    createProxyMiddleware("/users", {
+      target: "http://3.37.54.220:3000",
       changeOrigin: true,
-    }),
+    })
   );
+  */
   app.use(
-    createProxyMiddleware('/search', {
-      target: 'http://3.37.54.220:3000',
+    createProxyMiddleware(["/users", "/search"], {
+      target: "http://3.37.54.220:3000",
       changeOrigin: true,
-    }),
+    })
   );
 };
