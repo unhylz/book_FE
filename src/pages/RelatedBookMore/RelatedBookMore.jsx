@@ -1,5 +1,5 @@
 // RelatedBookMore.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
@@ -7,11 +7,38 @@ import Footer from "../Home/components/footer/Footer";
 import sortIcon from "../../assets/icons/sort.svg";
 import RelatedBookResults from "./components/RelatedBookResults";
 import "./RelatedBookMore.scss";
+import { BookSearch } from "../../modules/api/search";
 
 export default function RelatedBookMore() {
   // 선택한 센티먼트 id와 title 변수
   const { content } = useParams();
   const navigate = useNavigate();
+  const [SearchData, setSearchData] = useState(null);
+  const [SearchNum, setSearchNum] = useState(null);
+
+  console.log("content detail page: ", content);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await BookSearch(content);
+        setSearchData(data);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    if (content) {
+      fetchData();
+    }
+  }, [content]);
+
+  useEffect(() => {
+    if (SearchData && SearchData.bookData) {
+      console.log("검색 도서 데이터:", SearchData.bookData);
+      setSearchNum(SearchData.bookData.bookObject.length);
+    }
+  }, [SearchData]);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -40,15 +67,22 @@ export default function RelatedBookMore() {
             <div className="results-container">
               <div className="results-title">
                 <p className="results">
-                  {<strong>{`"${content}"`}</strong>} 관련 서적 검색 결과
+                  {<strong>{`"${content}"`}</strong>} 관련 서적 검색
+                  결과&nbsp;&nbsp; 총&nbsp;
+                  {<strong>{`${SearchNum}`}</strong>}권
                 </p>
+
                 <button className="sort-btn" onClick={handleSortClick}>
                   <img src={sortIcon} alt="Sort" className="sort-icon" />
                   관련순
                 </button>
               </div>
-
-              <RelatedBookResults searchResult={content} />
+              {SearchData && SearchData.bookData && (
+                <RelatedBookResults
+                  searchResult={content}
+                  displayedItems={SearchData.bookData}
+                />
+              )}
             </div>
             <p>페이지네이션 추가</p>
           </div>
