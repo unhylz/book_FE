@@ -1,6 +1,6 @@
 // BookDetail.jsx
-import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
@@ -11,19 +11,29 @@ import { bookDummy } from "../TopNavSearch/bookDummy.js";
 import { sentimentDummy } from "../Home/components/sentiment/sentimentDummy";
 import StarRating from "./components/starRating/StarRating.jsx";
 import "./BookDetail.scss";
+import { BookSearch } from "../../modules/api/search";
+import { SentimentSearch } from "../../modules/api/search";
 
 export default function BookDetail() {
   // 선택한 센티먼트 id와 title 변수
-  const { content, book_title, id } = useParams();
+  const { content, book_title } = useParams();
   const navigate = useNavigate();
-  //const location = useLocation();
-  const bookId = parseInt(id, 10);
+  const location = useLocation();
+  const bookId = 1; //parseInt(id, 10);
   const displayedItems2 = sentimentDummy.slice(33, 36);
+  const { bookInfo } = useLocation();
 
-  //확인용
   const isAssessed = true;
 
-  console.log(book_title);
+  console.log("location: ", location);
+
+  useEffect(() => {
+    if (bookInfo) {
+      console.log("검색 도서 데이터22:", bookInfo);
+    } else {
+      console.log("bookInfo is not available!");
+    }
+  }, [bookInfo]);
 
   const handleLogoClick = () => {
     navigate("/");
