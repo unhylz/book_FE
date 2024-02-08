@@ -1,3 +1,5 @@
+//search.js
+
 import axios from "axios";
 
 export const topNavSearch = async (keyword) => {
@@ -79,6 +81,19 @@ export const NicknameFollow = async (user_id, followingId) => {
     return response.data;
   } catch (error) {
     console.log("NicknameFollow response error: ", error);
+    throw error;
+  }
+};
+
+export const RankingData = async () => {
+  try {
+    const response = await axios.get(`/ranks`, {
+      withCredentials: true,
+    });
+    console.log("rankning response.data: ", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("rankning response error: ", error);
     throw error;
   }
 };
