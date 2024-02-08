@@ -13,7 +13,6 @@ import DiaIcon from "../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../assets/tiers/그랜드마스터.svg";
 import "./RelatedSentimentResults.scss";
-import axios from "axios";
 
 function formatDateTime(dateTimeString) {
   /*

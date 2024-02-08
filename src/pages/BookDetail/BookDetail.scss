@@ -103,7 +103,10 @@
                       //border: 2px dashed red;
                       margin: 0;
                       height: 50%;
+                      width: 40px;
+                      min-width: 40px;
                       align-items: center;
+                      justify-content: center;
                       display: flex;
                     }
                   }
@@ -144,6 +147,11 @@
                         margin-left: 5px;
                         font-size: 15px;
                         color: rgba($black, 0.7);
+                        width: 60px;
+                        min-width: 60px;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
                       }
                     }
 
