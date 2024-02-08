@@ -40,7 +40,7 @@ export default function Header({
       // League 버튼 클릭 시 SentimentLeague 페이지로 이동
       navigate("/sentiment-league");
     } else {
-      alert("로그인이 필요한 기능입니다.");
+      //alert("로그인이 필요한 기능입니다.");
     }
   };
 
