@@ -2,11 +2,12 @@
 
 .related-book-container {
   //border: 2px dashed brown;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 280px);
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 150px;
+  grid-gap: 80px;
   margin-top: 30px;
 
   .related-book-info {
@@ -15,12 +16,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 220px;
+    width: 240px;
 
     .book-image {
       //border: 2px dashed red;
-      width: 220px;
-      height: 330px;
+      border: 1px solid $black;
+      width: 240px;
+      height: 360px;
       object-fit: fill;
     }
 

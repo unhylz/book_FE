@@ -21,7 +21,7 @@ export default function PasswordSearch(props) {
   const [isRemember, setIsRemember] = useState(false);
 
   return (
-  <div className='bg_shadow' onClick={props.onClickBg}>
+  <div className='bg_shadow' onMouseDown={props.onClickBg}>
     <div className='pwsearch_popup'>
       <Link to="/"><img className='logo' src={BSL_logo}></img></Link>
       <div className="title">비밀번호 찾기</div>

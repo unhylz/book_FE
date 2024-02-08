@@ -43,7 +43,7 @@ function formatDateTime(dateTimeString) {
   const minutes = String(dateTime.getMinutes()).padStart(2, "0");
 
   return `${year}/${month}/${day} ${hours}:${minutes}`;
-}
+} 
 
 export default function MypageScrap() {
     const [selectedButton, setSelectedButton] = useState("sentiment");
@@ -76,14 +76,18 @@ export default function MypageScrap() {
         setSelectedButton(button);
     };
 
-   /* useEffect(() => {
-      // 전체 아이템 수를 가져오는 로직
-      // 예: API 호출 등
-      fetchTotalItems().then((data) => {
-        setTotalItems(data.totalCount);
+    useEffect(() => {
+      axios.get('http://3.37.54.220:3000/users/abc1234@naver.com/scrap')
+      .then((Response) => {
+        setResult(Response.data);
+        setTotalItems(Response.data.length)
+      .then((data) => console.log(data)); 
+      })
+      .catch((error) => {
+        console.log('Error fetching data: ', error);
       });
     }, []);
-    */
+    
 
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 

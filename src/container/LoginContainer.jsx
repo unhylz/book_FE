@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Login from "../components/login/Login";
-import { isLoginTrue, postLogin } from "../modules/api/account";
+import { isLoginTrue, postLogin} from "../modules/api/account";
 import { useNavigate } from "react-router-dom";
 //import { useLoginContext } from "../modules/api/contexts/LoginContext"; // 컨텍스트 가져오기
 
@@ -26,8 +26,9 @@ export default function LoginContainer(props) {
     pwInputRef.current.focus();
   };
 
+
   const onSubmitHandler = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     console.log("hihihi");
 
     if (email === "") {

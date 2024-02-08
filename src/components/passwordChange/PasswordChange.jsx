@@ -19,7 +19,7 @@ export default function PasswordChange(props)
   const [isRemember,setIsRemember] = useState(false);
 
   return (
-  <div className='bg_shadow' onClick={props.onClickBg}>
+  <div className='bg_shadow' onMouseDown={props.onClickBg}>
     <div className='pwchange_popup'>
       <Link to="/"><img className='logo' src={BSL_logo}></img></Link>
       <h2>비밀번호 변경</h2>

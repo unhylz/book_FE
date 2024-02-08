@@ -1,54 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import followersData from "../../../../modules/api/dummy_follower";
-//import "./mypage.scss";
-//import "../mypage/mypage_follower.scss";
-import ellipse4 from "../../../../assets/followers/ellipse-4.svg";
-import axios from "axios";
 import moreIcon from "../../../../assets/icons/moreicon.svg";
 import "./RelatedNickname.scss";
+import { NicknameFollow } from "../../../../modules/api/search";
 
 export default function RelatedNickname({ searchResult, displayedItems }) {
-  const [followers, setFollowers] = useState(followersData.slice(5, 8));
-  const [selectedButton, setSelectedButton] = useState("sentiment");
-  const userId = "123"; // 실제 사용자 ID로 대체해야 합니다.
+  const userId = "2"; // 실제 사용자 ID로 대체 필요 ---------------
+  const [FollowStatus, setFollowStatus] = useState([]);
 
-  const handleButtonClick = (button) => {
-    setSelectedButton(button);
-  };
+  useEffect(() => {
+    const fetchInitialFollowStatus = async () => {
+      try {
+        // displayedItems에서 user_id의 오름차순으로 데이터 정렬
+        const sortedItems = displayedItems.nicknameObject.sort(
+          (a, b) => a.user_id - b.user_id
+        );
 
-  const handleFollowClick = async (follower) => {
+        // 정렬된 데이터를 기반으로 초기 팔로우 상태 설정
+        const initialFollowStatus = await Promise.all(
+          sortedItems.map(async (follower) => {
+            const data = await NicknameFollow(userId, follower.user_id);
+            return data.follow_status === "following";
+          })
+        );
+        setFollowStatus(initialFollowStatus);
+      } catch (error) {
+        console.error("팔로우 상태 초기화 오류:", error);
+      }
+    };
+
+    fetchInitialFollowStatus();
+  }, []);
+  const handleFollowClick = async (follower, index) => {
     if (!follower) {
       console.error("Invalid follower object");
       return;
     }
 
     try {
-      // 팔로우 상태 업데이트를 서버에 요청
-      const response = await axios.post(
-        "http://localhost:3001/users/{user-id}/follow",
-        {
-          followerId: follower.id, // 팔로우 대상 사용자의 ID
-          isFollow: !follower.isFollow, // 현재 팔로우 상태를 반전시킵니다.
-        }
-      );
-
-      if (response.data.follow_status === "Follow") {
-        console.log(`${follower.name}를 팔로우했습니다.`);
-      } else {
-        console.log(`${follower.name} 팔로우를 취소했습니다.`);
+      const data = await NicknameFollow(userId, follower.user_id);
+      const updatedFollowStatus = [...FollowStatus]; // FollowStatus 복사
+      if (data.follow_status === "following") {
+        updatedFollowStatus[index] = true;
       }
-
-      // 팔로우 상태를 업데이트합니다.
-      const newFollowers = followers.map((f) => {
-        if (f.id === follower.id) {
-          return { ...f, isFollow: !follower.isFollow };
-        }
-        return f;
-      });
-      setFollowers(newFollowers);
+      if (data.follow_status === "follow") {
+        updatedFollowStatus[index] = false;
+      }
+      setFollowStatus(updatedFollowStatus); // 업데이트된 팔로우 상태 저장
     } catch (error) {
-      console.error("팔로우 요청 중 오류 발생:", error);
+      console.error("팔로우 오류:", error);
     }
   };
 
@@ -56,27 +56,35 @@ export default function RelatedNickname({ searchResult, displayedItems }) {
     <>
       <div className="related-nickname-container">
         <div className="related-nickname-list">
-          {followers.map((follower, index) => (
-            <div key={index} className="related-follower-card">
-              <img
-                src={follower.imageUrl}
-                alt={follower.name}
-                className="related-follower-image"
-              />
-              <div className="related-follower-info">
-                <h3 className="related-follower-name">{follower.name}</h3>
-                <p className="follower-bio">{follower.bio}</p>
-              </div>
-              <button
-                onClick={() => handleFollowClick(follower)}
-                className={`follower-status ${
-                  follower.isFollow ? "followed" : "not-followed"
-                }`}
-              >
-                {follower.isFollow ? "팔로우" : "팔로잉"}
-              </button>
-            </div>
-          ))}
+          {displayedItems.nicknameObject &&
+            Array.isArray(displayedItems.nicknameObject) &&
+            displayedItems.nicknameObject.length > 0 &&
+            displayedItems.nicknameObject
+              .sort((a, b) => a.user_id - b.user_id)
+              .map((follower, index) => (
+                <div key={index} className="related-follower-card">
+                  <img
+                    src={follower.profile_image}
+                    alt={follower.nickname}
+                    className="related-follower-image"
+                  />
+                  <div className="related-follower-info">
+                    <h3 className="related-follower-name">
+                      {follower.nickname}
+                    </h3>
+                    <p className="follower-bio">{follower.status_message}</p>
+                  </div>
+                  <button
+                    onClick={() => handleFollowClick(follower, index)} // 인덱스도 함께 전달
+                    className={`follower-status ${
+                      FollowStatus[index] ? "followed" : "not-followed" // 팔로우 상태에 따라 클래스 지정
+                    }`}
+                  >
+                    {FollowStatus[index] ? "팔로잉" : "팔로우"}
+                    {/* 팔로우 상태에 따라 버튼 텍스트 변경 */}
+                  </button>
+                </div>
+              ))}
         </div>
       </div>
       <div className="more-details">

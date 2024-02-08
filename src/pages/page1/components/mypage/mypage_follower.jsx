@@ -1,18 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideAd from "../../../Home/components/advertisement/SideAd";
 import Header from "../../../../pages/Home/components/header/Header";
-import followersData from "../../../../modules/api/dummy_follower";
+import axios from "axios";
 import "./mypage.scss";
 import "../mypage/mypage_follower.scss";
-import axios from "axios";
 
 export default function Mypage_follower() {
-  const [followers, setFollowers] = useState(followersData);
+  const [followers, setFollowers] = useState([]);
   const [selectedButton, setSelectedButton] = useState("sentiment");
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
   };
+
+  useEffect(() => {
+    const fetchFollowers = async () => {
+      try {
+        const response = await axios.get("/users/abc1234@naver.com/follower");
+        setFollowers(response.data.nicknames);
+        console.log("팔로워 데이터:", response.data);
+      } catch (error) {
+        console.error("팔로워 데이터를 불러오는 중 오류 발생:", error);
+      }
+    };
+
+    fetchFollowers();
+  }, []);
 
   const handleFollowClick = async (follower) => {
     if (!follower) {
@@ -20,34 +33,36 @@ export default function Mypage_follower() {
       return;
     }
   
+    
+
     try {
       // 팔로우 상태 업데이트를 서버에 요청
-      const response = await axios.get(`http://3.37.54.220:3000/users/{user-id}/follower`, {
-        params: {
-          followerId: follower.id,
-          isFollow: !follower.isFollow, 
-        }
+      const response = await axios.post("/users/abc1234@naver.com/follow", {
+        followerId: follower.nick,
+        isFollow: follower.follow_status === "true" ? false : true,
       });
-  
-      if (response.data.follow_status === "Follow") {
-        console.log(`${follower.name}를 팔로우했습니다.`);
+
+      if (response.data.follow_status === "true") {
+        console.log(`${follower.nick}를 팔로우했습니다.`);
       } else {
-        console.log(`${follower.name} 팔로우를 취소했습니다.`);
+        console.log(`${follower.nick} 팔로우를 취소했습니다.`);
       }
-  
+
       // 팔로우 상태를 업데이트합니다.
       const newFollowers = followers.map((f) => {
-        if (f.id === follower.id) {
-          return { ...f, isFollow: !f.isFollow };
+        if (f.nick === follower.nick) {
+          return { ...f, follow_status: follower.follow_status === "true" ? "false" : "true" };
         }
         return f;
       });
       setFollowers(newFollowers);
-  
+
     } catch (error) {
       console.error("팔로우 요청 중 오류 발생:", error);
     }
   };
+
+  
 
   return (
     <div>
@@ -58,30 +73,34 @@ export default function Mypage_follower() {
         </div>
         <div className="mypage-container">
           <div className="user-list">
-            <h2>팔로잉</h2>
-            {followers.map((follower, index) => (
+            <h2>팔로우</h2>
+            {followers.length === 0 ? (
+              <p>팔로워가 없습니다.</p>
+            ) :
+            followers.map((follower, index) => (
               <div key={index} className="follower-card">
                 <img
-                  src={follower.imageUrl}
-                  alt={follower.name}
+                  src={follower.profile_image}
+                  alt={follower.nick}
                   className="follower-image"
                 />
                 <div className="follower-info">
-                  <h3 className="follower-name">{follower.name}</h3>
-                  <p className="follower-bio">{follower.bio}</p>
+                  <h3 className="follower-name">{follower.nick}</h3>
+                  <p className="follower-bio">{follower.status_message}</p>
                 </div>
                 <button
                   onClick={() => handleFollowClick(follower)}
                   className={`follower-status ${
-                    follower.isFollow ? "followed" : "not-followed"
+                    follower.follow_status === "true" ? "followed" : "not-followed"
                   }`}
                 >
-                  {follower.isFollow ? "팔로우" : "팔로잉"}
+                  {follower.follow_status === "true" ? "팔로우" : "팔로잉"}
                 </button>
               </div>
             ))}
           </div>
         </div>
+      
         <div className="right">
           <SideAd />
         </div>
