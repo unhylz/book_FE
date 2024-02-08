@@ -47,3 +47,38 @@ export const SentimentSearch = async (keyword) => {
     throw error;
   }
 };
+
+export const NicknameSearch = async (keyword) => {
+  try {
+    const response = await axios.get(`/search/nickname`, {
+      params: {
+        query: keyword,
+      },
+      withCredentials: true,
+    });
+    console.log("response.data: ", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("response error: ", error);
+    throw error;
+  }
+};
+
+export const NicknameFollow = async (user_id, followingId) => {
+  try {
+    const response = await axios.post(
+      `/users/${user_id}/follow`,
+      {
+        followingId: followingId,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    console.log("user_id: ", user_id, "-> ", response.data, "-> ", followingId);
+    return response.data;
+  } catch (error) {
+    console.log("NicknameFollow response error: ", error);
+    throw error;
+  }
+};
