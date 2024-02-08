@@ -21,11 +21,12 @@ export default function BookDetail() {
   const location = useLocation();
   const bookId = 1; //parseInt(id, 10);
   const displayedItems2 = sentimentDummy.slice(33, 36);
+  const [SearchData, setSearchData] = useState(null);
   const { bookInfo } = useLocation();
 
   const isAssessed = true;
 
-  console.log("location: ", location);
+  console.log("content 책 상세 페이지: ", content);
 
   useEffect(() => {
     if (bookInfo) {
@@ -56,6 +57,28 @@ export default function BookDetail() {
       console.log("Book not found with id:", bookId);
     }
   }
+
+  // 관련 센티먼트
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await SentimentSearch(content);
+        setSearchData(data.sentimentObject);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    if (content) {
+      fetchData();
+    }
+  }, [content]);
+
+  useEffect(() => {
+    if (SearchData && SearchData) {
+      console.log("검색 센티먼트 데이터22:", SearchData);
+    }
+  }, [SearchData]);
 
   function formatPublishDatetime(dateTimeString) {
     const dateTime = new Date(dateTimeString);
@@ -201,10 +224,12 @@ export default function BookDetail() {
           </div>
           <div className="book-detail-sentiment">
             <p className="book-related-sentiment">관련 센티먼트</p>
-            <RelatedSentiment
-              searchResult={content}
-              displayedItems={displayedItems2}
-            />
+            {SearchData && (
+              <RelatedSentiment
+                searchResult={content}
+                displayedItems={SearchData}
+              />
+            )}
           </div>
         </div>
 
