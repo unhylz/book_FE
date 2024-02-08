@@ -15,8 +15,22 @@ export default function RelatedBookMore() {
   const navigate = useNavigate();
   const [SearchData, setSearchData] = useState(null);
   const [SearchNum, setSearchNum] = useState(null);
+  const [SortedSearchData, setSortedSearchData] = useState(null);
 
-  console.log("content detail page: ", content);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // 드롭다운 메뉴 열림/닫힘
+  const [selectedSortOption, setSelectedSortOption] = useState("관련순"); // 선택된 정렬 옵션
+  const sortOptions = ["관련순", "별점순"]; // 정렬 옵션 리스트
+
+  //console.log("content detail page: ", content);
+
+  const handleMenuToggle = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleSortOptionClick = (option) => {
+    setIsMenuOpen(false); // 메뉴 닫기
+    setSelectedSortOption(option); // 선택한 옵션 설정
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,13 +58,36 @@ export default function RelatedBookMore() {
     navigate("/");
   };
 
-  const handleSortClick = () => {
-    alert("정렬 기능 구현 예정");
-  };
   // 페이지 이동시 스크롤바 위치 최상단으로 가도록
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    // 정렬 함수
+    const sortData = (data, option) => {
+      console.log("옵션: ", option);
+      switch (option) {
+        case "관련순":
+          //console.log("옵2션: ", data);
+          return data;
+        case "별점순":
+          return data.slice().sort((a, b) => b.avr_score - a.avr_score);
+        default:
+          return data;
+      }
+    };
+
+    if (SearchData) {
+      // 선택된 정렬 옵션에 따라 데이터를 정렬
+      const sortedData = sortData(
+        SearchData.bookData.bookObject,
+        selectedSortOption
+      );
+      // 정렬된 데이터를 RelatedSentimentResults 컴포넌트에 전달
+      setSortedSearchData(sortedData);
+    }
+  }, [SearchData, selectedSortOption]);
 
   return (
     <div>
@@ -71,16 +108,29 @@ export default function RelatedBookMore() {
                   결과&nbsp;&nbsp; 총&nbsp;
                   {<strong>{`${SearchNum}`}</strong>}권
                 </p>
-
-                <button className="sort-btn" onClick={handleSortClick}>
-                  <img src={sortIcon} alt="Sort" className="sort-icon" />
-                  관련순
-                </button>
+                <div className="dropdown2">
+                  <button className="sort-btn" onClick={handleMenuToggle}>
+                    <img src={sortIcon} alt="Sort" className="sort-icon" />
+                    {selectedSortOption}
+                  </button>
+                  {isMenuOpen && (
+                    <div className="dropdown-menu">
+                      {sortOptions.map((option) => (
+                        <button
+                          key={option}
+                          onClick={() => handleSortOptionClick(option)}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-              {SearchData && SearchData.bookData && (
+              {SortedSearchData && (
                 <RelatedBookResults
                   searchResult={content}
-                  displayedItems={SearchData.bookData}
+                  displayedItems={SortedSearchData}
                 />
               )}
             </div>

@@ -23,22 +23,67 @@
         font-size: 22px;
       }
 
-      .sort-btn {
-        font-size: 17px;
-        border: none;
-        background-color: white;
+      .dropdown2 {
         margin-right: 0;
         margin-left: auto;
         display: flex;
         align-items: center;
-        cursor: pointer;
 
-        .sort-icon {
+        .sort-btn {
+          font-size: 17px;
           border: none;
-          margin: 0;
+          background-color: white;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          //border: 1.5px solid $black;
+          cursor: pointer;
+          width: 90px;
           padding: 0;
-          margin-right: 5px;
-          width: 20px;
+          padding-right: 5px;
+
+          .sort-icon {
+            //border: 1.5px solid $black;
+            //border: none;
+            margin: 0;
+            padding: 0;
+            margin-left: 0;
+            margin-right: auto;
+            width: 20px;
+          }
+        }
+
+        .dropdown-menu {
+          //border: 1.5px solid $black;
+          position: absolute;
+          background-color: white;
+          //border: 1px solid #ccc;
+          border-top: none;
+          border-radius: 0 0 4px 4px;
+          //box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          //transform: translate(0px, 84px);
+          transform: translate(0px, 47px);
+          transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+          width: 90px;
+
+          button {
+            display: block;
+            width: 100%;
+            //padding: 10px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            border: none;
+            background-color: transparent;
+            color: $black;
+            text-align: right;
+            font-size: 17px;
+          }
+
+          button:hover {
+            background-color: $green;
+            color: white;
+            cursor: pointer;
+          }
         }
       }
     }
