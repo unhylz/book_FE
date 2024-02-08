@@ -62,77 +62,74 @@ export default function RelatedSentimentResults({
   return (
     <>
       <div className="related-sentiment-results">
-        {displayedItems.sentimentObject &&
-          Array.isArray(displayedItems.sentimentObject) &&
-          displayedItems.sentimentObject.length > 0 &&
-          displayedItems.sentimentObject.map((result, index) => (
-            <div key={index} className="related-sentiment-search-result">
-              <div className="info">
-                <Link
-                  to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
-                  className="book-link"
-                >
-                  <div className="book-cover">
-                    <img src={result.book_image} alt={result.book_title} />
+        {displayedItems.map((result, index) => (
+          <div key={index} className="related-sentiment-search-result">
+            <div className="info">
+              <Link
+                to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
+                className="book-link"
+              >
+                <div className="book-cover">
+                  <img src={result.book_image} alt={result.book_title} />
+                </div>
+              </Link>
+              <div className="none-img">
+                <div className="detail-info">
+                  <Link
+                    to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
+                    className="book-link"
+                  >
+                    <h3>{result.sentiment_title}</h3>
+                  </Link>
+                  <p>
+                    <strong>{result.book_title}</strong> ({result.author}/
+                    {result.publisher})
+                  </p>
+                </div>
+                <div className="additional-info">
+                  <div className="nickname">
+                    <p>닉네임: {result.nickname} </p>
                   </div>
-                </Link>
-                <div className="none-img">
-                  <div className="detail-info">
-                    <Link
-                      to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
-                      className="book-link"
-                    >
-                      <h3>{result.sentiment_title}</h3>
-                    </Link>
-                    <p>
-                      <strong>{result.book_title}</strong> ({result.author}/
-                      {result.publisher})
-                    </p>
+                  <div className="tier">
+                    <p>티어: </p>
+                    <img
+                      src={getTierIcon(result.tier)}
+                      alt="result.tier"
+                      className="tier-icon"
+                    />
                   </div>
-                  <div className="additional-info">
-                    <div className="nickname">
-                      <p>닉네임: {result.nickname} </p>
-                    </div>
-                    <div className="tier">
-                      <p>티어: </p>
-                      <img
-                        src={getTierIcon(result.tier)}
-                        alt="result.tier"
-                        className="tier-icon"
-                      />
-                    </div>
-                    <div className="likes">
-                      <img src={likeIcon} alt="like" className="like-icon" />
-                      <p>{result.like_num}</p>
-                    </div>
-                    <div className="comments">
-                      <img
-                        src={commentIcon}
-                        alt="comment"
-                        className="comment-icon"
-                      />
-                      <p>{result.comment_num}</p>
-                    </div>
-                    <div className="bookmarks">
-                      <img
-                        src={boockmarkIcon}
-                        alt="bookmark"
-                        className="bookmark-icon"
-                      />
-                      <p>{result.scrap_num}</p>
-                    </div>
-                    <p className="datetime">
-                      {formatDateTime(result.created_at)}
-                    </p>
+                  <div className="likes">
+                    <img src={likeIcon} alt="like" className="like-icon" />
+                    <p>{result.like_num}</p>
                   </div>
+                  <div className="comments">
+                    <img
+                      src={commentIcon}
+                      alt="comment"
+                      className="comment-icon"
+                    />
+                    <p>{result.comment_num}</p>
+                  </div>
+                  <div className="bookmarks">
+                    <img
+                      src={boockmarkIcon}
+                      alt="bookmark"
+                      className="bookmark-icon"
+                    />
+                    <p>{result.scrap_num}</p>
+                  </div>
+                  <p className="datetime">
+                    {formatDateTime(result.created_at)}
+                  </p>
                 </div>
               </div>
-              <div className="rating-info">
-                <img src={starIcon} alt="star" className="star-icon" />
-                <p>{result.score.toFixed(1)}</p>
-              </div>
             </div>
-          ))}
+            <div className="rating-info">
+              <img src={starIcon} alt="star" className="star-icon" />
+              <p>{result.score.toFixed(1)}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </>
   );
