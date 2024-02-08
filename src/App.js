@@ -34,11 +34,6 @@ function App() {
             element={<SentimentLeagueContainer />}
           />
           <Route path="/top-nav-search" element={<TopNavSearchContainer />} />
-          <Route
-            path="/sentiment-league"
-            element={<SentimentLeagueContainer />}
-          ></Route>
-          <Route path="/top-nav-search" element={<TopNavSearchContainer />} />
           <Route path="/login" element={<LoginContainer />}></Route>
           <Route path="/passwordsearch" element={<PasswordSearchContainer />} />
           <Route path="/signup" element={<SignupContainer />}></Route>
