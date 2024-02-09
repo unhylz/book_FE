@@ -1,85 +1,88 @@
-// RelatedNicknameResults.jsx
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import followersData from "../../../modules/api/dummy_follower";
-//import "./mypage.scss";
-//import "../mypage/mypage_follower.scss";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+//import { Link } from "react-router-dom";
 import "./RelatedNicknameResults.scss";
+import { NicknameFollow } from "../../../modules/api/search";
 
-export default function RelatedNicknameResults({ searchResult }) {
-  const [followers, setFollowers] = useState(followersData);
-  const [selectedButton, setSelectedButton] = useState("sentiment");
-  const userId = "123"; // 실제 사용자 ID로 대체해야 합니다.
+export default function RelatedNicknameResults({
+  searchResult,
+  displayedItems,
+}) {
+  const userId = "2"; // 실제 사용자 ID로 대체 필요 ---------------
+  const [FollowStatus, setFollowStatus] = useState([]);
 
-  const handleButtonClick = (button) => {
-    setSelectedButton(button);
-  };
+  useEffect(() => {
+    const fetchInitialFollowStatus = async () => {
+      try {
+        // displayedItems에서 user_id의 오름차순으로 데이터 정렬
+        const sortedItems = displayedItems.nicknameObject.sort(
+          (a, b) => a.user_id - b.user_id
+        );
 
-  const handleFollowClick = async (follower) => {
+        const initialFollowStatus = await Promise.all(
+          sortedItems.map(async (follower) => {
+            const data = await NicknameFollow(userId, follower.user_id);
+            return data.follow_status === "following";
+          })
+        );
+        setFollowStatus(initialFollowStatus);
+      } catch (error) {
+        console.error("팔로우 상태 초기화 오류:", error);
+      }
+    };
+
+    fetchInitialFollowStatus();
+  }, []);
+
+  const handleFollowClick = async (follower, index) => {
     if (!follower) {
       console.error("Invalid follower object");
       return;
     }
 
     try {
-      // 팔로우 상태 업데이트를 서버에 요청
-      const response = await axios.post(
-        "http://localhost:3001/users/{user-id}/follow",
-        {
-          followerId: follower.id, // 팔로우 대상 사용자의 ID
-          isFollow: !follower.isFollow, // 현재 팔로우 상태를 반전시킵니다.
-        }
-      );
-
-      if (response.data.follow_status === "Follow") {
-        console.log(`${follower.name}를 팔로우했습니다.`);
-      } else {
-        console.log(`${follower.name} 팔로우를 취소했습니다.`);
-      }
-
-      // 팔로우 상태를 업데이트합니다.
-      const newFollowers = followers.map((f) => {
-        if (f.id === follower.id) {
-          return { ...f, isFollow: !follower.isFollow };
-        }
-        return f;
-      });
-      setFollowers(newFollowers);
+      const data = await NicknameFollow(userId, follower.user_id);
+      const updatedFollowStatus = [...FollowStatus];
+      updatedFollowStatus[index] = data.follow_status === "following";
+      setFollowStatus(updatedFollowStatus);
     } catch (error) {
-      console.error("팔로우 요청 중 오류 발생:", error);
+      console.error("팔로우 오류:", error);
     }
   };
 
   return (
-    <>
-      <div className="related-nickname-results">
-        <div className="related-nickname-results-container">
-          <div className="related-nickname-results-list">
-            {followers.map((follower, index) => (
-              <div key={index} className="related-follower-card">
-                <img
-                  src={follower.imageUrl}
-                  alt={follower.name}
-                  className="related-follower-image"
-                />
-                <div className="related-follower-info">
-                  <h3 className="related-follower-name">{follower.name}</h3>
-                  <p className="follower-bio">{follower.bio}</p>
+    <div className="related-nickname-results">
+      <div className="related-nickname-results-container">
+        <div className="related-nickname-results-list">
+          {displayedItems.nicknameObject &&
+            Array.isArray(displayedItems.nicknameObject) &&
+            displayedItems.nicknameObject.length > 0 &&
+            displayedItems.nicknameObject
+              .sort((a, b) => a.user_id - b.user_id)
+              .map((follower, index) => (
+                <div key={index} className="related-follower-card">
+                  <img
+                    src={follower.profile_image}
+                    alt={follower.nickname}
+                    className="related-follower-image"
+                  />
+                  <div className="related-follower-info">
+                    <h3 className="related-follower-name">
+                      {follower.nickname}
+                    </h3>
+                    <p className="follower-bio">{follower.status_message}</p>
+                  </div>
+                  <button
+                    onClick={() => handleFollowClick(follower, index)}
+                    className={`follower-status ${
+                      FollowStatus[index] ? "followed" : "not-followed"
+                    }`}
+                  >
+                    {FollowStatus[index] ? "팔로잉" : "팔로우"}
+                  </button>
                 </div>
-                <button
-                  onClick={() => handleFollowClick(follower)}
-                  className={`follower-status ${
-                    follower.isFollow ? "followed" : "not-followed"
-                  }`}
-                >
-                  {follower.isFollow ? "팔로우" : "팔로잉"}
-                </button>
-              </div>
-            ))}
-          </div>
+              ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }

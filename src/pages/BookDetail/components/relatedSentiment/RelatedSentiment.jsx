@@ -15,12 +15,20 @@ import GrandMasterIcon from "../../../../assets/tiers/그랜드마스터.svg";
 import "./RelatedSentiment.scss";
 
 function formatDateTime(dateTimeString) {
+  /*
   const dateTime = new Date(dateTimeString);
   const year = String(dateTime.getFullYear()).slice(-2);
   const month = String(dateTime.getMonth() + 1).padStart(2, "0");
   const day = String(dateTime.getDate()).padStart(2, "0");
   const hours = String(dateTime.getHours()).padStart(2, "0");
   const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+*/
+
+  const year = dateTimeString.slice(6, 10);
+  const month = dateTimeString.slice(0, 2);
+  const day = dateTimeString.slice(3, 5);
+  const hours = dateTimeString.slice(12, 14);
+  const minutes = dateTimeString.slice(15, 17);
 
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
@@ -49,21 +57,20 @@ export default function RelatedSentiment({ searchResult, displayedItems }) {
     <>
       <div className="book-related-sentiment-container">
         {displayedItems.map((result) => (
-          <div key={result.id} className="book-search-result">
+          <div key={result.sentiment_id} className="book-search-result">
             <div className="book-info">
               <Link
-                to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
                 className="book-link"
               >
-                <img
-                  src={`/bookcover_dummy/${result.image_file}`}
-                  alt={result.title}
-                />
+                <div className="book-cover">
+                  <img src={result.book_image} alt={result.book_title} />
+                </div>
               </Link>
               <div className="none-img">
                 <div className="detail-info">
                   <Link
-                    to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                    to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
                     className="book-link"
                   >
                     <h3>{result.sentiment_title}</h3>
@@ -87,7 +94,7 @@ export default function RelatedSentiment({ searchResult, displayedItems }) {
                   </div>
                   <div className="likes">
                     <img src={likeIcon} alt="like" className="like-icon" />
-                    <p>{result.likes}</p>
+                    <p>{result.like_num}</p>
                   </div>
                   <div className="comments">
                     <img
@@ -95,7 +102,7 @@ export default function RelatedSentiment({ searchResult, displayedItems }) {
                       alt="comment"
                       className="comment-icon"
                     />
-                    <p>{result.comments}</p>
+                    <p>{result.comment_num}</p>
                   </div>
                   <div className="bookmarks">
                     <img
@@ -103,15 +110,17 @@ export default function RelatedSentiment({ searchResult, displayedItems }) {
                       alt="bookmark"
                       className="bookmark-icon"
                     />
-                    <p>{result.bookmarks}</p>
+                    <p>{result.scrap_num}</p>
                   </div>
-                  <p className="datetime">{formatDateTime(result.datetime)}</p>
+                  <p className="datetime">
+                    {formatDateTime(result.created_at)}
+                  </p>
                 </div>
               </div>
             </div>
             <div className="rating-info">
               <img src={starIcon} alt="star" className="star-icon" />
-              <p>{result.rating.toFixed(1)}</p>
+              <p>{result.score.toFixed(1)}</p>
             </div>
           </div>
         ))}
