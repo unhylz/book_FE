@@ -1,13 +1,13 @@
 import React from 'react';
 import { useState, useRef } from 'react';
-import "./SentimentWrite.scss";
+import "./SentimentEdit.scss";
 import { PiStarFill, PiStarLight } from "react-icons/pi";
 import Modal from 'react-modal';
-import { Link, useNavigate } from 'react-router-dom';
-import BookLogo from "./BookLogo.png";
-import ImgAdd from "./AddImg.png";
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import BookLogo from "../../SentimentWrite/BookLogo.png";
+import ImgAdd from "../../SentimentWrite/AddImg.png";
 import axios from 'axios';
-import ModalFrame from './Modal';
+import ModalFrame from '../../SentimentWrite/Modal';
 
 
 function DecoModal({isOpen, onClose}) {
@@ -52,7 +52,7 @@ function DecoModal({isOpen, onClose}) {
 }
 
 
-export default function SentimentWrite() {
+const SentimentEdit = () => {
 
 	const navigate = useNavigate();
 	const [title, setTitle] = useState('');
@@ -96,6 +96,7 @@ export default function SentimentWrite() {
 			return;
 		}
 
+		// 도서검색 API
 		// if(search.trim() === ""){
 		// 	setSearchValid(false);
 		// 	return;
@@ -261,3 +262,6 @@ export default function SentimentWrite() {
 		</form>
 	)
 }
+
+
+export default SentimentEdit;
