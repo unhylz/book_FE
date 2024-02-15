@@ -13,8 +13,30 @@ import MasterIcon from "../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../assets/tiers/그랜드마스터.svg";
 import x_circleIcon from "../../../../assets/icons/x-circle.svg";
 import "./Ranking.scss";
+import { RankingData } from "../../../../modules/api/search";
 
 export default function Ranking() {
+  const [SearchData, setSearchData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await RankingData();
+        setSearchData(data.result);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (SearchData && SearchData) {
+      console.log("검색 랭킹 데이터22:", SearchData);
+    }
+  }, [SearchData]);
+
   //티어 아이콘 색상 변경용
   const getTierIcon = (tier) => {
     const tierIcons = {
@@ -42,9 +64,12 @@ export default function Ranking() {
   const [updatedResults, setUpdatedResults] = useState([]);
   const dropdownRef = useRef(null);
 
+  /* //SearchData에 시즌이 없어서 임시로 ----- 추후 수정 필요 ex) SearchData.season1
   const rankingResults = rankingDummy.filter(
     (data) => data.season === selectedItem
   );
+  */
+  const rankingResults = SearchData;
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -180,27 +205,33 @@ export default function Ranking() {
             <div className="ranking-rows">
               {searchedNickname === "" && (
                 <>
-                  {rankingResults.map((data) => (
-                    <div
-                      key={data.nickname}
-                      className={`ranking-records ${
-                        data.isHighlighted ? "highlighted-row" : ""
-                      }`}
-                    >
-                      <div className="table-rank">{data.rank}</div>
-                      <div className="table-tier">
+                  {rankingResults &&
+                    rankingResults.map((data) => (
+                      <div
+                        key={data.nickname}
+                        className={`ranking-records ${
+                          data.isHighlighted ? "highlighted-row" : ""
+                        }`}
+                      >
+                        <div className="table-rank">{data.ranking}</div>
+                        <div className="table-tier">
+                          {data.tier}
+                          {/*                        
                         <img
                           src={getTierIcon(data.tier)}
                           alt="result.tier"
                           className="tier-icon"
-                        />
+                        /> 
+                        */}
+                        </div>
+                        <div className="table-nickname">{data.nickname}</div>
+                        <div className="table-status">
+                          {data.status_message}
+                        </div>
+                        <div className="table-post">{data.sentiment_num}</div>
+                        <div className="table-like">{data.like_num}</div>
                       </div>
-                      <div className="table-nickname">{data.nickname}</div>
-                      <div className="table-status">{data.statusMessage}</div>
-                      <div className="table-post">{data.postCount}</div>
-                      <div className="table-like">{data.likes}</div>
-                    </div>
-                  ))}
+                    ))}
                 </>
               )}
               {searchedNickname !== "" && (
@@ -221,29 +252,37 @@ export default function Ranking() {
                   {updatedResults.filter((data) => data.isHighlighted)
                     .length !== 0 && (
                     <>
-                      {updatedResults.map((data) => (
-                        <div
-                          key={data.nickname}
-                          className={`ranking-records ${
-                            data.isHighlighted ? "highlighted-row" : ""
-                          }`}
-                        >
-                          <div className="table-rank">{data.rank}</div>
-                          <div className="table-tier">
-                            <img
-                              src={getTierIcon(data.tier)}
-                              alt="result.tier"
-                              className="tier-icon"
-                            />
+                      {updatedResults &&
+                        updatedResults.map((data) => (
+                          <div
+                            key={data.nickname}
+                            className={`ranking-records ${
+                              data.isHighlighted ? "highlighted-row" : ""
+                            }`}
+                          >
+                            <div className="table-rank">{data.ranking}</div>
+                            <div className="table-tier">
+                              {data.tier}
+                              {/*                             
+                              <img
+                                src={getTierIcon(data.tier)}
+                                alt="result.tier"
+                                className="tier-icon"
+                              /> 
+                              */}
+                            </div>
+                            <div className="table-nickname">
+                              {data.nickname}
+                            </div>
+                            <div className="table-status">
+                              {data.status_message}
+                            </div>
+                            <div className="table-post">
+                              {data.sentiment_num}
+                            </div>
+                            <div className="table-like">{data.like_num}</div>
                           </div>
-                          <div className="table-nickname">{data.nickname}</div>
-                          <div className="table-status">
-                            {data.statusMessage}
-                          </div>
-                          <div className="table-post">{data.postCount}</div>
-                          <div className="table-like">{data.likes}</div>
-                        </div>
-                      ))}
+                        ))}
                     </>
                   )}
                 </>

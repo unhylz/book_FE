@@ -1,6 +1,6 @@
 // BookDetail.jsx
-import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
@@ -11,19 +11,30 @@ import { bookDummy } from "../TopNavSearch/bookDummy.js";
 import { sentimentDummy } from "../Home/components/sentiment/sentimentDummy";
 import StarRating from "./components/starRating/StarRating.jsx";
 import "./BookDetail.scss";
+import { BookSearch } from "../../modules/api/search";
+import { SentimentSearch } from "../../modules/api/search";
 
 export default function BookDetail() {
   // 선택한 센티먼트 id와 title 변수
-  const { content, book_title, id } = useParams();
+  const { content, book_title } = useParams();
   const navigate = useNavigate();
-  //const location = useLocation();
-  const bookId = parseInt(id, 10);
+  const location = useLocation();
+  const bookId = 1; //parseInt(id, 10);
   const displayedItems2 = sentimentDummy.slice(33, 36);
+  const [SearchData, setSearchData] = useState(null);
+  const { bookInfo } = useLocation();
 
-  //확인용
   const isAssessed = true;
 
-  console.log(book_title);
+  console.log("content 책 상세 페이지: ", content);
+
+  useEffect(() => {
+    if (bookInfo) {
+      console.log("검색 도서 데이터22:", bookInfo);
+    } else {
+      console.log("bookInfo is not available!");
+    }
+  }, [bookInfo]);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -46,6 +57,28 @@ export default function BookDetail() {
       console.log("Book not found with id:", bookId);
     }
   }
+
+  // 관련 센티먼트
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await SentimentSearch(content);
+        setSearchData(data.sentimentObject);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    if (content) {
+      fetchData();
+    }
+  }, [content]);
+
+  useEffect(() => {
+    if (SearchData && SearchData) {
+      console.log("검색 센티먼트 데이터22:", SearchData);
+    }
+  }, [SearchData]);
 
   function formatPublishDatetime(dateTimeString) {
     const dateTime = new Date(dateTimeString);
@@ -191,10 +224,12 @@ export default function BookDetail() {
           </div>
           <div className="book-detail-sentiment">
             <p className="book-related-sentiment">관련 센티먼트</p>
-            <RelatedSentiment
-              searchResult={content}
-              displayedItems={displayedItems2}
-            />
+            {SearchData && (
+              <RelatedSentiment
+                searchResult={content}
+                displayedItems={SearchData}
+              />
+            )}
           </div>
         </div>
 
