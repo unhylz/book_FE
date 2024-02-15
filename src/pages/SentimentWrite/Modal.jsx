@@ -5,7 +5,7 @@ const ModalFrame = ({ _handleModal, children, ...rest }) => {
         <div className="modal-container">
             <div className="modal-background" onClick={_handleModal} />
             <div className="modal-block" {...rest}>
-                <div className="contents">
+                <div className="content">
                     {children}
                 </div>
             </div>
