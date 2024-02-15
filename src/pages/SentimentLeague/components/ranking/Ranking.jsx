@@ -14,26 +14,44 @@ import GrandMasterIcon from "../../../../assets/tiers/그랜드마스터.svg";
 import x_circleIcon from "../../../../assets/icons/x-circle.svg";
 import "./Ranking.scss";
 import { RankingData } from "../../../../modules/api/search";
+import { TotalRankingData } from "../../../../modules/api/search";
 
 export default function Ranking() {
+  const pageNumber = "1"; // 추후 수정 -------
+
   const [SearchData, setSearchData] = useState(null);
+  const dropdownItems = ["Season 1", "Season 2"]; // 시즌 선택 데이터
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(dropdownItems[0]);
+  const [searchedNickname, setSearchedNickname] = useState("");
+  const [seasonNum, SetSeasonNum] = useState("");
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [updatedResults, setUpdatedResults] = useState([]);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await RankingData();
-        setSearchData(data.result);
+        if (selectedItem === dropdownItems[0]) {
+          SetSeasonNum("1");
+        }
+        if (selectedItem === dropdownItems[1]) {
+          SetSeasonNum("2");
+        }
+
+        const data = await RankingData(pageNumber, seasonNum);
+        setSearchData(data.result.totalRank);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [pageNumber, seasonNum, selectedItem]);
 
   useEffect(() => {
-    if (SearchData && SearchData) {
-      console.log("검색 랭킹 데이터22:", SearchData);
+    if (SearchData) {
+      console.log("전체 랭킹 데이터:", SearchData);
     }
   }, [SearchData]);
 
@@ -56,19 +74,6 @@ export default function Ranking() {
     return SelectedIcon;
   };
 
-  const dropdownItems = ["Season 2", "Season 1"]; // 시즌 선택 데이터
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(dropdownItems[0]);
-  const [searchedNickname, setSearchedNickname] = useState("");
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [updatedResults, setUpdatedResults] = useState([]);
-  const dropdownRef = useRef(null);
-
-  /* //SearchData에 시즌이 없어서 임시로 ----- 추후 수정 필요 ex) SearchData.season1
-  const rankingResults = rankingDummy.filter(
-    (data) => data.season === selectedItem
-  );
-  */
   const rankingResults = SearchData;
 
   useEffect(() => {
@@ -110,7 +115,7 @@ export default function Ranking() {
   };
 
   const handleTierSearchButtonClick = () => {
-    //console.log("검색 버튼 클릭됨");
+    console.log("검색 버튼 클릭됨");
     highlightRows(searchedNickname);
     //setSearchedNickname("");
   };
@@ -118,13 +123,13 @@ export default function Ranking() {
   const handleInputChange = (e) => {
     //console.log("setSearchedNickname: ", e.target.value);
     setSearchedNickname(e.target.value);
-    highlightRows(e.target.value);
+    //highlightRows(e.target.value);
     //highlightRows(searchedNickname);
   };
 
   const handleInputKeyUp = (e) => {
     if (e.key === "Enter") {
-      //console.log("Enter 키 눌림");
+      console.log("Enter 키 눌림");
       highlightRows(searchedNickname);
     }
   };
@@ -133,14 +138,29 @@ export default function Ranking() {
     const searchedString = searchedNickname.trim().toLowerCase();
     //console.log("searchedString: ", searchedString);
 
-    const updatedResults = rankingResults.map((data) => ({
-      ...data,
-      isHighlighted:
-        searchedString && data.nickname.toLowerCase().includes(searchedString),
-    }));
+    if (!searchedString) {
+      // 검색어가 없는 경우 모든 데이터를 표시
+      setUpdatedResults(SearchData);
+    } else {
+      // 검색어가 있는 경우 해당 검색어와 닉네임이 완전히 일치하는 항목을 찾아 표시
+      const filteredResults = SearchData.filter(
+        (data) => data.nickname.toLowerCase() === searchedString
+      );
+      setUpdatedResults(filteredResults);
+    }
 
-    setUpdatedResults(updatedResults);
-    //console.log(updatedResults);
+    if (SearchData) {
+      // rankingResults가 정의되어 있는지 확인
+      const updatedResults = SearchData.map((data) => ({
+        ...data,
+        isHighlighted:
+          searchedString &&
+          data.nickname.toLowerCase().includes(searchedString),
+      }));
+
+      setUpdatedResults(updatedResults);
+      //console.log(updatedResults);
+    }
   };
 
   return (
@@ -203,10 +223,10 @@ export default function Ranking() {
               <div className="table-like">추천 수</div>
             </div>
             <div className="ranking-rows">
-              {searchedNickname === "" && (
+              {searchedNickname === "" && ( //검색어가 없을  때
                 <>
-                  {rankingResults &&
-                    rankingResults.map((data) => (
+                  {SearchData &&
+                    SearchData.map((data) => (
                       <div
                         key={data.nickname}
                         className={`ranking-records ${
@@ -216,25 +236,25 @@ export default function Ranking() {
                         <div className="table-rank">{data.ranking}</div>
                         <div className="table-tier">
                           {data.tier}
-                          {/*                        
-                        <img
-                          src={getTierIcon(data.tier)}
-                          alt="result.tier"
-                          className="tier-icon"
-                        /> 
-                        */}
+                          {
+                            <img
+                              src={getTierIcon(data.tier)}
+                              alt="result.tier"
+                              className="tier-icon"
+                            />
+                          }
                         </div>
                         <div className="table-nickname">{data.nickname}</div>
                         <div className="table-status">
                           {data.status_message}
                         </div>
-                        <div className="table-post">{data.sentiment_num}</div>
-                        <div className="table-like">{data.like_num}</div>
+                        <div className="table-post">{data.sentimentCount}</div>
+                        <div className="table-like">{data.totalLikes}</div>
                       </div>
                     ))}
                 </>
               )}
-              {searchedNickname !== "" && (
+              {searchedNickname !== "" && ( //검색어가 있을 때
                 <>
                   {updatedResults.filter((data) => data.isHighlighted)
                     .length === 0 && (
@@ -278,9 +298,9 @@ export default function Ranking() {
                               {data.status_message}
                             </div>
                             <div className="table-post">
-                              {data.sentiment_num}
+                              {data.sentimentCount}
                             </div>
-                            <div className="table-like">{data.like_num}</div>
+                            <div className="table-like">{data.totalLikes}</div>
                           </div>
                         ))}
                     </>

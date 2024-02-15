@@ -1,17 +1,49 @@
 @import "../../lib/scss/BSL.scss";
 
 .main-title {
-  //width: 100%;
+  width: 100%;
+  margin-top: 120px;
   height: 260px;
   background-color: $green;
   color: white;
   display: flex;
   align-items: center;
   padding-left: 100px;
+  //border: 2px dashed red;
+  //margin-bottom: 0;
 
   .title {
     font-size: 40px;
     font-weight: bold;
     color: white;
+  }
+}
+
+.main-content-league {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  //border: 2px dashed blue;
+
+  .left-league,
+  .right-league {
+    width: 300px;
+    height: 860px;
+    padding-left: 50px;
+    padding-right: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; // 가로 중앙 정렬
+  }
+
+  .center-league {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contents-league {
+    padding-top: 25px;
   }
 }

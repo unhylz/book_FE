@@ -2,15 +2,15 @@
 
 import axios from "axios";
 
-export const topNavSearch = async (keyword) => {
+export const topNavSearch = async (keyword, user_id) => {
   try {
-    const response = await axios.get(`/search`, {
+    const response = await axios.get(`/search/${user_id}`, {
       params: {
         query: keyword,
       },
       withCredentials: true,
     });
-    console.log("response.data: ", response.data);
+    console.log("topNavSearch response.data: ", response.data);
     return response.data; // 결과를 반환하는 Promise
   } catch (error) {
     console.log("response error: ", error);
@@ -18,9 +18,9 @@ export const topNavSearch = async (keyword) => {
   }
 };
 
-export const BookSearch = async (keyword) => {
+export const BookSearch = async (user_Id, keyword) => {
   try {
-    const response = await axios.get(`/search/book`, {
+    const response = await axios.get(`/search/${user_Id}/book`, {
       params: {
         query: keyword,
       },
@@ -34,14 +34,17 @@ export const BookSearch = async (keyword) => {
   }
 };
 
-export const SentimentSearch = async (keyword) => {
+export const SentimentSearch = async (user_id, cursor_id, keyword) => {
   try {
-    const response = await axios.get(`/search/sentiment`, {
-      params: {
-        query: keyword,
-      },
-      withCredentials: true,
-    });
+    const response = await axios.get(
+      `/search/${user_id}/sentiment/${cursor_id}`,
+      {
+        params: {
+          query: keyword,
+        },
+        withCredentials: true,
+      }
+    );
     console.log("response.data: ", response.data);
     return response.data;
   } catch (error) {
@@ -50,15 +53,18 @@ export const SentimentSearch = async (keyword) => {
   }
 };
 
-export const NicknameSearch = async (keyword) => {
+export const NicknameSearch = async (user_id, cursor_id, keyword) => {
   try {
-    const response = await axios.get(`/search/nickname`, {
-      params: {
-        query: keyword,
-      },
-      withCredentials: true,
-    });
-    console.log("response.data: ", response.data);
+    const response = await axios.get(
+      `/search/${user_id}/nickname/${cursor_id}`,
+      {
+        params: {
+          query: keyword,
+        },
+        withCredentials: true,
+      }
+    );
+    console.log("NicknameSearch response.data: ", response.data);
     return response.data;
   } catch (error) {
     console.log("response error: ", error);
@@ -85,15 +91,64 @@ export const NicknameFollow = async (user_id, followingId) => {
   }
 };
 
-export const RankingData = async () => {
+export const TotalRankingData = async (pageNumber, seasonNumber) => {
   try {
-    const response = await axios.get(`/ranks`, {
+    const response = await axios.get(`/ranks/${pageNumber}`, {
+      params: {
+        season: seasonNumber,
+      },
       withCredentials: true,
     });
-    console.log("rankning response.data: ", response.data);
+    console.log("TotalRankingData response data: ", response.data);
     return response.data;
   } catch (error) {
-    console.log("rankning response error: ", error);
+    console.log("TotalRankingData response error: ", error);
     throw error;
+  }
+};
+
+export const RankingData = async (pageNumber, seasonNumber, nickname) => {
+  try {
+    const response = await axios.get(`/ranks/${pageNumber}`, {
+      params: {
+        season: seasonNumber,
+        nickname: nickname,
+      },
+      withCredentials: true,
+    });
+    console.log("RankingData response data: ", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("RankingData response error: ", error);
+    throw error;
+  }
+};
+
+export const SentimentData = async (cursor_id) => {
+  try {
+    const response = await axios.get(`/sentiments/list/${cursor_id}`, {
+      withCredentials: true,
+    });
+    console.log("sentiments response.data: ", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("sentiments response error: ", error);
+    throw error;
+  }
+};
+
+export const FollowSentimentData = async (user_id, cursor_id) => {
+  try {
+    const response = await axios.get(
+      `/sentiments/follow/${user_id}/${cursor_id}`,
+      {
+        withCredentials: true,
+      }
+    );
+    console.log("FollowSentimentData response.data: ", response.data);
+    return response.data; // 결과를 반환하는 Promise
+  } catch (error) {
+    console.log("response error: ", error);
+    throw error; // 오류가 발생하면 오류를 던짐
   }
 };
