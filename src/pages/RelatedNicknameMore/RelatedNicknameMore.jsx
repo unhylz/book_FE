@@ -10,6 +10,9 @@ import "./RelatedNicknameMore.scss";
 import { NicknameSearch } from "../../modules/api/search";
 
 export default function RelatedNicknameMore() {
+  const userId = "2"; // 실제 사용자 ID로 대체 필요 ---------------
+  const cursorId = "0";
+
   // 선택한 센티먼트 id와 title 변수
   const { content } = useParams();
   const navigate = useNavigate();
@@ -21,7 +24,7 @@ export default function RelatedNicknameMore() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await NicknameSearch(content);
+        const data = await NicknameSearch(userId, cursorId, content);
         setSearchData(data);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -42,10 +45,6 @@ export default function RelatedNicknameMore() {
 
   const handleLogoClick = () => {
     navigate("/");
-  };
-
-  const handleSortClick = () => {
-    alert("정렬 기능 구현 예정");
   };
 
   // 페이지 이동시 스크롤바 위치 최상단으로 가도록
@@ -78,6 +77,7 @@ export default function RelatedNicknameMore() {
                 <RelatedNicknameResults
                   searchResult={content}
                   displayedItems={SearchData}
+                  userId={userId}
                 />
               )}
             </div>
