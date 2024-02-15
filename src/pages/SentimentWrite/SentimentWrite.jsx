@@ -96,18 +96,17 @@ export default function SentimentWrite() {
 			return;
 		}
 
-		if(search.trim() === ""){
-			setSearchValid(false);
+		// if(search.trim() === ""){
+		// 	setSearchValid(false);
+		// 	return;
+		// }
+		if (rating === 0) {
+			setRatingValid(false);
 			return;
 		}
 
 		if (content.trim() === "") {
 			setContentValid(false);
-			return;
-		}
-
-		if (rating === 0) {
-			setRatingValid(false);
 			return;
 		}
 	}
@@ -118,7 +117,7 @@ export default function SentimentWrite() {
 
 	const handleCloseModal = () => {
 		setTitleValid(true); // 모달이 닫힐 때 유효성 상태를 초기화
-		setSearchValid(true);
+		// setSearchValid(true);
 		setContentValid(true);
 		setRatingValid(true);
 	};
@@ -192,8 +191,12 @@ export default function SentimentWrite() {
 					<input className="title" placeholder="글 제목" value={title} onChange={handleTitleChange}/>
 					{!titleValid && (
 						<ModalFrame _handleModal={handleCloseModal} >
-            	<h1>타이틀을 입력해주세요</h1>
-							<button className="close" onClick={handleCloseModal}>닫기</button>
+            	<h3>www.booksentimentleague.com 내용:</h3>
+							<div style={{fontWeight:"bold", marginBottom:"55px"}}>글 제목을 작성해주세요.(글자제한)</div>
+							<button className="close" onClick={handleCloseModal} 
+							style={{width:"90px", backgroundColor:"#5FCB75", color:"white", fontSize:"20px", borderRadius:"30px", 
+							padding:"10px", border:"none", marginLeft:"72%", cursor:"pointer"}}
+							>확인</button>
        			</ModalFrame>
 					)}
 					<div className='search-rating-box'>
@@ -223,8 +226,12 @@ export default function SentimentWrite() {
 							</p>
 							{!ratingValid && (
 								<ModalFrame _handleModal={handleCloseModal} >
-									<h1>별점을 입력해주세요</h1>
-									<button className="close" onClick={handleCloseModal}>닫기</button>
+									<h3>www.booksentimentleague.com 내용:</h3>
+									<div style={{fontWeight:"bold", marginBottom:"55px"}}>평점을 부여해주세요.(최소 1점부터 최대 5점까지)</div>
+									<button className="close" onClick={handleCloseModal} 
+									style={{width:"90px", backgroundColor:"#5FCB75", color:"white", fontSize:"20px", borderRadius:"30px", 
+									padding:"10px", border:"none", marginLeft:"72%", cursor:"pointer"}}
+									>확인</button>
 								</ModalFrame>
 							)}
 						</div>
@@ -240,8 +247,12 @@ export default function SentimentWrite() {
 						<input className="input_box" placeholder="Tell your sentiment" value={content} onChange={handleContentChange} />
 						{!contentValid && (
 							<ModalFrame _handleModal={handleCloseModal} >
-								<h1>내용을 입력해주세요</h1>
-								<button className="close" onClick={handleCloseModal}>닫기</button>
+								<h3>www.booksentimentleague.com 내용:</h3>
+								<div style={{fontWeight:"bold", marginBottom:"55px"}}>센티멘트를 20자 이상 작성해주세요.</div>
+								<button className="close" onClick={handleCloseModal} 
+								style={{width:"90px", backgroundColor:"#5FCB75", color:"white", fontSize:"20px", borderRadius:"30px", 
+								padding:"10px", border:"none", marginLeft:"72%", cursor:"pointer"}}
+								>확인</button>
 							</ModalFrame>
 						)}
 					</div>

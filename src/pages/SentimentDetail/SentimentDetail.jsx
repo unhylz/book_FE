@@ -2,13 +2,14 @@
 // 나경 to 지현
 // 이 파일이 홈페이지에서 센티먼트 항목 클릭하면 연결 돼요!
 // 센티먼트 페이지 만들고 나중에 여기로 옮기면 될 것 같아요:)
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
 import CommentItem from "./Comment/Comment";
 import SentimentDetailDummy from "./SentimentDetailDummy";
+import axios from "axios";
 import likeBlackIcon from "../../assets/icons/like_black.png";
 import bookmarkBlackIcon from "../../assets/icons/bookmark_black.png";
 import editIcon from "../../assets/icons/edit_Img.png";
@@ -30,12 +31,14 @@ import insertImg from "./insert_Img.png";
 import bookcover1 from "./book_image_1.svg";
 
 export default function SentimentDetail() {
-  // 선택한 센티먼트 id와 title 변수
-  const { content, sentiment_title } = useParams();
-  console.log("검색어가 있으면 ", content);
-  console.log(sentiment_title);
-
   const navigate = useNavigate();
+  // 선택한 센티먼트 id와 title 변수
+  const [sentimentData, setSentimentData] = useState({});
+  const {sentiment_id} = useParams();
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // console.log("검색어가 있으면 ", content);
+  // console.log(sentiment_title);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -51,12 +54,9 @@ export default function SentimentDetail() {
       마스터: MasterIcon,
       그랜드마스터: GrandMasterIcon,
     };
-
     const DefaultIcon = () => null;
     const formattedTier = tier.toLowerCase().replace(/\s/g, "");
-
     const SelectedIcon = tierIcons[formattedTier] || DefaultIcon;
-
     return SelectedIcon;
   };
 
@@ -65,57 +65,93 @@ export default function SentimentDetail() {
   //   window.scrollTo(0, 0);
   // }, []);
 
+  //추천, 스크랩 버튼
+  const [isRecommand, setIsRecommand] = useState(false);
+  const [isScrap, setIsScrap] = useState(false);
+  const handleRecommand = () => {
+    setIsRecommand(!isRecommand);
+  };
+  const handleScrap =() => {
+    setIsScrap(!isScrap);
+  }
+
+
+  const getSentimentData = async () => {
+    try {
+      const response = await axios.get(`/sentiments/1`);
+      console.log("센티먼트 데이터 확인용", response.data);
+      console.log(response);
+      setSentimentData(response.data); 
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  //api 가져오기 
+  useEffect(() => {  
+    getSentimentData();
+  }, []);
+  
+  
 
   //상단 컴포넌트
   const DetailTop = ({Sentiments}) => {
 
     const { id } = useParams(); 
 
-    console.log(id);
+    //console.log(id);
     //console.log(content.title);
     //console.log(SentimentDetailDummy[id-1].title);
 
 
   return (
     <div id="detail-top">
-      <div className="top-header">
-        <div className="book-info-box">
-          <div className="sort">Sentiment</div>
-          <div className="title">{SentimentDetailDummy[id-1].title}</div>
-          <div className="title-author-box">
-            <div className="book-title">{SentimentDetailDummy[id-1].book}</div>
-            <div className="book-author">{SentimentDetailDummy[id-1].author}</div>
-          </div>
-          <div className="writer-info-box">
-            <img src={userImg} alt="userImg" className="profile-image" />
-            <div className="nick-date-box">
-              <div className="nickname-tier">
-                <div className="nickname">{SentimentDetailDummy[id-1].name}</div>
-                <img
-                  src={getTierIcon(SentimentDetailDummy[id-1].tier)}
-                  alt="tier"
-                  className="tier-icon"
-                />
+      {sentimentData ? (
+        <>
+        <div className="top-header">
+          <div className="book-info-box">
+            <div className="sort">Sentiment</div>
+            <div className="title">{SentimentDetailDummy[id-1].title}</div>
+            <div className="title-author-box">
+              <div className="book-title">{SentimentDetailDummy[id-1].book}</div>
+              <div className="book-author">{SentimentDetailDummy[id-1].author}</div>
+            </div>
+            <div className="writer-info-box">
+              <img src={userImg} alt="userImg" className="profile-image" />
+              <div className="nick-date-box">
+                <div className="nickname-tier">
+                  <div className="nickname">{SentimentDetailDummy[id-1].name}</div>
+                  <img
+                    src={getTierIcon(SentimentDetailDummy[id-1].tier)}
+                    alt="tier"
+                    className="tier-icon"
+                  />
+                </div>
+                <div className="date">{SentimentDetailDummy[id-1].date}</div>
               </div>
-              <div className="date">{SentimentDetailDummy[id-1].date}</div>
+            </div>
+          </div>
+          <div className="book-image-box">
+            <div className="image-box">
+              <img className="image" src = {bookcover1} alt="Book Cover"/>
+              <div className="rating">{SentimentDetailDummy[id-1].star}</div>
             </div>
           </div>
         </div>
-        <div className="book-image-box">
-          <div className="image-box">
-            <img className="image" src = {bookcover1} alt="Book Cover"/>
-            <div className="rating">{SentimentDetailDummy[id-1].star}</div>
-          </div>
-        </div>
-      </div>
 
-      <div className="detail-top-main">
-      <img className="detail-main-image" style={{width:"1100px", height:"1100px"}} src={insertImg} alt="책 내용 사진" />
-        <div className="detail-main-text">{SentimentDetailDummy[id-1].text}</div>
-      </div>
+        <div className="detail-top-main">
+        <img className="detail-main-image" style={{width:"1100px", height:"1100px"}} src={insertImg} alt="책 내용 사진" />
+          <div className="detail-main-text">{SentimentDetailDummy[id-1].text}</div>
+        </div>
+      </>
+      )
+    :(
+      <p>데이터 없어용</p>
+    )
+    }
     </div>
   );
-}
+  }
 
 
 //하단 컴포넌트
@@ -150,11 +186,15 @@ const DetailBottom = () => {
           </div>
         </div>
         <div className="recommand-box">
-          <div className="recommand-button">
+          <div className={`recommand-button ${
+              isRecommand ? "recommand" : "not-recommand" }`}
+                onClick={handleRecommand}>
             <img src={likeBlackIcon}  alt="likeBlack" className="recommand-black-icon"/>
             <div className="recommand-text">추천하기</div>
           </div>
-          <div className="scrap-button">
+          <div className={`scrap-button ${
+              isScrap ? "scrap" : "not-scrap" }`}
+                onClick={handleScrap}>
             <img src={bookmarkBlackIcon} alt="bookmarkBlack" className="scrap-black-icon" />
             <div className="scrap-text">스크랩</div>
           </div>

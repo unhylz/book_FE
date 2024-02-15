@@ -51,10 +51,10 @@ export default function RelatedSentimentResults({ searchResult }) {
     <>
       <div className="related-sentiment-results">
         {displayedItems.map((result) => (
-          <div key={result.id} className="related-sentiment-search-result">
+          <div key={1} className="related-sentiment-search-result">
             <div className="info">
               <Link
-                to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                to={`/sentiment/${1}/${result.sentiment_title}`}
                 className="book-link"
               >
                 <img
@@ -65,7 +65,7 @@ export default function RelatedSentimentResults({ searchResult }) {
               <div className="none-img">
                 <div className="detail-info">
                   <Link
-                    to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                    to={`/sentiment/${1}/${result.sentiment_title}`}
                     className="book-link"
                   >
                     <h3>{result.sentiment_title}</h3>

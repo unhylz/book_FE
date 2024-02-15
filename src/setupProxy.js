@@ -14,4 +14,10 @@ module.exports = function (app) {
       changeOrigin: true,
     }),
   );
+  app.use(
+    createProxyMiddleware('/sentiments', {
+      target: 'http://3.37.54.220:3000',
+      changeOrigin: true,
+    }),
+  );
 };
