@@ -5,17 +5,23 @@ import Header from "./components/header/Header";
 import SideAd from "../../pages/Home/components/advertisement/SideAd";
 import MainAd from "../../pages/Home/components/advertisement/MainAd";
 import Sentiment from "./components/sentiment/Sentiment";
-import Follow from "./components/follow/Follow";
 import Footer from "./components/footer/Footer";
 import AcountModalContainer from "../../container/AcountModalContainer";
 import "./Home.scss";
 
 export default function Home() {
+  const userId = "2"; //"2"; //임시 --------------
+  const isLogin = true;
+
   const [selectedButton, setSelectedButton] = useState("sentiment");
   const [modalState, setModalState] = useState("login");
 
   const handleButtonClick = (button) => {
-    setSelectedButton(button);
+    if (!isLogin && userId === null && button === "follow") {
+      alert("로그인이 필요한 기능입니다.");
+    } else {
+      setSelectedButton(button);
+    }
   };
 
   const handleCloseModal = () => {
@@ -63,10 +69,7 @@ export default function Home() {
                 팔로우
               </button>
             </div>
-
-            {/* 조건부 렌더링을 사용하여 버튼에 따라 다른 내용 표시 */}
-            {selectedButton === "sentiment" && <Sentiment />}
-            {selectedButton === "follow" && <Sentiment />}
+            <Sentiment userId={userId} selectedButton={selectedButton} />
           </div>
         </div>
 

@@ -42,6 +42,31 @@
         margin-left: 15px;
       }
 
+      .follower-status {
+        font-size: 15px;
+        font-weight: normal;
+
+        &.followed {
+          // followed 상태의 스타일
+          background-color: rgba($black, 0.5);
+          color: white;
+        }
+
+        &.not-followed {
+          // not-followed 상태의 스타일
+          background-color: $green;
+          color: white;
+        }
+
+        &.null {
+          // null 상태의 스타일
+          background-color: rgba($black, 0.5);
+          color: white;
+          cursor: not-allowed; // 클릭이 불가능한 상태를 나타내기 위해 커서를 변경
+          pointer-events: none; // 클릭 이벤트를 비활성화
+        }
+      }
+
       .related-follower-name {
         margin: 0;
         font-size: 1.2em;
