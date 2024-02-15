@@ -33,8 +33,9 @@ import bookcover1 from "./book_image_1.svg";
 export default function SentimentDetail() {
   const navigate = useNavigate();
   // 선택한 센티먼트 id와 title 변수
-  const [sentimentData, setSentimentData] = useState({});
-  const {sentiment_id} = useParams();
+  const [sentimentData, setSentimentData] = useState(null);
+  const { id } = useParams(); 
+  console.log(id);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // console.log("검색어가 있으면 ", content);
@@ -78,10 +79,11 @@ export default function SentimentDetail() {
 
   const getSentimentData = async () => {
     try {
-      const response = await axios.get(`/sentiments/1`);
+      const response = await axios.get(`/sentiments/${id}`);
       console.log("센티먼트 데이터 확인용", response.data);
       console.log(response);
       setSentimentData(response.data); 
+      console.log(response.data[0].sentiment.sentiment_title);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -97,12 +99,6 @@ export default function SentimentDetail() {
   //상단 컴포넌트
   const DetailTop = ({Sentiments}) => {
 
-    const { id } = useParams(); 
-
-    //console.log(id);
-    //console.log(content.title);
-    //console.log(SentimentDetailDummy[id-1].title);
-
 
   return (
     <div id="detail-top">
@@ -111,37 +107,37 @@ export default function SentimentDetail() {
         <div className="top-header">
           <div className="book-info-box">
             <div className="sort">Sentiment</div>
-            <div className="title">{SentimentDetailDummy[id-1].title}</div>
+            <div className="title">{sentimentData[0].sentiment.sentiment_title}</div>
             <div className="title-author-box">
-              <div className="book-title">{SentimentDetailDummy[id-1].book}</div>
-              <div className="book-author">{SentimentDetailDummy[id-1].author}</div>
+              <div className="book-title">{sentimentData[0].sentiment.book_title}</div>
+              <div className="book-author">{sentimentData[0].sentiment.author}</div>
             </div>
             <div className="writer-info-box">
               <img src={userImg} alt="userImg" className="profile-image" />
               <div className="nick-date-box">
                 <div className="nickname-tier">
-                  <div className="nickname">{SentimentDetailDummy[id-1].name}</div>
+                  <div className="nickname">{sentimentData[0].sentiment.nickname}</div>
                   <img
-                    src={getTierIcon(SentimentDetailDummy[id-1].tier)}
+                    src={getTierIcon(sentimentData[0].sentiment.tier)}
                     alt="tier"
                     className="tier-icon"
                   />
                 </div>
-                <div className="date">{SentimentDetailDummy[id-1].date}</div>
+                <div className="date">{sentimentData[0].sentiment.created_at}</div>
               </div>
             </div>
           </div>
           <div className="book-image-box">
             <div className="image-box">
               <img className="image" src = {bookcover1} alt="Book Cover"/>
-              <div className="rating">{SentimentDetailDummy[id-1].star}</div>
+              <div className="rating">{sentimentData[0].sentiment.score}</div>
             </div>
           </div>
         </div>
 
         <div className="detail-top-main">
         <img className="detail-main-image" style={{width:"1100px", height:"1100px"}} src={insertImg} alt="책 내용 사진" />
-          <div className="detail-main-text">{SentimentDetailDummy[id-1].text}</div>
+          <div className="detail-main-text">{sentimentData[0].sentiment.content}</div>
         </div>
       </>
       )
