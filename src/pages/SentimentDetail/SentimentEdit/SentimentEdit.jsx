@@ -67,6 +67,7 @@ const SentimentEdit = () => {
 	const [imgFile, setImgFile] = useState("");
 	const imgRef = useRef();
 	
+	const id = useParams();
 	
 	//모달 state
 	const [isOpen, setIsOpen] = useState(false);

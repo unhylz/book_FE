@@ -84,7 +84,7 @@ function App() {
             element={<MypageScrapContainer></MypageScrapContainer>}
           ></Route>
           <Route
-            path="/editsentiment/:id/:book_title"
+            path="/editsentiment/:id"
             element={<EditSentiment></EditSentiment>}
           ></Route>
         </Routes>
