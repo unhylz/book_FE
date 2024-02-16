@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import RookieIcon from "../../../../../assets/tiers/루키.svg";
 import SilverIcon from "../../../../../assets/tiers/실버.svg";
@@ -10,58 +10,20 @@ import profileImg from "../../../../../assets/icons/profileImg.svg.svg"
 import "./userProfile.scss"
 import flag from "../../../../../assets/icons/lets-icons-flag-finish-alt.svg"
 import MypageModal from './mypageModal';
-import FileInput from "./FileInput";
 import axios from "axios";
+import ImageCropperModal from "../imgCropModal";
+
+
 
 function UserProfile({ userData }) {
-  const [files, setFiles] = useState([]);
   const [message, setMessage] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태를 관리합니다.
-
-  const [fileReaderThumbnail, setFileReaderThumbnail] = useState();
-  const [URLThumbnail, setURLThumbnail] = useState();
-
-  const createImageURL = (fileBlob) => { 
-    if(URLThumbnail)URL.revokeObjectURL(URLThumbnail);
-    const url = URL.createObjectURL(fileBlob);
-
-    setURLThumbnail(url);
-  };
-
-
-  const onImageChange = (e) => {
-    const { files } = e.target;
-
-    if (!files || !files[0]) return;
-
-    const uploadImage = files[0];
-
-    createImageURL(uploadImage);
-  };
-
-  const uploadImage = () => {
-    if (!files) return;
-
-    const formData = new FormData();
-    formData.append('image', files);
-
-     axios.patch("/users/1/mypage", formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then((response) => {
-        console.log('Image uploaded successfully:', response.data);
-        alert("서버에 등록이 완료되었습니다!");
-      })
-      .catch((error) => {
-        console.error('Error uploading image:', error);
-      });
-  };
- 
-  
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCropModalOpen, setIsCropModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const navigate = useNavigate();
+  const [values, setValues] = useState({
+    status_message:""
+  })
 
   const goToMypageFollower = () => {
     navigate("../mypage_follower");
@@ -81,9 +43,32 @@ function UserProfile({ userData }) {
     setIsModalOpen(false);
   };
 
-  const handleModalSubmit = (newMessage) => {
-    setMessage(newMessage);
-    alert("Message updated: " + newMessage);
+  const handleModalSubmit = (status_message) => {
+    setMessage(status_message);
+    sendStatusMessage(status_message);
+  };
+
+  const sendStatusMessage = (status_message) => {
+    const formData = new FormData();
+    formData.append('status_message', status_message);
+  
+    fetch(`/users/1/mypage`, {
+      method: 'POST', 
+      body: formData, 
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json(); 
+      } else {
+        throw new Error('Network response was not ok.'); 
+    }
+    })
+    .then(data => {
+      console.log("Status message updated successfully", data);
+    })
+    .catch(error => {
+      console.error("Error updating status message:", error);
+    });
   };
 
   const getTierIcon = (tier) => {
@@ -99,19 +84,70 @@ function UserProfile({ userData }) {
   };
     
 
-
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+    if (files.length > 0) {
+      setSelectedImage(URL.createObjectURL(files[0]));
+      setIsCropModalOpen(true);
+    }
+  };
+  
+  const handleImageCrop = (croppedImage) => {
+    // Blob으로 변환
+    fetch(croppedImage)
+      .then(res => res.blob())
+      .then(blob => {
+        // FormData 객체 생성
+        const formData = new FormData();
+        formData.append('files', blob, 'croppedImage.png');
+        // 서버로 업로드
+        uploadImg(formData); // 수정: formData를 직접 전달
+      })
+      .catch(err => {
+        console.error('Error processing image', err);
+      });
+  
+    // 모달 닫기
+    setIsCropModalOpen(false);
+  };
+  
+  const uploadImg = (formData) => {
+    // 수정: 인수를 formData로 받습니다.
+    const config = {
+      headers: { "content-type": "multipart/form-data" },
+    };
+    axios.post(`users/1/mypage`, formData, config)
+      .then((res) => {
+        if (res.data.success) {
+          console.log('Image upload successful', res.data);
+        } 
+      })
+      .catch(err => {
+        console.error('Error uploading image', err);
+      });
+  };
+  
   return (
     <div className="user-profile">
       <div className="img-container">
-        <div className="round-image">
-        {URLThumbnail ? (
-            <img src={URLThumbnail} alt="thumbnail" />
+        <div className="round-image" >
+        {selectedImage ? (
+            <img src={selectedImage} alt="thumbnail" />
           ) : (
             <img src={userData[0].profile_image}/>
           )}
         </div>
-        <FileInput label="Edit" onChange={onImageChange} />
-        <button onClick={uploadImage}>upload</button>
+        <form>
+          <input type="file" accept="image/*" onChange={handleFileChange} />
+      {isCropModalOpen && (
+        <ImageCropperModal
+          isOpen={isCropModalOpen}
+          onClose={() => setIsCropModalOpen(false)}
+          src={selectedImage}
+          onCrop={handleImageCrop}
+        />
+      )}
+        </form>
       </div>
       <div className="userdata-container">
         <div className="last-tier">
@@ -138,6 +174,7 @@ function UserProfile({ userData }) {
           </button>
           {/* 모달 컴포넌트 */}
           <MypageModal
+            value={values.status_message}
             isOpen={isModalOpen}
             onClose={handleModalClose}
             onSubmit={handleModalSubmit}
@@ -146,13 +183,13 @@ function UserProfile({ userData }) {
         <div className="userDetail-container">
           <div
             className="follower-count detail-item"
-            onClick={goToMypageFollowing}
+            onClick={goToMypageFollower}
           >
             <strong>팔로워: {userData[0].follower_num}</strong>
           </div>
           <div
             className="follow-count detail-item"
-            onClick={goToMypageFollower}
+            onClick={goToMypageFollowing}
           >
             <strong>팔로우: {userData[0].following_num}</strong>
           </div>

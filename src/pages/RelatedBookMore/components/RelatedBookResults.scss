@@ -4,37 +4,45 @@
   //border: 2px dashed red;
   border-top: 1px solid rgba($black, 0.2);
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, 280px);
+  align-items: center;
+  justify-content: center;
+  grid-gap: 80px;
   padding: 0;
-  padding-top: 30px;
+  padding-top: 25px;
 
   .search-result {
-    flex: 0 0 calc(33.33% - 20px); // Added this line
+    //border: 2px dashed blue;
     display: flex;
     align-items: center;
     justify-content: center;
-    //border: 2px dashed orange;
     flex-grow: 1;
     margin: 0;
-    margin-bottom: 60px;
 
     .book-image {
-      //border: 2px dashed orange;
-      width: 300px;
+      //border: 2px dashed pink;
+      border: 1px solid $black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 280px;
       height: 400px;
       object-fit: fill;
     }
 
     .none-img-detail-info {
-      //border: 2px dashed orange;
-      width: 100%;
+      //order: 2px dashed orange;
+      height: 115px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
 
       h3 {
         //border: 2px dashed green;
         margin: 0;
-        margin-top: 5px;
+        margin-top: 15px;
         margin-bottom: 5px;
         font-size: 18px;
         font-weight: bold;

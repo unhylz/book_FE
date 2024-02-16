@@ -1,13 +1,26 @@
 @import "../../../../lib/scss/BSL.scss";
 
 .header {
+  position: fixed; // 화면 상단에 고정
+  top: 0; // 화면의 맨 위에 위치
+  left: 0; // 화면의 맨 왼쪽에 위치
+  width: 100%; // 헤더의 너비를 화면 전체로 설정
+  height: 120px;
+  border-bottom: 2px solid rgba($black, 0.1);
+  display: flex;
+  background-color: white;
+  z-index: 1000;
+  /*
+  align-items: center;
   height: 120px;
   border-bottom: 2px solid rgba($black, 0.1);
   display: flex;
   align-items: center;
+*/
 
   .logo {
-    position: flex;
+    display: flex;
+    align-items: center;
     margin-left: 50px;
 
     img {
@@ -27,7 +40,7 @@
   .search-bar {
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: center; // 세로 중앙 정렬
     width: 500px;
     height: 48px;
     min-width: 200px;
@@ -36,6 +49,7 @@
     border: 2px solid $green;
     padding: 0 10px;
     margin-right: 50px;
+    margin-top: 35px;
 
     .search-button {
       margin-left: 10px;
@@ -213,10 +227,11 @@
       font-size: 17px;
       border: none;
       font-weight: normal;
+      width: 50px;
+      min-width: 50px;
     }
 
     .signup-btn {
-      margin-left: 20px;
       font-size: 15px;
       border: 2px solid $black;
       border-radius: 5px;
@@ -225,6 +240,9 @@
       padding-bottom: 10px;
       padding-left: 15px;
       padding-right: 15px;
+
+      width: 90px;
+      min-width: 90px;
 
       &:hover {
         background-color: $green;

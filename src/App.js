@@ -20,10 +20,12 @@ import PasswordChangeContainer from "./container/PasswordChangeContainer";
 import RelatedSentimentMoreContainer from "./container/RelatedSentimentMoreContainer";
 import RelatedNicknameMoreContainer from "./container/RelatedNicknameMoreContainer";
 import Mypage_followerContainer from "./container/MypageFollowerContainer";
-import NotificationContainer from "./container/notificationContainer"
+import NotificationContainer from "./container/notificationContainer";
 import Mypage_followingContainer from "./container/MypageFollowing";
 import AcountModalContainer from "./container/AcountModalContainer";
 import MypageScrapContainer from "./container/MypageScrapContainer";
+import MypageSentimentContainer from "./container/MypageSentimentContainer"
+import EditSentiment from "./pages/SentimentDetail/SentimentEdit/SentimentEdit"
 
 
 
@@ -43,29 +45,29 @@ return (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomeContainer />} />
-          <Route path="/sentiment-league" element={<SentimentLeagueContainer />} />
-          <Route path="/top-nav-search" element={<TopNavSearchContainer />} />
           <Route
             path="/sentiment-league"
             element={<SentimentLeagueContainer />}
-          ></Route>
-          <Route path="/top-nav-search" element={<TopNavSearchContainer/>}/>
+          />
+          <Route path="/top-nav-search" element={<TopNavSearchContainer />} />
           <Route path="/login" element={<LoginContainer />}></Route>
           <Route path="/passwordsearch" element={<PasswordSearchContainer />} />
           <Route path="/signup" element={<SignupContainer />}></Route>
-          <Route path="/modal" element={<AcountModalContainer state={"login"}/>}></Route>
-          
+          <Route
+            path="/modal"
+            element={<AcountModalContainer state={"login"} />}
+          ></Route>
 
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
-          <Route path="/passwordchange" element={<PasswordChangeContainer/>}/>
+          <Route path="/passwordchange" element={<PasswordChangeContainer />} />
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
 
           <Route
-            path="/sentiment/:id/:sentiment_title"
+            path="/sentiment/:content/:id/:sentiment_title"
             element={<SentimentDetailContainer />}
           />
           <Route
-            path="/book/:content/:book_title/:id"
+            path="/book/:content/:book_title/:cursor_id/:index/:options"
             element={<BookDetailContainer />}
           ></Route>
           <Route
@@ -80,14 +82,30 @@ return (
             path="/:content/related_nickname_more"
             element={<RelatedNicknameMoreContainer />}
           ></Route>
-          <Route path="/mypage_follower"
-           element={<Mypage_followerContainer></Mypage_followerContainer>} />
-          <Route path="/mypage_following"
-           element={<Mypage_followingContainer></Mypage_followingContainer>} />
-           <Route path="/notification" 
-           element={<NotificationContainer />}></Route>
-           <Route path="/MypageScrap"
-           element={<MypageScrapContainer></MypageScrapContainer>}></Route>
+          <Route
+            path="/mypage_follower"
+            element={<Mypage_followerContainer></Mypage_followerContainer>}
+          />
+          <Route
+            path="/mypage_following"
+            element={<Mypage_followingContainer></Mypage_followingContainer>}
+          />
+          <Route
+            path="/mypageSentiment"
+            element={<MypageSentimentContainer/>}
+          />
+          <Route
+            path="/notification"
+            element={<NotificationContainer />}
+          ></Route>
+          <Route
+            path="/MypageScrap"
+            element={<MypageScrapContainer></MypageScrapContainer>}
+          ></Route>
+          <Route
+            path="/editsentiment/:id/:book_title"
+            element={<EditSentiment></EditSentiment>}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>

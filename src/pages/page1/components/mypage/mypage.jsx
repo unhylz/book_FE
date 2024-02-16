@@ -47,6 +47,8 @@ function MyPage() {
     
   };
 
+  
+
   useEffect(() => {
     setSelectedButton("sentiment");
     fetchUserData();
@@ -88,7 +90,7 @@ function MyPage() {
           ) : (
             <p>사용자 데이터를 불러오는 중...</p>
           )}
-          <UserPosts currentPosts={currentPosts} />
+          <UserPosts/>
         </div>
         <div className="right">
           <SideAd />

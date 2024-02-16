@@ -25,24 +25,24 @@ function SentimentLeague() {
           <p>시즌은 6개월마다 초기화 됩니다.</p>
         </div>
       </div>
-      <div className="main-content">
+      <div className="main-content-league">
         {/* 1열 - 왼쪽 사이드 광고 부분 */}
-        <div className="left">
+        <div className="left-league">
           <SideAd />
         </div>
 
         {/* 2열 - 중앙 메인 광고 부분 */}
-        <div className="center">
+        <div className="center-league">
           {/* 메인 광고 영역 */}
           <MainAd />
 
-          <div className="contents">
+          <div className="contents-league">
             <Ranking />
           </div>
         </div>
 
         {/* 3열 - 오른쪽 사이드 광고 부분 */}
-        <div className="right">
+        <div className="right-league">
           <SideAd />
         </div>
       </div>

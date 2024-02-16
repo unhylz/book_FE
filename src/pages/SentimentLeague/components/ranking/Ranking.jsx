@@ -13,8 +13,50 @@ import MasterIcon from "../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../assets/tiers/그랜드마스터.svg";
 import x_circleIcon from "../../../../assets/icons/x-circle.svg";
 import "./Ranking.scss";
+import { RankingData } from "../../../../modules/api/search";
+//import { TotalRankingData } from "../../../../modules/api/search";
 
 export default function Ranking() {
+  const pageNumber = "1"; // 추후 수정 -------
+
+  const [SearchData, setSearchData] = useState(null);
+  //const [SearchNicknameData, setSearchNicknameData] = useState(null);
+  const dropdownItems = ["Season 1", "Season 2"]; // 시즌 선택 데이터
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(dropdownItems[0]);
+  const [searchedNickname, setSearchedNickname] = useState("");
+  const [seasonNum, SetSeasonNum] = useState("");
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [updatedResults, setUpdatedResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false); // 검색 중 여부를 나타내는 상태
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (selectedItem === dropdownItems[0]) {
+          SetSeasonNum("1");
+        }
+        if (selectedItem === dropdownItems[1]) {
+          SetSeasonNum("2");
+        }
+
+        const data = await RankingData(pageNumber, seasonNum);
+        setSearchData(data.result.totalRank);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    fetchData();
+  }, [pageNumber, selectedItem]);
+
+  useEffect(() => {
+    if (SearchData) {
+      console.log("전체 랭킹 데이터:", SearchData);
+    }
+  }, [SearchData]);
+
   //티어 아이콘 색상 변경용
   const getTierIcon = (tier) => {
     const tierIcons = {
@@ -33,18 +75,6 @@ export default function Ranking() {
 
     return SelectedIcon;
   };
-
-  const dropdownItems = ["Season 2", "Season 1"]; // 시즌 선택 데이터
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(dropdownItems[0]);
-  const [searchedNickname, setSearchedNickname] = useState("");
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [updatedResults, setUpdatedResults] = useState([]);
-  const dropdownRef = useRef(null);
-
-  const rankingResults = rankingDummy.filter(
-    (data) => data.season === selectedItem
-  );
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -66,14 +96,22 @@ export default function Ranking() {
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
+
+    // Season에 따른 seasonNum 상태 업데이트
+    if (item === dropdownItems[0]) {
+      SetSeasonNum("1");
+    } else if (item === dropdownItems[1]) {
+      SetSeasonNum("2");
+    }
+
     setDropdownOpen(false);
-    ///*
+
+    // 검색어 초기화
     setSearchedNickname("");
     const inputField = document.querySelector(".tier-search input");
     if (inputField) {
       inputField.value = ""; // 입력 필드 초기화
     }
-    //*/
   };
 
   const handleTierStandardClick = () => {
@@ -85,37 +123,58 @@ export default function Ranking() {
   };
 
   const handleTierSearchButtonClick = () => {
-    //console.log("검색 버튼 클릭됨");
-    highlightRows(searchedNickname);
-    //setSearchedNickname("");
+    handleSearch();
+  };
+
+  const handleSearch = async () => {
+    setIsSearching(true); // 검색 중임을 표시
+
+    const searchedString = searchedNickname.trim().toLowerCase();
+
+    try {
+      if (selectedItem === dropdownItems[0]) {
+        SetSeasonNum("1");
+      } else if (selectedItem === dropdownItems[1]) {
+        SetSeasonNum("2");
+      }
+
+      const data = await RankingData(pageNumber, seasonNum);
+      setSearchData(data.result.totalRank);
+
+      if (searchedString === "") {
+        // 검색어가 비어있는 경우, 전체 랭킹 데이터 표시
+        setUpdatedResults(data.result.totalRank);
+      } else {
+        // 검색어에 따라 데이터 필터링 및 하이라이트
+        const updatedResults = data.result.totalRank.map((data) => ({
+          ...data,
+          isHighlighted:
+            searchedString &&
+            data.nickname.toLowerCase().includes(searchedString),
+        }));
+        setUpdatedResults(updatedResults);
+      }
+    } catch (error) {
+      console.error("데이터 가져오기 오류:", error);
+    }
+
+    setIsSearching(false); // 검색 완료
   };
 
   const handleInputChange = (e) => {
     //console.log("setSearchedNickname: ", e.target.value);
     setSearchedNickname(e.target.value);
-    highlightRows(e.target.value);
+    //highlightRows(e.target.value);
     //highlightRows(searchedNickname);
   };
 
   const handleInputKeyUp = (e) => {
     if (e.key === "Enter") {
-      //console.log("Enter 키 눌림");
-      highlightRows(searchedNickname);
+      handleSearch();
+    } else if (e.key === "Backspace" && searchedNickname === "") {
+      // Backspace 키를 누르고 검색어가 비어있는 경우, 전체 랭킹 데이터 표시
+      setUpdatedResults(SearchData);
     }
-  };
-
-  const highlightRows = (searchedNickname) => {
-    const searchedString = searchedNickname.trim().toLowerCase();
-    //console.log("searchedString: ", searchedString);
-
-    const updatedResults = rankingResults.map((data) => ({
-      ...data,
-      isHighlighted:
-        searchedString && data.nickname.toLowerCase().includes(searchedString),
-    }));
-
-    setUpdatedResults(updatedResults);
-    //console.log(updatedResults);
   };
 
   return (
@@ -178,34 +237,40 @@ export default function Ranking() {
               <div className="table-like">추천 수</div>
             </div>
             <div className="ranking-rows">
-              {searchedNickname === "" && (
+              {searchedNickname === "" && ( //검색어가 없을  때
                 <>
-                  {rankingResults.map((data) => (
-                    <div
-                      key={data.nickname}
-                      className={`ranking-records ${
-                        data.isHighlighted ? "highlighted-row" : ""
-                      }`}
-                    >
-                      <div className="table-rank">{data.rank}</div>
-                      <div className="table-tier">
-                        <img
-                          src={getTierIcon(data.tier)}
-                          alt="result.tier"
-                          className="tier-icon"
-                        />
+                  {SearchData &&
+                    SearchData.map((data) => (
+                      <div
+                        key={data.nickname}
+                        className={`ranking-records ${
+                          data.isHighlighted ? "highlighted-row" : ""
+                        }`}
+                      >
+                        <div className="table-rank">{data.ranking}</div>
+                        <div className="table-tier">
+                          {data.tier}
+                          {
+                            <img
+                              src={getTierIcon(data.tier)}
+                              alt="result.tier"
+                              className="tier-icon"
+                            />
+                          }
+                        </div>
+                        <div className="table-nickname">{data.nickname}</div>
+                        <div className="table-status">
+                          {data.status_message}
+                        </div>
+                        <div className="table-post">{data.sentimentCount}</div>
+                        <div className="table-like">{data.totalLikes}</div>
                       </div>
-                      <div className="table-nickname">{data.nickname}</div>
-                      <div className="table-status">{data.statusMessage}</div>
-                      <div className="table-post">{data.postCount}</div>
-                      <div className="table-like">{data.likes}</div>
-                    </div>
-                  ))}
+                    ))}
                 </>
               )}
-              {searchedNickname !== "" && (
+              {searchedNickname !== "" && ( //검색어가 있을 때
                 <>
-                  {updatedResults.filter((data) => data.isHighlighted)
+                  {updatedResults.filter((data) => data.isHighlighted) //검색어와 일치하는 데이터 x
                     .length === 0 && (
                     <>
                       <div className="nickname-search-results">
@@ -218,32 +283,40 @@ export default function Ranking() {
                       </div>
                     </>
                   )}
-                  {updatedResults.filter((data) => data.isHighlighted)
+                  {updatedResults.filter((data) => data.isHighlighted) //검색어와 일치하는 데이터 o
                     .length !== 0 && (
                     <>
-                      {updatedResults.map((data) => (
-                        <div
-                          key={data.nickname}
-                          className={`ranking-records ${
-                            data.isHighlighted ? "highlighted-row" : ""
-                          }`}
-                        >
-                          <div className="table-rank">{data.rank}</div>
-                          <div className="table-tier">
-                            <img
-                              src={getTierIcon(data.tier)}
-                              alt="result.tier"
-                              className="tier-icon"
-                            />
+                      {updatedResults &&
+                        updatedResults.map((data) => (
+                          <div
+                            key={data.nickname}
+                            className={`ranking-records ${
+                              data.isHighlighted ? "highlighted-row" : ""
+                            }`}
+                          >
+                            <div className="table-rank">{data.ranking}</div>
+                            <div className="table-tier">
+                              {data.tier}
+                              {/*                             
+                              <img
+                                src={getTierIcon(data.tier)}
+                                alt="result.tier"
+                                className="tier-icon"
+                              /> 
+                              */}
+                            </div>
+                            <div className="table-nickname">
+                              {data.nickname}
+                            </div>
+                            <div className="table-status">
+                              {data.status_message}
+                            </div>
+                            <div className="table-post">
+                              {data.sentimentCount}
+                            </div>
+                            <div className="table-like">{data.totalLikes}</div>
                           </div>
-                          <div className="table-nickname">{data.nickname}</div>
-                          <div className="table-status">
-                            {data.statusMessage}
-                          </div>
-                          <div className="table-post">{data.postCount}</div>
-                          <div className="table-like">{data.likes}</div>
-                        </div>
-                      ))}
+                        ))}
                     </>
                   )}
                 </>
@@ -251,6 +324,7 @@ export default function Ranking() {
             </div>
           </div>
         </div>
+        <p>페이지네이션 추가</p>
       </div>
     </>
   );

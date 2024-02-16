@@ -1,38 +1,39 @@
 import axios from "axios"
+
 // const url = "http://3.37.54.220:3000"
-const url = ""
+const url = "";
 
-export const isEmailDuplication = (email)=>{
-  if(email==="중복"){
-    return(true)
+export const isEmailDuplication = (email) => {
+  if (email === "중복") {
+    return true;
+  } else {
+    return false;
   }
-  else{
-    return(false)
-  }
-}
+};
 
-export const isAuth = (auth)=>{
-  if(auth==="000000")
-    {return(true)}
-  else
-    {return(false)}
-}
-
-export const isNickDuplication = (nick)=>{
-  if(nick==="중복"){
-    return(true)
+export const isAuth = (auth) => {
+  if (auth === "000000") {
+    return true;
+  } else {
+    return false;
   }
-  else{
-    return(false)
-  }
-}
+};
 
-export const isLoginTrue = (email,pw)=>{
-  if(email==="admin@naver.com"){
-    if(pw==="admin1234!") {return true}
-    else return false
-  }else return false
-}
+export const isNickDuplication = (nick) => {
+  if (nick === "중복") {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const isLoginTrue = (email, pw) => {
+  if (email === "admin@naver.com") {
+    if (pw === "admin1234!") {
+      return true;
+    } else return false;
+  } else return false;
+};
 
 
 export const postLogin = async(email,password) => {
@@ -84,18 +85,19 @@ export const checkEmailDup = async (email) => {
 
 
 export const checkNickDup = (nickname) => {
-  axios.post(`/users/signin/nickcheck`, {
-    nickname
-  })
-  .then(function (response) {
-    console.log(response);
-    return true
-  })
-  .catch(function (error) {
-    console.log(error);
-    return false
-  });
-}
+  axios
+    .post(`/users/signin/nickcheck`, {
+      nickname,
+    })
+    .then(function (response) {
+      console.log(response);
+      return true;
+    })
+    .catch(function (error) {
+      console.log(error);
+      return false;
+    });
+};
 
 export const sendAuth = (email)=>{
   axios.post(`/users/auth`, {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 import { sentimentDummy } from "./sentimentDummy";
@@ -12,38 +12,76 @@ import GoldIcon from "../../../../assets/tiers/골드.svg";
 import DiaIcon from "../../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../assets/tiers/그랜드마스터.svg";
+import rightIcon from "../../../../assets/icons/chevron_right.svg";
+import leftIcon from "../../../../assets/icons/chevron_left.svg";
 import "./Sentiment.scss";
+import { SentimentData } from "../../../../modules/api/search";
+import { FollowSentimentData } from "../../../../modules/api/search";
 
 function formatDateTime(dateTimeString) {
-  const dateTime = new Date(dateTimeString);
-  const year = String(dateTime.getFullYear()).slice(-2);
-  const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-  const day = String(dateTime.getDate()).padStart(2, "0");
-  const hours = String(dateTime.getHours()).padStart(2, "0");
-  const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+  const year = dateTimeString.slice(6, 10);
+  const month = dateTimeString.slice(0, 2);
+  const day = dateTimeString.slice(3, 5);
+  const hours = dateTimeString.slice(12, 14);
+  const minutes = dateTimeString.slice(15, 17);
 
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
 
-export default function Sentiment() {
-  //const searchResults = sentimentDummy;
+export default function Sentiment({ userId, selectedButton }) {
+  const cursorId = "1"; // 센티먼트는 커서 1부터 추후 수정 ----------------
+
+  const itemsPerPage = 2;
+  const PageNumPerPage = 3;
+  const [SearchData, setSearchData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [startPage, setStartPage] = useState(1);
+  const [endPage, setEndPage] = useState(PageNumPerPage);
 
-  const itemsPerPage = 3; // 한 페이지에 보이는 항목 수
-  const totalItems = sentimentDummy.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  // 현재 페이지에 해당하는 데이터 계산
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const displayedItems = sentimentDummy.slice(startIndex, endIndex);
-
-  // 페이지 번호 클릭 시 해당 페이지로 이동하는 함수
-  const handlePageChange = (pageNumber) => {
+  const handlePageChange = async (pageNumber) => {
     setCurrentPage(pageNumber);
+    try {
+      if (selectedButton === "sentiment") {
+        const data = await SentimentData(cursorId);
+        setSearchData(data.result);
+      }
+      if (selectedButton === "follow") {
+        const data = await FollowSentimentData(userId, cursorId);
+        setSearchData(data.result);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
-  //티어 아이콘 색상 변경용
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log(selectedButton);
+
+        if (selectedButton === "sentiment") {
+          const data = await SentimentData(cursorId);
+          setSearchData(data.result);
+        }
+        if (selectedButton === "follow") {
+          const data = await FollowSentimentData(userId, cursorId);
+          setSearchData(data.result.slice(0, itemsPerPage));
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [userId, selectedButton]);
+
+  useEffect(() => {
+    if (SearchData) {
+      console.log("Sentiment data:", SearchData);
+    }
+  }, [SearchData]);
+
   const getTierIcon = (tier) => {
     const tierIcons = {
       루키: RookieIcon,
@@ -65,91 +103,77 @@ export default function Sentiment() {
   return (
     <div>
       <div className="search-container">
-        {/* 검색 결과 리스트 */}
-        {displayedItems.map((result) => (
-          <div key={result.id} className="search-result">
-            <div className="info">
-              <Link
-                to={`/sentiment/${result.id}/${result.sentiment_title}`}
-                className="book-link"
-              >
-                <img
-                  src={`/bookcover_dummy/${result.image_file}`}
-                  alt={result.title}
-                />
-              </Link>
-              <div className="none-img">
-                <div className="detail-info">
-                  <Link
-                    to={`/sentiment/${result.id}/${result.sentiment_title}`}
-                    className="book-link"
-                  >
-                    <h3>{result.sentiment_title}</h3>
-                  </Link>
-                  <p>
-                    <strong>{result.book_title}</strong> ({result.author}/
-                    {result.publisher})
-                  </p>
-                </div>
-                <div className="additional-info">
-                  <div className="nickname">
-                    <p>닉네임: {result.nickname} </p>
+        {SearchData &&
+          SearchData.map((result) => (
+            <div key={result.sentiment_id} className="search-result">
+              <div className="info">
+                <Link
+                  to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
+                  className="book-link"
+                >
+                  <img src={result.book_image} alt={result.book_title} />
+                </Link>
+                <div className="none-img">
+                  <div className="detail-info">
+                    <Link
+                      to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
+                      className="book-link"
+                    >
+                      <h3>{result.sentiment_title}</h3>
+                    </Link>
+                    <p>
+                      <strong>{result.book_title}</strong> ({result.author}/
+                      {result.publisher})
+                    </p>
                   </div>
-                  <div className="tier">
-                    <p>티어: </p>
-                    <img
-                      src={getTierIcon(result.tier)}
-                      alt="result.tier"
-                      className="tier-icon"
-                    />
+                  <div className="additional-info">
+                    <div className="nickname">
+                      <p>닉네임: {result.nickname} </p>
+                    </div>
+                    <div className="tier">
+                      <p>티어: </p>
+                      <img
+                        src={getTierIcon(result.tier)}
+                        alt="result.tier"
+                        className="tier-icon"
+                      />
+                    </div>
+                    <div className="likes">
+                      <img src={likeIcon} alt="like" className="like-icon" />
+                      <p>{result.like_num}</p>
+                    </div>
+                    <div className="comments">
+                      <img
+                        src={commentIcon}
+                        alt="comment"
+                        className="comment-icon"
+                      />
+                      <p>{result.comment_num}</p>
+                    </div>
+                    <div className="bookmarks">
+                      <img
+                        src={boockmarkIcon}
+                        alt="bookmark"
+                        className="bookmark-icon"
+                      />
+                      <p>{result.scrap_num}</p>
+                    </div>
+                    <p className="datetime">
+                      {formatDateTime(result.created_at)}
+                    </p>
                   </div>
-                  <div className="likes">
-                    <img src={likeIcon} alt="like" className="like-icon" />
-                    <p>{result.likes}</p>
-                  </div>
-                  <div className="comments">
-                    <img
-                      src={commentIcon}
-                      alt="comment"
-                      className="comment-icon"
-                    />
-                    <p>{result.comments}</p>
-                  </div>
-                  <div className="bookmarks">
-                    <img
-                      src={boockmarkIcon}
-                      alt="bookmark"
-                      className="bookmark-icon"
-                    />
-                    <p>{result.bookmarks}</p>
-                  </div>
-                  <p className="datetime">{formatDateTime(result.datetime)}</p>
                 </div>
               </div>
+              <div className="rating-info">
+                <img src={starIcon} alt="star" className="star-icon" />
+                <p>{result.score.toFixed(1)}</p>
+              </div>
             </div>
-            <div className="rating-info">
-              <img src={starIcon} alt="star" className="star-icon" />
-              <p>{result.rating.toFixed(1)}</p>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
-      {/* 페이지 번호 */}
 
       <div className="pagination-container">
-        <div className="pagination">
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-            (pageNumber) => (
-              <button
-                key={pageNumber}
-                className={pageNumber === currentPage ? "active" : ""}
-                onClick={() => handlePageChange(pageNumber)}
-              >
-                {pageNumber}
-              </button>
-            )
-          )}
-        </div>
+        <div className="pagination">페이지네이션 추가</div>
       </div>
     </div>
   );

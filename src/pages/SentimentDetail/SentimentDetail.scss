@@ -1,275 +1,293 @@
 @import "../../lib/scss/BSL.scss";
 
 * {
-	// border: 1px solid greenyellow; 
+  // border: 1px solid greenyellow;
 }
 
 #detail-top {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	margin-left: 60px;
-	margin-right: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 60px;
+  margin-right: 60px;
 
-	.top-header {
-		display: flex;
-		flex-direction: row;
-		margin-bottom: 20px;
-		padding-bottom: 30px;
-		border-bottom: 1px solid gray;
-		.book-info-box {
-			.sort {
-				font-size: 32px;
-				color: #5FCB75;
-				font-weight: bold;
-				margin-bottom: 10px;
-			}
-			.title { 
-				font-size: 42px;
-				font-weight: 600;
-				line-height: 140%;
-				font-weight: bold;
-				margin-bottom: 10px;
-			}
-			.title-author-box {
-				display: flex;
-				flex-direction: row;
-				.book-title {
-					font-size: 32px;
-					color: gray;
-					font-weight: bold;
-					margin-bottom: 10px;
-				}
-				.book-author {
-					font-size: 22px;
-					color: gray;
-					margin-top: 10px;
-					font-weight: 600;
-					margin-left: 5px;
-					font-weight: bold;
-				}
-			}
-			.writer-info-box {
-				display: flex;
-				flex-direction: row;
-				margin-top: 15px;
-				.profile-image {
-					width: 60px;
-					height: 60px;
-				}
-				.nick-date-box {
-					margin-left: 10px;
-					.nickname-tier {
-						display: flex;
-						flex-direction: row;
-						.nickname{
-							font-size: 24px;
-							display: flex;
-							flex-direction: column;
-						}
-						.tier-icon {
-							object-fit: fill;
-							width: 12px;
-							margin-left: 4px;
-						}
-					}
-					.date {
-						font-size: 18px;
-						display: flex;
-						flex-direction: column;
-						color: gray;
-					}
-				}
-			}
-		}
-		.book-image-box {
-			display: flex;
-			padding-left: 100px;
-			.image-box {
-				margin-left: 0px;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				margin-top: 20px;
-				.image {
-					width: 130px;
-				}
-				.rating {
-					color: #5FCB75;
-					font-weight: bold;
-					margin-top: 5px;
-					font-size: 25px;
-				}
-			}
-		}
-	}
-	.detail-top-main {
-		height: auto;
-		.detail-main-image {
-			align-content: center;
-			margin-bottom: 20px;
-			border: 1px solid black;
-		}
-		.detail-main-text {
-			font-size: 28px;
-			font-weight: bold;
-			line-height: 3;
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-	}
+  .top-header {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid gray;
+    .book-info-box {
+      .sort {
+        font-size: 32px;
+        color: #5fcb75;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .title {
+        font-size: 42px;
+        font-weight: 600;
+        line-height: 140%;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .title-author-box {
+        display: flex;
+        flex-direction: row;
+        .book-title {
+          font-size: 32px;
+          color: gray;
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+        .book-author {
+          font-size: 22px;
+          color: gray;
+          margin-top: 10px;
+          font-weight: 600;
+          margin-left: 5px;
+          font-weight: bold;
+        }
+      }
+      .writer-info-box {
+        display: flex;
+        flex-direction: row;
+        margin-top: 15px;
+        .profile-image {
+          width: 60px;
+          height: 60px;
+        }
+        .nick-date-box {
+          margin-left: 10px;
+          .nickname-tier {
+            display: flex;
+            flex-direction: row;
+            .nickname {
+              font-size: 24px;
+              display: flex;
+              flex-direction: column;
+            }
+            .tier-icon {
+              object-fit: fill;
+              width: 12px;
+              margin-left: 4px;
+            }
+          }
+          .date {
+            font-size: 18px;
+            display: flex;
+            flex-direction: column;
+            color: gray;
+          }
+        }
+      }
+    }
+    .book-image-box {
+      display: flex;
+      padding-left: 100px;
+      .image-box {
+        margin-left: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        .image {
+          width: 130px;
+          border: 1.5px solid $black;
+        }
+        .rating {
+          color: #5fcb75;
+          font-weight: bold;
+          margin-top: 5px;
+          font-size: 25px;
+        }
+      }
+    }
+  }
+  .detail-top-main {
+    height: auto;
+    .detail-main-image {
+      align-content: center;
+      margin-bottom: 20px;
+      border: 1px solid black;
+    }
+    .detail-main-text {
+      font-size: 28px;
+      font-weight: bold;
+      line-height: 3;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
 }
-
 
 #detail-bottom {
-	margin-left: 60px;
-	margin-right: 60px;
-	padding-bottom: 30px;
-	border-bottom: 1px solid gray;
-	.update-delete-box {
-		display: flex;
-		flex-direction: row;
-		float: right;
-		margin-right: 25px;
-		margin-bottom: 20px;
-		.update-button {
-			display: flex;
-			flex-direction: row;
-			cursor: pointer;
-			.edit-icon{
-				width: 22px;
-				height: 22px;
-			}
-			.edit-text{
-				margin-left: 8px;
-				font-size: 20px;
-				font-weight: bold;
-			}
-		}
-		.delete-button {
-			display: flex;
-			flex-direction: row;
-			margin-left: 60px;
-			cursor: pointer;
-			.delete-icon{
-				width: 20px;
-				height: 22px;
-			}
-			.delete-text{
-				margin-left: 8px;
-				font-size: 20px;
-				font-weight: bold;
-			}
-		}
-	}
-.bottom-button-box {
-	display: flex;
-	flex-direction: row;
-	clear: both;
-	justify-content: space-between;
-	align-items: center;
-	.like-box {
-		display: flex;
-		flex-direction: row;
-		.like {
-			display: flex;
-			flex-direction: row;
-			margin: 10px;
-			.like-icon{
-				width: 23px;
-				height: 23px;
-				padding-right: 5px;
-			}
-			.like-count {
-				font-size: 20px;
-				font-weight: bold;
-				color: #FF1348;
-			}
-		}
-		.comment {
-			display: flex;
-			flex-direction: row;
-			margin: 10px;
-			padding-left: 15px;
-			.comment-icon {
-				width: 24px;
-				height: 24px;
-				padding-right: 5px;
-			}
-			.comment-count {
-				font-size: 20px;
-				font-weight: bold;
-				color: #1975FF;
-			}
-		}
-		.scrap {
-			display: flex;
-			flex-direction: row;
-			margin: 10px;
-			padding-left: 15px;
-			.scrap-icon{
-				width: 25px;
-				height: 25px;
-				padding-right: 2px;
-				font-size: 20px;
-				font-weight: bold;
-			}
-			.scrap-count {
-				font-size: 20px;
-				font-weight: bold;
-				color: #FFC120;
-			}
-		}
-	}
-	.recommand-box {
-		display: flex;
-		flex-direction: row;
-		margin-right: 15px;
-			.recommand-button {
-				display: flex;
-				flex-direction: row;
-				width: 110px;
-				height: 25px;
-				padding: 5px;
-				border: 2px solid black;
-				border-radius: 10px;
-				cursor: pointer;
-				justify-content: center;
-				align-items: center;
+  margin-left: 60px;
+  margin-right: 60px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid gray;
+  .update-delete-box {
+    display: flex;
+    flex-direction: row;
+    float: right;
+    margin-right: 25px;
+    margin-bottom: 20px;
+    .update-button {
+      display: flex;
+      flex-direction: row;
+      cursor: pointer;
+      .edit-icon {
+        width: 22px;
+        height: 22px;
+      }
+      .edit-text {
+        margin-left: 8px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+    .delete-button {
+      display: flex;
+      flex-direction: row;
+      margin-left: 60px;
+      cursor: pointer;
+      .delete-icon {
+        width: 20px;
+        height: 22px;
+      }
+      .delete-text {
+        margin-left: 8px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+  }
+  .bottom-button-box {
+    display: flex;
+    flex-direction: row;
+    clear: both;
+    justify-content: space-between;
+    align-items: center;
+    .like-box {
+      display: flex;
+      flex-direction: row;
+      .like {
+        display: flex;
+        flex-direction: row;
+        margin: 10px;
+        .like-icon {
+          width: 23px;
+          height: 23px;
+          padding-right: 5px;
+        }
+        .like-count {
+          font-size: 20px;
+          font-weight: bold;
+          color: #ff1348;
+        }
+      }
+      .comment {
+        display: flex;
+        flex-direction: row;
+        margin: 10px;
+        padding-left: 15px;
+        .comment-icon {
+          width: 24px;
+          height: 24px;
+          padding-right: 5px;
+        }
+        .comment-count {
+          font-size: 20px;
+          font-weight: bold;
+          color: #1975ff;
+        }
+      }
+      .scrap {
+        display: flex;
+        flex-direction: row;
+        margin: 10px;
+        padding-left: 15px;
+        .scrap-icon {
+          width: 25px;
+          height: 25px;
+          padding-right: 2px;
+          font-size: 20px;
+          font-weight: bold;
+        }
+        .scrap-count {
+          font-size: 20px;
+          font-weight: bold;
+          color: #ffc120;
+        }
+      }
+    }
+    .recommand-box {
+      display: flex;
+      flex-direction: row;
+      margin-right: 15px;
+      .recommand-button {
+        display: flex;
+        flex-direction: row;
+        width: 110px;
+        height: 25px;
+        padding: 5px;
+        border: 2px solid black;
+        border-radius: 10px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
 
-				.recommand-black-icon {
-					width: 23px;
-					height: 23px;
-				}
-				.recommand-text {
-					font-size: 20px;
-					font-weight: bold;
-					margin-left: 7px;
-				}
-			}
-			.scrap-button {
-				display: flex;
-				flex-direction: row;
-				width: 110px;
-				height: 25px;
-				padding: 5px;
-				border: 2px solid black;
-				border-radius: 10px;
-				justify-content: center;
-				align-items: center;
-				margin-left: 35px;
-				cursor: pointer;
+        .recommand-black-icon {
+          width: 23px;
+          height: 23px;
+        }
+        .recommand-text {
+          font-size: 20px;
+          font-weight: bold;
+          margin-left: 7px;
+        }
+        &.recommand {
+          background-color: #fe5050;
+          color: white;
+          border: 2px solid #fe5050;
+        }
+        &.not-recommand {
+          background-color: white;
+          color: black;
+        }
+      }
+      .scrap-button {
+        display: flex;
+        flex-direction: row;
+        width: 110px;
+        height: 25px;
+        padding: 5px;
+        border: 2px solid black;
+        border-radius: 10px;
+        justify-content: center;
+        align-items: center;
+        margin-left: 35px;
+        cursor: pointer;
 
-				.scrap-black-icon {
-					width: 17px;
-					height: 21px;
-				}
-				.scrap-text {
-					font-size: 20px;
-					font-weight: bold;
-					margin-left: 13px;
-				}
-			}
-	}
-}
+        .scrap-black-icon {
+          width: 17px;
+          height: 21px;
+        }
+        .scrap-text {
+          font-size: 20px;
+          font-weight: bold;
+          margin-left: 13px;
+        }
+        &.scrap {
+          background-color: #ffc120;
+          color: white;
+          border: 2px solid #ffc120;
+        }
+        &.not-scrap {
+          background-color: white;
+          color: black;
+        }
+      }
+    }
+  }
 }

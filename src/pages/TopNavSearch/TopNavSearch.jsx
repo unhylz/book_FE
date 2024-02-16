@@ -1,6 +1,5 @@
 // TopNavSearch.jsx
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
@@ -12,19 +11,47 @@ import RelatedSentiment from "./components/RelatedSentiment/RelatedSentiment";
 import RelatedNickname from "./components/RelatedNickname/RelatedNickname";
 import AcountModalContainer from "../../container/AcountModalContainer";
 import "./TopNavSearch.scss";
+import { topNavSearch } from "../../modules/api/search";
 
 function TopNavSearch() {
+  //isLogin:false, id:null, email:null
+  const userId = "2"; //추후 수정 --------
+
   const navigate = useNavigate();
   const search_result = useLocation().state;
   const content = search_result ? search_result.content : "";
-  const displayedItems1 = bookDummy.slice(3, 6);
-  const displayedItems2 = sentimentDummy.slice(30, 33);
+  //const displayedItems1 = bookDummy.slice(3, 6);
+  //const displayedItems2 = sentimentDummy.slice(30, 33);
   //const displayedItems3 = nicknameDummy.slice(0, 3);
   const [modalState, setModalState] = useState(null);
+  const [SearchData, setSearchData] = useState(null);
 
   const handleLogoClick = () => {
     navigate("/");
   };
+
+  console.log("content: ", content);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await topNavSearch(content, userId);
+        setSearchData(data);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    if (content) {
+      fetchData();
+    }
+  }, [content]);
+
+  useEffect(() => {
+    if (SearchData && SearchData.searchSentimentObject) {
+      console.log("검색 도서 데이터:", SearchData.searchSentimentObject);
+    }
+  }, [SearchData]);
 
   return (
     <div>
@@ -55,24 +82,39 @@ function TopNavSearch() {
             <div className="search-additional">
               <div className="related-book">
                 <h2>#관련서적</h2>
-                <RelatedBook
-                  searchResult={search_result}
-                  displayedItems={displayedItems1}
-                />
+                {SearchData &&
+                  SearchData.searchBookObject &&
+                  SearchData.searchBookObject.bookObject && (
+                    <RelatedBook
+                      searchResult={search_result}
+                      displayedItems={SearchData.searchBookObject}
+                      userId={userId}
+                    />
+                  )}
               </div>
               <div className="related-sentiment">
                 <h2>#센티먼트</h2>
-                <RelatedSentiment
-                  searchResult={search_result}
-                  displayedItems={displayedItems2}
-                />
+                {SearchData &&
+                  SearchData.searchSentimentObject &&
+                  SearchData.searchSentimentObject.sentimentObject && (
+                    <RelatedSentiment
+                      searchResult={search_result}
+                      displayedItems={SearchData.searchSentimentObject}
+                      userId={userId}
+                    />
+                  )}
               </div>
               <div className="related-nickname">
                 <h2>#닉네임</h2>
-                <RelatedNickname
-                  searchResult={search_result}
-                  displayedItems={displayedItems2} //---- 추후 3으로 수정
-                />
+                {SearchData &&
+                  SearchData.searchNicknameObject &&
+                  SearchData.searchNicknameObject.nicknameObject && (
+                    <RelatedNickname
+                      searchResult={search_result}
+                      displayedItems={SearchData.searchNicknameObject}
+                      userId={userId}
+                    />
+                  )}
               </div>
             </div>
           </div>

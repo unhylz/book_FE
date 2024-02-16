@@ -1,6 +1,6 @@
 // BookDetail.jsx
-import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
@@ -11,19 +11,74 @@ import { bookDummy } from "../TopNavSearch/bookDummy.js";
 import { sentimentDummy } from "../Home/components/sentiment/sentimentDummy";
 import StarRating from "./components/starRating/StarRating.jsx";
 import "./BookDetail.scss";
+import { BookSearch } from "../../modules/api/search";
+import { SentimentSearch } from "../../modules/api/search";
+import { topNavSearch } from "../../modules/api/search";
 
 export default function BookDetail() {
-  // 선택한 센티먼트 id와 title 변수
-  const { content, book_title, id } = useParams();
+  const isLogin = true; //추후 수정 ------
+  const userId = "2"; //추후 수정 --------
+  const cursorId = "0"; // 센티먼트 커서 추후 수정 --------
+
+  // 책 커서
+  const { content, book_title, cursor_id, index, options } = useParams();
   const navigate = useNavigate();
-  //const location = useLocation();
-  const bookId = parseInt(id, 10);
+  const location = useLocation();
+  const bookId = 1; //parseInt(id, 10);
   const displayedItems2 = sentimentDummy.slice(33, 36);
+  const [SearchData, setSearchData] = useState(null);
+  const [isAssessed, setIsAssessed] = useState(true);
+  const [BookSearchData, setBookSearchData] = useState(null);
 
-  //확인용
-  const isAssessed = true;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (options === "전체검색") {
+          const data = await topNavSearch(content, userId);
+          setBookSearchData(data.searchBookObject.bookObject[index]);
+        } else {
+          const data = await BookSearch(userId, cursor_id, content);
 
-  console.log(book_title);
+          switch (options) {
+            case "관련순":
+              // "관련순"인 경우에는 데이터를 그대로 설정
+              setBookSearchData(data.bookData.bookObject[index]);
+              break;
+            case "별점순":
+              // "별점순"인 경우에는 데이터를 별점순으로 정렬하여 설정
+              const sortedData = data.bookData.bookObject
+                .slice()
+                .sort((a, b) => b.avr_score - a.avr_score);
+              setBookSearchData(sortedData[index]);
+              break;
+            default:
+              // 다른 경우에는 기본적으로 데이터를 그대로 설정
+              setBookSearchData(data.bookData.bookObject[index]);
+          }
+
+          //setSearchData(data);
+        }
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    if (content) {
+      fetchData();
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("검색 도서 데이터 진입", BookSearchData);
+    if (BookSearchData) {
+      console.log("검색 도서 데이터!!!!!:", BookSearchData);
+      if (BookSearchData.user_score === null) {
+        setIsAssessed(false);
+      } else {
+        setIsAssessed(true);
+      }
+    }
+  }, [BookSearchData]);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -34,30 +89,45 @@ export default function BookDetail() {
     window.scrollTo(0, 0);
   }, []);
 
-  //const bookInfo = location.state?.bookInfo;
+  // 관련 센티먼트
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await SentimentSearch(userId, cursorId, content);
+        setSearchData(data.sentimentObject);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
 
-  // 해당 도서 데이터 가져오기
-  function getBookById(bookId) {
-    const foundBook = bookDummy.find((book) => book.id === bookId);
-    // 책이 존재하면 콘솔에 출력, 존재하지 않으면 메시지 출력
-    if (foundBook) {
-      return foundBook;
-    } else {
-      console.log("Book not found with id:", bookId);
+    if (content) {
+      fetchData();
     }
-  }
+  }, [content]);
+
+  useEffect(() => {
+    if (SearchData && SearchData) {
+      console.log("검색 센티먼트 데이터22:", SearchData);
+    }
+  }, [SearchData]);
 
   function formatPublishDatetime(dateTimeString) {
+    /*
     const dateTime = new Date(dateTimeString);
     const year = String(dateTime.getFullYear()).slice(-4);
     const month = String(dateTime.getMonth() + 1).padStart(2, "0");
     const day = String(dateTime.getDate()).padStart(2, "0");
+    */
+    const year = dateTimeString.slice(0, 4);
+    const month = dateTimeString.slice(6, 8);
+    const day = dateTimeString.slice(10, 12);
 
     return `${year}.${month}.${day}`;
   }
 
   const handleWriteClick1 = () => {
-    navigate("/write");
+    //navigate("/write");
+    navigate("/write", { state: { bookTitle: book_title } });
   };
 
   const handleWriteClick2 = () => {
@@ -76,125 +146,127 @@ export default function BookDetail() {
         {/* 2열 - 중앙 메인 부분 */}
         <div className="center">
           <div className="book-detail-contents">
-            <div className="book-detail-container">
-              <div className="book-row-container">
-                <div className="book-image-container">
-                  <img
-                    src={`/bookcover_dummy/${getBookById(bookId).image_file}`}
-                    alt={getBookById(bookId).book_title}
-                    className="book-image"
-                  />
-                </div>
-
-                <div className="book-row-column">
-                  <p className="book-detail-title">
-                    {getBookById(bookId).book_title}
-                  </p>
-                  <div className="book-detail-info">
-                    <div className="book-detail-info">
-                      <p>
-                        저자:{" "}
-                        <span className="dynamic-content">
-                          {getBookById(bookId).author}
-                        </span>
-                      </p>
-                      <p>
-                        출판:{" "}
-                        <span className="dynamic-content">
-                          {getBookById(bookId).publisher}
-                        </span>
-                      </p>
-                      <p>
-                        발행:{" "}
-                        <span className="dynamic-content">
-                          {formatPublishDatetime(getBookById(bookId).publish)}
-                        </span>
-                      </p>
-                    </div>
+            {BookSearchData && (
+              <div className="book-detail-container">
+                <div className="book-row-container">
+                  <div className="book-image-container">
+                    <img
+                      src={BookSearchData.image}
+                      alt={BookSearchData.title}
+                      className="book-image"
+                    />
                   </div>
-                  <div className="book-detail-scope">
-                    <div className="book-detail-row">
-                      <div className="book-detail-column">
-                        <div className="book-detail-vote-avg">
-                          <div className="book-vote-title">
-                            <p className="book-scope-title">평균</p>
-                            <p className="book-scope-title">평가</p>
-                          </div>
-                          <div className="book-vote-star">
-                            <StarRating
-                              averageRates={[
-                                getBookById(bookId).vote_avg,
-                                getBookById(bookId).my_vote,
-                              ]}
-                            />
-                          </div>
-                          <div className="book-vote-value">
-                            <div className="book-vote-avg-value">
-                              <p className="book-vote1">
-                                {getBookById(bookId).vote_avg}
-                              </p>
-                              <p className="book-vote-num">
-                                (총 {getBookById(bookId).vote}명)
-                              </p>
+
+                  <div className="book-row-column">
+                    <p className="book-detail-title">{BookSearchData.title}</p>
+                    <div className="book-detail-info">
+                      <div className="book-detail-info">
+                        <p>
+                          저자:&nbsp;
+                          <span className="dynamic-content">
+                            {BookSearchData.author}
+                          </span>
+                        </p>
+                        <p>
+                          출판:&nbsp;
+                          <span className="dynamic-content">
+                            {BookSearchData.publisher}
+                          </span>
+                        </p>
+                        <p>
+                          발행:&nbsp;
+                          <span className="dynamic-content">
+                            {formatPublishDatetime(BookSearchData.pubdate)}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="book-detail-scope">
+                      <div className="book-detail-row">
+                        <div className="book-detail-column">
+                          <div className="book-detail-vote-avg">
+                            <div className="book-vote-title">
+                              <p className="book-scope-title">평균</p>
+                              <p className="book-scope-title">평가</p>
                             </div>
-                            <div className="book-vote-my-value">
-                              <p className="book-vote2">
-                                {getBookById(bookId).my_vote}
-                              </p>
+                            <div className="book-vote-star">
+                              <StarRating
+                                averageRates={[
+                                  BookSearchData.avr_score,
+                                  BookSearchData.user_score,
+                                ]}
+                              />
+                            </div>
+                            <div className="book-vote-value">
+                              <div className="book-vote-avg-value">
+                                <p className="book-vote1">
+                                  {BookSearchData.avr_score}
+                                </p>
+                                <p className="book-vote-num">
+                                  (총 {BookSearchData.eval_num}명)
+                                </p>
+                              </div>
+                              <div className="book-vote-my-value">
+                                <p className="book-vote2">
+                                  {BookSearchData.user_score}
+                                </p>
+                              </div>
                             </div>
                           </div>
                         </div>
+                        {!isAssessed && (
+                          <>
+                            <button
+                              className="book-assess-btn1"
+                              onClick={handleWriteClick1}
+                            >
+                              <img
+                                src={assessmentIcon1}
+                                alt="assessmentIcon1"
+                                className="assessment-icon1"
+                              />
+                              평가하기
+                            </button>
+                          </>
+                        )}
+                        {isAssessed && (
+                          <>
+                            <button
+                              className="book-assess-btn2"
+                              onClick={handleWriteClick2}
+                            >
+                              <img
+                                src={assessmentIcon2}
+                                alt="assessmentIcon2"
+                                className="assessment-icon2"
+                              />
+                              평가완료
+                            </button>
+                          </>
+                        )}
                       </div>
-                      {!isAssessed && (
-                        <>
-                          <button
-                            className="book-assess-btn1"
-                            onClick={handleWriteClick1}
-                          >
-                            <img
-                              src={assessmentIcon1}
-                              alt="assessmentIcon1"
-                              className="assessment-icon1"
-                            />
-                            평가하기
-                          </button>
-                        </>
-                      )}
-                      {isAssessed && (
-                        <>
-                          <button
-                            className="book-assess-btn2"
-                            onClick={handleWriteClick2}
-                          >
-                            <img
-                              src={assessmentIcon2}
-                              alt="assessmentIcon2"
-                              className="assessment-icon2"
-                            />
-                            평가완료
-                          </button>
-                        </>
-                      )}
                     </div>
                   </div>
                 </div>
+                <p className="book-intro-title">책 소개</p>
+                <div
+                  className="book-intro-detail"
+                  style={{ whiteSpace: "pre-line" }}
+                >
+                  {BookSearchData.description}
+                </div>
               </div>
-
-              <p className="book-intro-title">책 소개</p>
-              <div
-                className="book-intro-detail"
-                style={{ whiteSpace: "pre-line" }}
-              >
-                {getBookById(bookId).intro}
-              </div>
-            </div>
+            )}
           </div>
           <div className="book-detail-sentiment">
             <p className="book-related-sentiment">관련 센티먼트</p>
-            <RelatedSentiment
-              searchResult={content}
-              displayedItems={displayedItems2}
-            />
+            {SearchData && (
+              <RelatedSentiment
+                searchResult={content}
+                displayedItems={SearchData}
+              />
+            )}
+            <p>페이지네이션 추가</p>
           </div>
         </div>
 
