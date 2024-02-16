@@ -65,7 +65,7 @@ export default function RelatedSentimentResults({
           <div key={index} className="related-sentiment-search-result">
             <div className="info">
               <Link
-                to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
+                to={`/sentiment/${searchResult}/${result.sentiment_id}/${result.sentiment_title}`}
                 className="book-link"
               >
                 <div className="book-cover">
@@ -75,7 +75,7 @@ export default function RelatedSentimentResults({
               <div className="none-img">
                 <div className="detail-info">
                   <Link
-                    to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
+                    to={`/sentiment/${searchResult}/${result.sentiment_id}/${result.sentiment_title}`}
                     className="book-link"
                   >
                     <h3>{result.sentiment_title}</h3>
