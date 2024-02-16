@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { sentimentDummy } from "../../../../Home/components/sentiment/sentimentDummy";
 import starIcon from "../../../../../assets/icons/star.svg";
 import boockmarkIcon from "../../../../../assets/icons/bookmark.svg";
 import commentIcon from "../../../../../assets/icons/comment.svg";
@@ -12,37 +11,37 @@ import DiaIcon from "../../../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../../assets/tiers/그랜드마스터.svg";
 import Pagination from "./pagenation";
+import axios from "axios";
 
 function formatDateTime(dateTimeString) {
-  const dateTime = new Date(dateTimeString);
-  const year = String(dateTime.getFullYear()).slice(-2);
-  const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-  const day = String(dateTime.getDate()).padStart(2, "0");
-  const hours = String(dateTime.getHours()).padStart(2, "0");
-  const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+  const year = dateTimeString.slice(6, 10);
+  const month = dateTimeString.slice(0, 2);
+  const day = dateTimeString.slice(3, 5);
+  const hours = dateTimeString.slice(12, 14);
+  const minutes = dateTimeString.slice(15, 17);
 
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
 
-export default function Sentiment() {
-  //const searchResults = sentimentDummy;
-  const [currentPage, setCurrentPage] = useState(1);
+export default function Sentiment() { 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+    const itemsPerPage = 3;
+    const [cursorId, setCursorId] = useState(1);
+    const [sentimentData, setSentimentData] = useState(null);
 
-  const itemsPerPage = 3; // 한 페이지에 보이는 항목 수
-  const totalItems = sentimentDummy.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+    useEffect(() => {
+      axios.get(`users/1/mypage`, {
+        withCredentials: true,
+      })
+      .then(response => {
+        if(response.data.length > 1){
+        setSentimentData(response.data[1].sentimentObject);
+      }
+      }) 
+      .catch(error => console.error(error));
+    }, []);
 
-  // 현재 페이지에 해당하는 데이터 계산
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const displayedItems = sentimentDummy.slice(startIndex, endIndex);
-
-  // 페이지 번호 클릭 시 해당 페이지로 이동하는 함수
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  //티어 아이콘 색상 변경용
   const getTierIcon = (tier) => {
     const tierIcons = {
       루키: RookieIcon,
@@ -52,41 +51,42 @@ export default function Sentiment() {
       마스터: MasterIcon,
       그랜드마스터: GrandMasterIcon,
     };
-
-    const DefaultIcon = () => null;
-    const formattedTier = tier.toLowerCase().replace(/\s/g, "");
-
-    const SelectedIcon = tierIcons[formattedTier] || DefaultIcon;
-
-    return SelectedIcon;
+    return tierIcons[tier];
   };
+
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   return (
     <div>
       <div className="search-container">
-        {/* 검색 결과 리스트 */}
-        {displayedItems.map((result) => (
-          <div key={result.id} className="search-result">
+      {sentimentData && sentimentData.map((result) => (
+        <div key={result.sentiment_id} className="search-result"> 
             <div className="info">
               <Link
-                to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
                 className="book-link"
               >
                 <img
                   src={`bookcover_dummy/${result.image_file}`}
-                  alt={result.title}
+                  alt={result.book_title}
                 />
               </Link>
               <div className="none-img">
                 <div className="detail-info">
                   <Link
-                    to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                    to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
                     className="book-link"
                   >
-                    <h3>{result.sentiment_title}</h3>
+                    <h3>{result.sentiment_title[0]}</h3>
                   </Link>
                   <p>
-                    <strong>{result.book_title}</strong> ({result.author}/
+                    <strong>{result.book_title[0]}</strong> ({result.author}/
                     {result.publisher})
                   </p>
                 </div>
@@ -104,7 +104,7 @@ export default function Sentiment() {
                   </div>
                   <div className="likes">
                     <img src={likeIcon} alt="like" className="like-icon" />
-                    <p>{result.likes}</p>
+                    <p>{result.like_num}</p>
                   </div>
                   <div className="comments">
                     <img
@@ -112,7 +112,7 @@ export default function Sentiment() {
                       alt="comment"
                       className="comment-icon"
                     />
-                    <p>{result.comments}</p>
+                    <p>{result.comment_num}</p>
                   </div>
                   <div className="bookmarks">
                     <img
@@ -120,26 +120,27 @@ export default function Sentiment() {
                       alt="bookmark"
                       className="bookmark-icon"
                     />
-                    <p>{result.bookmarks}</p>
+                    <p>{result.scrap_num}</p>
                   </div>
-                  <p className="datetime">{formatDateTime(result.datetime)}</p>
+                  <p className="datetime">
+                    {formatDateTime(result.created_at)}
+                  </p>
                 </div>
               </div>
             </div>
             <div className="rating-info">
               <img src={starIcon} alt="star" className="star-icon" />
-              <p>{result.rating.toFixed(1)}</p>
+              <p>{result.score.toFixed(1)}</p>
             </div>
           </div>
-        ))}
+        ))
+        }
       </div>
-      {/* 페이지 번호 */}
-      <hr/>
       <div className="pagination-container">
         <div className="pagination">
-        <Pagination
+          <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil(totalItems / itemsPerPage)}
+            totalPages={totalPages}
             onPageChange={handlePageChange}
           />
         </div>

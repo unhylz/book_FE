@@ -7,7 +7,7 @@ import AcountModalContainer from "../../../container/AcountModalContainer";
 import axios from "axios";
 
 export default function Notification() {
-  const [comments, setComments] = useState(["플러터 어렵나요?"]); // 댓글 상태
+  const [comments, setComments] = useState([]); // 댓글 상태
   const [notificationsData, setNotificationsData] = useState([]); // 알림 상태
   const [modalState, setModalState] = useState(null);
   const [isNotified, setIsNotified] = useState(false);
