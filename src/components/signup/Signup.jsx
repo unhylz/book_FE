@@ -14,7 +14,8 @@ import check_icon from '../../assets/icons/check.svg'
 export default function Signup(props) 
 {
   console.log(props)
-  const [isEyeOpen,setIsEyeOpen] = useState(false);
+  const [isPwEyeOpen,setIsPwEyeOpen] = useState(false);
+  const [isPwCheckEyeOpen,setIsPwCheckEyeOpen] = useState(false);
   const [isRemember,setIsRemember] = useState(false);
 
   return (
@@ -29,10 +30,6 @@ export default function Signup(props)
             <div className='email_input_line'>
               <div className={`email_input`}>
                 <input ref={props.pwInputRef} placeholder='이메일' onChange={props.onEmailChange} value={props.email}/>
-                {isEyeOpen ?
-                <img className='check' src={check_icon} onClick={()=>{}}/>
-                :<img className='error' src={error_icon} onClick={()=>{}}/>
-                }
               </div>
               <div className='check_btn' onClick={props.onEmailBtnClick}>이메일확인</div>
             </div>
@@ -52,16 +49,12 @@ export default function Signup(props)
               <div className='auth_input_line'>
                 <div className={`auth_input`}>
                   <input ref={props.pwInputRef} type='number' placeholder='인증코드' onChange={props.onAuthChange} value={props.auth}/>
-                  {isEyeOpen ?
-                  <img className='eye' src={eye_icon} onClick={()=>{}}/>
-                  :<img className='eye_off' src={eye_off_icon} onClick={()=>{}}/>
-                  }
                   {props.authState===3 ?
                   <img className='check' src={check_icon} onClick={()=>{}}/>
                   :<img className='error' src={error_icon} onClick={()=>{}}/>
                   }
                 </div>
-                <div className='auth_check_btn'>인증확인</div>
+                <div className='auth_check_btn' onClick={props.onAuthBtnClick}>인증확인</div>
                 <div className='resend'>재전송</div>
                 <div className='timer'>{props.timer}</div>
               </div>
@@ -78,10 +71,10 @@ export default function Signup(props)
 
           <div className={`pw_form`}>
             <div className={`pw_input`}>
-              <input ref={props.pwInputRef} type={isEyeOpen ? 'text':'password'} placeholder='비밀번호' onChange={props.onPwChange} value={props.pw}/>
-              {isEyeOpen ?
-              <img className='eye' src={eye_icon} onClick={()=>{}}/>
-              :<img className='eye_off' src={eye_off_icon} onClick={()=>{}}/>
+              <input ref={props.pwInputRef} type={isPwEyeOpen ? 'text':'password'} placeholder='비밀번호' onChange={props.onPwChange} value={props.pw}/>
+              {isPwEyeOpen ?
+              <img className='eye' src={eye_icon} onClick={()=>{setIsPwEyeOpen(false)}}/>
+              :<img className='eye_off' src={eye_off_icon} onClick={()=>{setIsPwEyeOpen(true)}}/>
               }
               {props.pwState===2 ?
               <img className='check' src={check_icon} onClick={()=>{}}/>
@@ -99,10 +92,10 @@ export default function Signup(props)
               [props.pwState]}
             </div>
             <div className='pwcheck_input'>
-              <input ref={props.pwInputRef} type={isEyeOpen ? 'text':'password'} placeholder='비밀번호 확인' onChange={props.onPwCheckChange} value={props.pwCheck}/>
-              {isEyeOpen ?
-              <img className='eye' src={eye_icon} onClick={()=>{}}/>
-              :<img className='eye_off' src={eye_off_icon} onClick={()=>{}}/>
+              <input ref={props.pwInputRef} type={isPwCheckEyeOpen ? 'text':'password'} placeholder='비밀번호 확인' onChange={props.onPwCheckChange} value={props.pwCheck}/>
+              {isPwCheckEyeOpen ?
+              <img className='eye' src={eye_icon} onClick={()=>{setIsPwCheckEyeOpen(false)}}/>
+              :<img className='eye_off' src={eye_off_icon} onClick={()=>{setIsPwCheckEyeOpen(true)}}/>
               }
               {props.pwCheckState===2 ?
               <img className='check' src={check_icon} onClick={()=>{}}/>
@@ -123,9 +116,6 @@ export default function Signup(props)
             <div className='nick_input_line'>
               <div className={`nick_input`}>
                 <input ref={props.pwInputRef} placeholder='닉네임' onChange={props.onNickChange} value={props.nick}/>
-                {isEyeOpen ?
-                <img className='check' src={check_icon} onClick={()=>{}}/>
-                :<img className='error' src={error_icon} onClick={()=>{}}/>}
               </div>
               <div className='nick_check_btn' onClick={props.onNickBtnClick}>중복확인</div>
             </div>

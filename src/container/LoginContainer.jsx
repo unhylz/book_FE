@@ -1,11 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Login from "../components/login/Login";
-import { isLoginTrue, postLogin} from "../modules/api/account";
+import { getSentimen, getSentiment, isLoginTrue, postLogin} from "../modules/api/account";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/Login";
 //import { useLoginContext } from "../modules/api/contexts/LoginContext"; // 컨텍스트 가져오기
 
 export default function LoginContainer(props) {
   //const { login, setIsLoggedIn } = useLoginContext(); // 컨텍스트에서 setIsLoggedIn 가져오기
+
 
   const [isEyeOpen, setIsEyeOpen] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
@@ -26,8 +28,15 @@ export default function LoginContainer(props) {
     pwInputRef.current.focus();
   };
 
+  const user_context = useContext(UserContext);
+  console.log("by just",user_context);
+//   useEffect(()=>{user_context.setLogin(1,"data");
+//   console.log(user_context)
+// },[])
+  
 
-  const onSubmitHandler = (e) => {
+
+  const onSubmitHandler = async(e) => {
     e.preventDefault()
     console.log("hihihi");
 
@@ -39,15 +48,17 @@ export default function LoginContainer(props) {
       pwInputFocus();
     } else {
       //로그인 api 함수 호출
-      console.log(
-        `email:${email}, pw:${pw}, remember:${remember} 로그인을 시도합니다.`
-      );
-      let res = postLogin(email,pw);
+      console.log(`email:${email}, pw:${pw}, remember:${remember} 로그인을 시도합니다.`);
+      const res = await postLogin(email,pw);
       console.log("res: ", res);
-
-      if (res) {
+      if ("안녕하세요" === res.data.status_message) {
         //setIsLoggedIn(true); // setIsLoggedIn을 컨텍스트로 전달
         setNotice(0);
+        console.log("idtype:",typeof(res.data.user_id))
+        console.log("emailtype:",typeof(res.data.email))
+      
+        user_context.setLogin(res.data.user_id,res.data.email)
+        setTimeout(()=>{console.log("afterapi",user_context)},10000)
         props.setState(null)
       } else {
         setNotice(3);

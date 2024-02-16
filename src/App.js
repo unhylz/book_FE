@@ -1,6 +1,8 @@
 import "./App.css";
-import React from "react";
+import React, { createContext, useReducer } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { UserContext, initialState, reducer } from "./context/Login";
+
 
 //Container import는 여기 아래에 쭈르륵 해주세요
 import LoginContainer from "./container/LoginContainer";
@@ -25,9 +27,21 @@ import MypageScrapContainer from "./container/MypageScrapContainer";
 import MypageSentimentContainer from "./container/MypageSentimentContainer"
 import EditSentiment from "./pages/SentimentDetail/SentimentEdit/SentimentEdit"
 
+
+
+
 function App() {
-  return (
-    <>
+  const [state,dispatcher] = useReducer(reducer,initialState);
+  const setLogin = (id,email)=>{
+    dispatcher({type:'LOGIN',id,email});
+  }
+  const setLogout = ()=>{
+    dispatcher({type:'LOGOUT'});
+  }
+
+return (
+  <>
+    <UserContext.Provider value={{user_data:state,setLogin,setLogout}}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomeContainer />} />
@@ -94,7 +108,8 @@ function App() {
           ></Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </UserContext.Provider>
+  </>
   );
 }
 
