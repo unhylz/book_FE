@@ -6,44 +6,84 @@ import { NicknameFollow } from "../../../modules/api/search";
 export default function RelatedNicknameResults({
   searchResult,
   displayedItems,
+  userId,
 }) {
-  const userId = "2"; // 실제 사용자 ID로 대체 필요 ---------------
+  const isLogin = true; //추후 수정 ------
+  if (!isLogin) {
+    userId = "0";
+  }
+
+  const [InitialFollowStatus, setInitialFollowStatus] = useState([]);
   const [FollowStatus, setFollowStatus] = useState([]);
 
   useEffect(() => {
-    const fetchInitialFollowStatus = async () => {
-      try {
-        // displayedItems에서 user_id의 오름차순으로 데이터 정렬
-        const sortedItems = displayedItems.nicknameObject.sort(
-          (a, b) => a.user_id - b.user_id
-        );
+    //console.log("맨 처음 렌더링될 때 한 번만 실행");
+    const sortedItems = displayedItems.nicknameObject.sort(
+      (a, b) => a.user_id - b.user_id
+    );
+    console.log("가장 처음 팔로우 상태: ", sortedItems);
 
-        const initialFollowStatus = await Promise.all(
-          sortedItems.map(async (follower) => {
-            const data = await NicknameFollow(userId, follower.user_id);
-            return data.follow_status === "following";
-          })
-        );
-        setFollowStatus(initialFollowStatus);
-      } catch (error) {
-        console.error("팔로우 상태 초기화 오류:", error);
-      }
-    };
-
-    fetchInitialFollowStatus();
+    setInitialFollowStatus(
+      sortedItems.map((data) => {
+        if (data.follow_status === "following") {
+          return true;
+        }
+        if (data.follow_status === "follow") {
+          return false;
+        }
+        if (data.follow_status === "myself") {
+          return null;
+        }
+      })
+    );
+    setFollowStatus(
+      sortedItems.map((data) => {
+        if (data.follow_status === "following") {
+          return true;
+        }
+        if (data.follow_status === "follow") {
+          return false;
+        }
+        if (data.follow_status === "myself") {
+          return null;
+        }
+      })
+    );
   }, []);
 
+  useEffect(() => {
+    if (InitialFollowStatus) {
+      console.log("팔로우 초기화: ", InitialFollowStatus);
+    }
+  }, [InitialFollowStatus]);
+
   const handleFollowClick = async (follower, index) => {
+    if (!isLogin) {
+      // 로그인 상태가 아닌 경우
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
     if (!follower) {
       console.error("Invalid follower object");
       return;
     }
 
     try {
-      const data = await NicknameFollow(userId, follower.user_id);
-      const updatedFollowStatus = [...FollowStatus];
-      updatedFollowStatus[index] = data.follow_status === "following";
-      setFollowStatus(updatedFollowStatus);
+      if (userId === follower.user_id) {
+        alert("자기 자신을 팔로우할 수 없습니다.");
+        return;
+      } else {
+        const data = await NicknameFollow(userId, follower.user_id);
+        const updatedFollowStatus = [...FollowStatus]; // FollowStatus 복사
+        if (data.follow_status === "following") {
+          updatedFollowStatus[index] = true;
+        }
+        if (data.follow_status === "follow") {
+          updatedFollowStatus[index] = false;
+        }
+        setFollowStatus(updatedFollowStatus); // 업데이트된 팔로우 상태 저장
+      }
     } catch (error) {
       console.error("팔로우 오류:", error);
     }
@@ -74,10 +114,18 @@ export default function RelatedNicknameResults({
                   <button
                     onClick={() => handleFollowClick(follower, index)}
                     className={`follower-status ${
-                      FollowStatus[index] ? "followed" : "not-followed"
+                      FollowStatus[index] === true
+                        ? "followed"
+                        : FollowStatus[index] === false
+                        ? "not-followed"
+                        : "null"
                     }`}
                   >
-                    {FollowStatus[index] ? "팔로잉" : "팔로우"}
+                    {FollowStatus[index] === true
+                      ? "팔로잉"
+                      : FollowStatus[index] === false
+                      ? "팔로우"
+                      : "내계정"}
                   </button>
                 </div>
               ))}

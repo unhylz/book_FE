@@ -10,6 +10,9 @@ import "./RelatedSentimentMore.scss";
 import { SentimentSearch } from "../../modules/api/search";
 
 export default function RelatedSentimentMore() {
+  const userId = "2"; // 추후 수정 ----------------
+  const cursorId = "0";
+
   // 선택한 센티먼트 id와 title 변수
   const { content } = useParams();
   const navigate = useNavigate();
@@ -35,7 +38,7 @@ export default function RelatedSentimentMore() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await SentimentSearch(content);
+        const data = await SentimentSearch(userId, cursorId, content);
         setSearchData(data);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);

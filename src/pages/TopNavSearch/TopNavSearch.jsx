@@ -14,6 +14,9 @@ import "./TopNavSearch.scss";
 import { topNavSearch } from "../../modules/api/search";
 
 function TopNavSearch() {
+  //isLogin:false, id:null, email:null
+  const userId = "2"; //추후 수정 --------
+
   const navigate = useNavigate();
   const search_result = useLocation().state;
   const content = search_result ? search_result.content : "";
@@ -32,7 +35,7 @@ function TopNavSearch() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await topNavSearch(content);
+        const data = await topNavSearch(content, userId);
         setSearchData(data);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -85,6 +88,7 @@ function TopNavSearch() {
                     <RelatedBook
                       searchResult={search_result}
                       displayedItems={SearchData.searchBookObject}
+                      userId={userId}
                     />
                   )}
               </div>
@@ -96,6 +100,7 @@ function TopNavSearch() {
                     <RelatedSentiment
                       searchResult={search_result}
                       displayedItems={SearchData.searchSentimentObject}
+                      userId={userId}
                     />
                   )}
               </div>
@@ -107,6 +112,7 @@ function TopNavSearch() {
                     <RelatedNickname
                       searchResult={search_result}
                       displayedItems={SearchData.searchNicknameObject}
+                      userId={userId}
                     />
                   )}
               </div>
