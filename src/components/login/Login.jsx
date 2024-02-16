@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { Link } from "react-router-dom";
+
 
 import "./Login.scss";
 import BSL_logo from "../../assets/logos/BSL_logo.svg";
@@ -13,12 +14,22 @@ import checkbox_black from "../../assets/icons/checkbox_black.svg";
 import notice_1 from "../../assets/notice/비밀번호를 입력해주세요..svg";
 import notice_2 from "../../assets/notice/이메일을 입력해주세요..svg";
 import notice_3 from "../../assets/notice/계정 정보가 잘못됐습니다..svg";
+import { UserContext } from "../../context/Login";
+
+
+
 
 export default function Login(props) {
+
+  
   console.log(props);
   const [isEyeOpen, setIsEyeOpen] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
 
+  const user_context = useContext(UserContext)
+  console.log(user_context)
+  
+  
   return (
     <div className="bg_shadow" onMouseDown={props.onClickBg}>
       <div className="login_popup">
