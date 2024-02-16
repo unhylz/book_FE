@@ -8,7 +8,8 @@ import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
 import CommentItem from "./Comment/Comment";
-import SentimentDetailDummy from "./SentimentDetailDummy";
+import ModalFrame from "../SentimentWrite/Modal";
+import axios from "axios";
 import likeBlackIcon from "../../assets/icons/like_black.png";
 import bookmarkBlackIcon from "../../assets/icons/bookmark_black.png";
 import editIcon from "../../assets/icons/edit_Img.png";
@@ -75,12 +76,9 @@ export default function SentimentDetail() {
       마스터: MasterIcon,
       그랜드마스터: GrandMasterIcon,
     };
-
     const DefaultIcon = () => null;
     const formattedTier = tier.toLowerCase().replace(/\s/g, "");
-
     const SelectedIcon = tierIcons[formattedTier] || DefaultIcon;
-
     return SelectedIcon;
   };
 
@@ -88,6 +86,17 @@ export default function SentimentDetail() {
   // useEffect(() => {
   //   window.scrollTo(0, 0);
   // }, []);
+
+  //추천, 스크랩 버튼
+  const [isRecommand, setIsRecommand] = useState(false);
+  const [isScrap, setIsScrap] = useState(false);
+
+  const handleRecommand = () => {
+    setIsRecommand(!isRecommand);
+  };
+  const handleScrap = () => {
+    setIsScrap(!isScrap);
+  };
 
   //상단 컴포넌트
   const DetailTop = ({ Sentiments }) => {
@@ -174,17 +183,60 @@ export default function SentimentDetail() {
 
   //하단 컴포넌트
   const DetailBottom = () => {
+    //모달 state
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
       <div id="detail-bottom">
         <div className="update-delete-box">
-          <div className="update-button">
+          <div
+            className="update-button"
+            onClick={() => {
+              navigate(`/editsentiment/${id}`);
+            }}
+          >
             <img src={editIcon} alt="editIcon" className="edit-icon" />
             <div className="edit-text">수정하기</div>
           </div>
-          <div className="delete-button">
+          <div
+            className="delete-button"
+            onClick={() => {
+              setIsOpen(true);
+            }}
+          >
             <img src={deleteIcon} alt="deleteIcon" className="delete-icon" />
             <div className="delete-text">삭제하기</div>
           </div>
+          {isOpen && (
+            <ModalFrame>
+              <h3>www.booksentimentleague.com 내용:</h3>
+              <div style={{ fontWeight: "bold", marginBottom: "55px" }}>
+                정말 삭제하시겠습니까?
+              </div>
+              <button
+                className="close"
+                onClick={async () => {
+                  setIsOpen(false);
+                  //await axios.delete(`/sentiments/${user_id}/delete/${id}`);
+                  navigate(`/`);
+                }}
+                style={{
+                  width: "90px",
+                  backgroundColor: "#5FCB75",
+                  color: "white",
+                  fontSize: "20px",
+                  borderRadius: "30px",
+                  padding: "10px",
+                  paddingTop: "none",
+                  border: "none",
+                  marginLeft: "72%",
+                  cursor: "pointer",
+                }}
+              >
+                확인
+              </button>
+            </ModalFrame>
+          )}
         </div>
         <div className="bottom-button-box">
           <div className="like-box">
@@ -202,7 +254,12 @@ export default function SentimentDetail() {
             </div>
           </div>
           <div className="recommand-box">
-            <div className="recommand-button">
+            <div
+              className={`recommand-button ${
+                isRecommand ? "recommand" : "not-recommand"
+              }`}
+              onClick={handleRecommand}
+            >
               <img
                 src={likeBlackIcon}
                 alt="likeBlack"
@@ -210,7 +267,10 @@ export default function SentimentDetail() {
               />
               <div className="recommand-text">추천하기</div>
             </div>
-            <div className="scrap-button">
+            <div
+              className={`scrap-button ${isScrap ? "scrap" : "not-scrap"}`}
+              onClick={handleScrap}
+            >
               <img
                 src={bookmarkBlackIcon}
                 alt="bookmarkBlack"

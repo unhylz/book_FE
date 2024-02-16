@@ -5,11 +5,11 @@ function MypageModal({ isOpen, onClose, onSubmit }) {
   const [inputValue, setInputValue] = useState('');
 
   const handleSubmit = () => {
-    if (inputValue.length <= 40) {
+    if (inputValue.length <= 20) {
       onSubmit(inputValue);
       onClose();
     } else {
-      alert('입력은 40자 이내로 제한됩니다.');
+      alert('입력은 20자 이내로 제한됩니다.');
     }
   };
 
@@ -20,7 +20,7 @@ function MypageModal({ isOpen, onClose, onSubmit }) {
           <h2>메시지 수정</h2>
           <input
             type="text"
-            placeholder="40자 이내로 입력하세요"
+            placeholder="20자 이내로 입력하세요"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />

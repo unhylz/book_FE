@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "../../../../../pages/Home/components/header/Header";
-import { sentimentDummy } from "../../../../Home/components/sentiment/sentimentDummy";
 import SideAd from "../../../../Home/components/advertisement/SideAd";
 import Footer from "../../../../../pages/Home/components/footer/Footer";
 import "../../../../Home/components/sentiment/Sentiment.scss";
@@ -19,21 +18,6 @@ import Pagination from "./pagenation";
 import axios from "axios";
 import "../mypageScrap.scss"
 
-/*function fetchTotalItems() {
-  // 서버의 특정 엔드포인트에서 전체 아이템 수를 가져옴
-  return fetch('http://3.37.54.220:3000/sentiments/{sentiment-id}')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => data.totalCount) // 'totalCount'는 서버 응답에서 전체 아이템 수를 나타내는 필드
-    .catch(error => {
-      console.error('Fetching total items count failed:', error);
-    });
-}*/
-
 function formatDateTime(dateTimeString) {
   const dateTime = new Date(dateTimeString);
   const year = String(dateTime.getFullYear()).slice(-2);
@@ -47,16 +31,16 @@ function formatDateTime(dateTimeString) {
 
 export default function MypageScrap() {
     const [selectedButton, setSelectedButton] = useState("sentiment");
-    const [result, setResult] = useState(sentimentDummy);
+    const [sentimentData, setSentimentData] = useState([]); 
+    const [result, setResult] = useState();
     const [modalState, setModalState] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const itemsPerPage = 10;
-    const postsPerPage = 5; // 페이지당 5개의 포스트
+    const postsPerPage = 5; 
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = result.slice(indexOfFirstPost, indexOfLastPost);
-    const [sentimentData, setSentimentData] = useState([]);
     const getTierIcon = (tier) => {
       const tierIcons = {
         루키: RookieIcon,
@@ -77,23 +61,43 @@ export default function MypageScrap() {
         setSelectedButton(button);
     };
 
-    useEffect(() => {
-      axios.get(`users/1/sentiment`, {
-        withCredentials: true,
-      })
-      .then(response => {
-        setSentimentData(response.data.sentiments);
-      }) 
-      .catch(error => console.error(error));
-    }, []);
+    const fetchUserSentiment = async () => {
+      try {
+        const response = await axios.get(`/users/1/sentiment`);
+        setSentimentData(response.data);
+        console.log(response.data);
+      }
+      catch (error) {
+        if (error.response) {
+          if (error.response.status === 400) {
+            console.log("HTTP 400 Bad Request 오류 발생");
+            if (error.response.data && error.response.data.errorCode) {
+              console.log("오류 코드:", error.response.data.errorCode);
+            }
+            if (error.response.data && error.response.data.message) {
+              console.log("오류 메시지:", error.response.data.message);
+            }
+          } else {
+            console.log("HTTP 오류 발생:", error.response.status);
+          }
+        } else {
+          console.error("서버 응답 오류 정보 없음");
+        }
+      }
+    }
+
+      useEffect(() => {
+    fetchUserSentiment();
+    })
     
 
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     const handlePageChange = (pageNumber) => {
       setCurrentPage(pageNumber);
-      // 페이지 변경에 따른 추가 로직
     };
+
+
 
     return (
         <div>
@@ -103,49 +107,49 @@ export default function MypageScrap() {
                     <SideAd />
                 </div>
                 <div className="main-container">
-                <strong className="Title">스크랩</strong>
+                <strong className="Title">센티멘트</strong>
                 <div className="mypage-container">
                     <div className="search-container">
-                        {currentPosts.map((result) => (
-                            <div key={result.id} className="search-result">
+                        {currentPosts.map((data) => (
+                            <div key={data.id} className="search-result">
                     <div className="info">
                     <Link
-                      to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                      to={`/sentiment/${data.id}/${data.sentiment_title}`}
                       className="book-link"
                     >
                       <img
-                        src={`/bookcover_dummy/${result.image_file}`}
-                        alt={result.title}
+                        src={`/bookcover_dummy/${data.image_file}`}
+                        alt={data.title}
                       />
                     </Link>
                     <div className="none-img">
                       <div className="detail-info">
                         <Link
-                          to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                          to={`/sentiment/${data.id}/${data.sentiment_title}`}
                           className="book-link"
                         >
-                          <h3>{result.sentiment_title}</h3>
+                          <h3>{data.sentiment_title}</h3>
                         </Link>
                         <p>
-                          <strong>{result.book_title}</strong> ({result.author}/
-                          {result.publisher})
+                          <strong>{data.book_title}</strong> ({data.author}/
+                          {data.publisher})
                         </p>
                       </div>
                       <div className="additional-info">
                         <div className="nickname">
-                          <p>닉네임: {result.nickname} </p>
+                          <p>닉네임: {data.nickname} </p>
                         </div>
                         <div className="tier">
                           <p>티어: </p>
                           <img
-                            src={getTierIcon(result.tier)}
+                            src={getTierIcon(data.tier)}
                             alt="result.tier"
                             className="tier-icon"
                           />
                         </div>
                         <div className="likes">
                           <img src={likeIcon} alt="like" className="like-icon" />
-                          <p>{result.likes}</p>
+                          <p>{data.likes}</p>
                         </div>
                         <div className="comments">
                           <img
@@ -153,7 +157,7 @@ export default function MypageScrap() {
                             alt="comment"
                             className="comment-icon"
                           />
-                          <p>{result.comments}</p>
+                          <p>{data.comments}</p>
                         </div>
                         <div className="bookmarks">
                           <img
@@ -161,9 +165,9 @@ export default function MypageScrap() {
                             alt="bookmark"
                             className="bookmark-icon"
                           />
-                          <p>{result.bookmarks}</p>
+                          <p>{data.bookmarks}</p>
                         </div>
-                        <p className="datetime">{formatDateTime(result.datetime)}</p>
+                        <p className="datetime">{formatDateTime(data.datetime)}</p>
                       </div>
                     </div>
                   </div>

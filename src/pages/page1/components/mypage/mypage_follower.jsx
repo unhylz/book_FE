@@ -16,7 +16,7 @@ export default function Mypage_follower() {
   useEffect(() => {
     const fetchFollowers = async () => {
       try {
-        const response = await axios.get("/users/abc1234@naver.com/follower");
+        const response = await axios.get("/users/2/follower");
         setFollowers(response.data.nicknames);
         console.log("팔로워 데이터:", response.data);
       } catch (error) {
@@ -37,7 +37,7 @@ export default function Mypage_follower() {
 
     try {
       // 팔로우 상태 업데이트를 서버에 요청
-      const response = await axios.post("/users/abc1234@naver.com/follow", {
+      const response = await axios.post("/users/2/follow", {
         followerId: follower.nick,
         isFollow: follower.follow_status === "true" ? false : true,
       });
@@ -73,7 +73,7 @@ export default function Mypage_follower() {
         </div>
         <div className="mypage-container">
           <div className="user-list">
-            <h2>팔로우</h2>
+            <h2>팔로워</h2>
             {followers.length === 0 ? (
               <p>팔로워가 없습니다.</p>
             ) :

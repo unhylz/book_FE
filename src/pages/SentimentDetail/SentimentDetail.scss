@@ -246,6 +246,15 @@
           font-weight: bold;
           margin-left: 7px;
         }
+        &.recommand {
+          background-color: #fe5050;
+          color: white;
+          border: 2px solid #fe5050;
+        }
+        &.not-recommand {
+          background-color: white;
+          color: black;
+        }
       }
       .scrap-button {
         display: flex;
@@ -268,6 +277,15 @@
           font-size: 20px;
           font-weight: bold;
           margin-left: 13px;
+        }
+        &.scrap {
+          background-color: #ffc120;
+          color: white;
+          border: 2px solid #ffc120;
+        }
+        &.not-scrap {
+          background-color: white;
+          color: black;
         }
       }
     }
