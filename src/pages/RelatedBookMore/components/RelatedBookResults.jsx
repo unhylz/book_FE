@@ -4,7 +4,12 @@ import { Link } from "react-router-dom";
 //import { bookDummy } from "../../TopNavSearch/bookDummy";
 import "./RelatedBookResults.scss";
 
-export default function RelatedBookResults({ searchResult, displayedItems }) {
+export default function RelatedBookResults({
+  searchResult,
+  displayedItems,
+  cursorId,
+  options,
+}) {
   //const displayedItems = bookDummy.slice(0, 8);
 
   function formatPublishYear(dateTimeString) {
@@ -23,7 +28,7 @@ export default function RelatedBookResults({ searchResult, displayedItems }) {
           <div key={index} className="search-result">
             <div className="related-book-info">
               <Link
-                to={`/book/${searchResult}/${result.title}`}
+                to={`/book/${searchResult}/${result.title}/${cursorId}/${index}/${options}`}
                 className="more-book-link"
               >
                 <img
@@ -34,7 +39,7 @@ export default function RelatedBookResults({ searchResult, displayedItems }) {
               </Link>
               <div className="none-img-detail-info">
                 <Link
-                  to={`/book/${searchResult}/${result.title}`}
+                  to={`/book/${searchResult}/${result.title}/${cursorId}/${index}/${options}`}
                   className="more-book-link"
                 >
                   <h3>{result.title}</h3>
