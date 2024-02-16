@@ -13,14 +13,18 @@ import Notification from "../../page1/notification/notification";
 import recommentIcon from "../../../assets/icons/comment.svg";
 import likeIcon from "../../../assets/icons/like.svg";
 import { SentimentIdSearch } from "../../../modules/api/search";
-export default function CommentItem(id) {
-  const [SearchData, setSearchData] = useState(null);
+
+export default function CommentItem({id}) {
+  const [CommentData, setCommentData] = useState(null);
+  console.log("댓글 id 확인", id);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await SentimentIdSearch(id);
-        setSearchData(data);
+        setCommentData(data[1].comment);
+
+        console.log("댓글 데이터", data)
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
@@ -30,10 +34,10 @@ export default function CommentItem(id) {
   }, [id]);
 
   useEffect(() => {
-    if (SearchData && SearchData[0].sentiment) {
-      console.log("센티먼트 데이터 확인용 33:", SearchData[0].sentiment);
+    if (CommentData) {
+      console.log("센티먼트 데이터 확인용 44:", CommentData);
     }
-  }, [SearchData]);
+  }, [CommentData]);
 
   const getTierIcon = (tier) => {
     const tierIcons = {
@@ -55,13 +59,13 @@ export default function CommentItem(id) {
 
   return (
     <div className="comment-list-item">
-      {CommentDummy.map((result) => (
+       {CommentData.map((result) => (
         <div key={result.id} className="comment-result">
           <div className="comment-header">
             <div className="list-top">
               <div className="profile-box">
                 <img
-                  src={userImg}
+                  src={result.profile_image}
                   alt="Img"
                   className="profile-image"
                   style={{ width: "36px", height: "36px" }}
@@ -76,7 +80,7 @@ export default function CommentItem(id) {
                     className="tier-icon"
                   />
                 </div>
-                <div className="time">{result.writeDateTime}</div>
+                <div className="time">{result.created_at}</div>
               </div>
             </div>
             <div className="like-recomment-container">
