@@ -23,6 +23,7 @@ import Mypage_followingContainer from "./container/MypageFollowing";
 import AcountModalContainer from "./container/AcountModalContainer";
 import MypageScrapContainer from "./container/MypageScrapContainer";
 import MypageSentimentContainer from "./container/MypageSentimentContainer"
+import EditSentiment from "./pages/SentimentDetail/SentimentEdit/SentimentEdit"
 
 function App() {
   return (
@@ -86,6 +87,10 @@ function App() {
           <Route
             path="/MypageScrap"
             element={<MypageScrapContainer></MypageScrapContainer>}
+          ></Route>
+            <Route
+            path="/editsentiment/:id/:book_title"
+            element={<EditSentiment></EditSentiment>}
           ></Route>
         </Routes>
       </BrowserRouter>
