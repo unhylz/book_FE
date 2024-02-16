@@ -22,6 +22,7 @@ import NotificationContainer from "./container/notificationContainer";
 import Mypage_followingContainer from "./container/MypageFollowing";
 import AcountModalContainer from "./container/AcountModalContainer";
 import MypageScrapContainer from "./container/MypageScrapContainer";
+import MypageSentimentContainer from "./container/MypageSentimentContainer"
 
 function App() {
   return (
@@ -73,6 +74,10 @@ function App() {
           <Route
             path="/mypage_following"
             element={<Mypage_followingContainer></Mypage_followingContainer>}
+          />
+          <Route
+            path="/mypageSentiment"
+            element={<MypageSentimentContainer/>}
           />
           <Route
             path="/notification"
