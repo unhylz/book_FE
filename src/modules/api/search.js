@@ -18,9 +18,9 @@ export const topNavSearch = async (keyword, user_id) => {
   }
 };
 
-export const BookSearch = async (user_Id, keyword) => {
+export const BookSearch = async (user_id, cursor_id, keyword) => {
   try {
-    const response = await axios.get(`/search/${user_Id}/book`, {
+    const response = await axios.get(`/search/${user_id}/book/${cursor_id}`, {
       params: {
         query: keyword,
       },
@@ -150,5 +150,18 @@ export const FollowSentimentData = async (user_id, cursor_id) => {
   } catch (error) {
     console.log("response error: ", error);
     throw error; // 오류가 발생하면 오류를 던짐
+  }
+};
+
+export const SentimentIdSearch = async (sentiment_id) => {
+  try {
+    const response = await axios.get(`/sentiments/${sentiment_id}`, {
+      withCredentials: true,
+    });
+    console.log("SentimentIdSearch response.data: ", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("SentimentIdSearch response error: ", error);
+    throw error;
   }
 };

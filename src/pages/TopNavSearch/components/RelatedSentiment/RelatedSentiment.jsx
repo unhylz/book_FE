@@ -36,7 +36,11 @@ function formatDateTime(dateTimeString) {
 //const url = "http://3.37.54.220:3000";
 //const url = "";
 
-export default function RelatedSentiment({ searchResult, displayedItems }) {
+export default function RelatedSentiment({
+  searchResult,
+  displayedItems,
+  usesrId,
+}) {
   //티어 아이콘 색상 변경용
   const getTierIcon = (tier) => {
     const tierIcons = {
@@ -66,7 +70,7 @@ export default function RelatedSentiment({ searchResult, displayedItems }) {
             <div key={result.sentiment_id} className="search-result">
               <div className="info">
                 <Link
-                  to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
+                  to={`/sentiment/${searchResult.content}/${result.sentiment_id}/${result.sentiment_title}`}
                   className="book-link"
                 >
                   <div className="book-cover">
@@ -76,7 +80,7 @@ export default function RelatedSentiment({ searchResult, displayedItems }) {
                 <div className="none-img">
                   <div className="detail-info">
                     <Link
-                      to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
+                      to={`/sentiment/${searchResult.content}/${result.sentiment_id}/${result.sentiment_title}`}
                       className="book-link"
                     >
                       <h3>{result.sentiment_title}</h3>
