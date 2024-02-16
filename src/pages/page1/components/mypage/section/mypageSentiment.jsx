@@ -19,28 +19,25 @@ import axios from "axios";
 import "../mypageScrap.scss"
 
 function formatDateTime(dateTimeString) {
-  const dateTime = new Date(dateTimeString);
-  const year = String(dateTime.getFullYear()).slice(-2);
-  const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-  const day = String(dateTime.getDate()).padStart(2, "0");
-  const hours = String(dateTime.getHours()).padStart(2, "0");
-  const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+  const year = dateTimeString.slice(6, 10);
+  const month = dateTimeString.slice(0, 2);
+  const day = dateTimeString.slice(3, 5);
+  const hours = dateTimeString.slice(12, 14);
+  const minutes = dateTimeString.slice(15, 17);
 
   return `${year}/${month}/${day} ${hours}:${minutes}`;
-} 
+}
 
 export default function MypageScrap() {
     const [selectedButton, setSelectedButton] = useState("sentiment");
-    const [sentimentData, setSentimentData] = useState([]); 
+    const [sentimentData, setSentimentData] = useState(null); 
     const [result, setResult] = useState();
     const [modalState, setModalState] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
-    const itemsPerPage = 10;
-    const postsPerPage = 5; 
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = result.slice(indexOfFirstPost, indexOfLastPost);
+    const itemsPerPage = 5;
+
+
     const getTierIcon = (tier) => {
       const tierIcons = {
         루키: RookieIcon,
@@ -51,44 +48,22 @@ export default function MypageScrap() {
         그랜드마스터: GrandMasterIcon,
       };
 
-      const DefaultIcon = () => null;
-      const formattedTier = tier.toLowerCase().replace(/\s/g, "");
-      const SelectedIcon = tierIcons[formattedTier] || DefaultIcon;
-      return SelectedIcon;
+      return tierIcons[tier];
     }
 
     const handleButtonClick = (button) => {
         setSelectedButton(button);
     };
 
-    const fetchUserSentiment = async () => {
-      try {
-        const response = await axios.get(`/users/1/sentiment`);
-        setSentimentData(response.data);
-        console.log(response.data);
-      }
-      catch (error) {
-        if (error.response) {
-          if (error.response.status === 400) {
-            console.log("HTTP 400 Bad Request 오류 발생");
-            if (error.response.data && error.response.data.errorCode) {
-              console.log("오류 코드:", error.response.data.errorCode);
-            }
-            if (error.response.data && error.response.data.message) {
-              console.log("오류 메시지:", error.response.data.message);
-            }
-          } else {
-            console.log("HTTP 오류 발생:", error.response.status);
-          }
-        } else {
-          console.error("서버 응답 오류 정보 없음");
-        }
-      }
-    }
-
-      useEffect(() => {
-    fetchUserSentiment();
-    })
+    useEffect(() => {
+      axios.get(`users/1/sentiment`, {
+        withCredentials: true,
+      })
+      .then(response => {
+        setSentimentData(response.result)
+      })
+      .catch(error => console.error(error))
+    }, []);
     
 
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -110,46 +85,46 @@ export default function MypageScrap() {
                 <strong className="Title">센티멘트</strong>
                 <div className="mypage-container">
                     <div className="search-container">
-                        {currentPosts.map((data) => (
-                            <div key={data.id} className="search-result">
+                    {sentimentData && sentimentData.map((result) => (
+                    <div key={result.sentiment_id} className="search-result"> 
                     <div className="info">
                     <Link
-                      to={`/sentiment/${data.id}/${data.sentiment_title}`}
+                      to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
                       className="book-link"
                     >
                       <img
-                        src={`/bookcover_dummy/${data.image_file}`}
-                        alt={data.title}
+                        src={`/bookcover_dummy/${result.book_image}`}
+                        alt={result.book_title}
                       />
                     </Link>
                     <div className="none-img">
                       <div className="detail-info">
                         <Link
-                          to={`/sentiment/${data.id}/${data.sentiment_title}`}
+                          to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
                           className="book-link"
                         >
-                          <h3>{data.sentiment_title}</h3>
+                          <h3>{result.sentiment_title}</h3>
                         </Link>
                         <p>
-                          <strong>{data.book_title}</strong> ({data.author}/
-                          {data.publisher})
+                          <strong>{result.book_title}</strong> ({result.author}/
+                          {result.publisher})
                         </p>
                       </div>
                       <div className="additional-info">
                         <div className="nickname">
-                          <p>닉네임: {data.nickname} </p>
+                          <p>닉네임: {result.nickname} </p>
                         </div>
                         <div className="tier">
                           <p>티어: </p>
                           <img
-                            src={getTierIcon(data.tier)}
+                            src={getTierIcon(result.tier)}
                             alt="result.tier"
                             className="tier-icon"
                           />
                         </div>
                         <div className="likes">
                           <img src={likeIcon} alt="like" className="like-icon" />
-                          <p>{data.likes}</p>
+                          <p>{result.likes}</p>
                         </div>
                         <div className="comments">
                           <img
@@ -157,7 +132,7 @@ export default function MypageScrap() {
                             alt="comment"
                             className="comment-icon"
                           />
-                          <p>{data.comments}</p>
+                          <p>{result.comments}</p>
                         </div>
                         <div className="bookmarks">
                           <img
@@ -165,9 +140,9 @@ export default function MypageScrap() {
                             alt="bookmark"
                             className="bookmark-icon"
                           />
-                          <p>{data.bookmarks}</p>
+                          <p>{result.bookmarks}</p>
                         </div>
-                        <p className="datetime">{formatDateTime(data.datetime)}</p>
+                        <p className="datetime">{formatDateTime(result.datetime)}</p>
                       </div>
                     </div>
                   </div>
@@ -180,7 +155,7 @@ export default function MypageScrap() {
         <div className="pagination">
         <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil(totalItems / itemsPerPage)}
+            totalPages={totalPages}
             onPageChange={handlePageChange}
           />
         </div>

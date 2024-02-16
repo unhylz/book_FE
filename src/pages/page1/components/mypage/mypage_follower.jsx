@@ -32,36 +32,29 @@ export default function Mypage_follower() {
       console.error("유효하지 않은 객체임");
       return;
     }
-  
-    
-
     try {
-      // 팔로우 상태 업데이트를 서버에 요청
-      const response = await axios.post("/users/2/follow", {
-        followerId: follower.nick,
-        isFollow: follower.follow_status === "true" ? false : true,
+      const response = await axios.post(`/users/2/follow`, {
+        followingId: follower.user_id, // user_id를 사용
+        isFollow: follower.follow_status === "1" ? 0 : 1,
       });
-
-      if (response.data.follow_status === "true") {
-        console.log(`${follower.nick}를 팔로우했습니다.`);
+  
+      if (response.data.follow_status === "1") {
+        console.log(`${follower.nickname}를 팔로우했습니다.`);
       } else {
-        console.log(`${follower.nick} 팔로우를 취소했습니다.`);
+        console.log(`${follower.nickname} 팔로우를 취소했습니다.`);
       }
-
-      // 팔로우 상태를 업데이트합니다.
-      const newFollowers = followers.map((f) => {
-        if (f.nick === follower.nick) {
-          return { ...f, follow_status: follower.follow_status === "true" ? "false" : "true" };
+  
+      const updatedFollowStatus = response.data.follow_status;
+      setFollowers(followers.map(f => {
+        if (f.user_id === follower.user_id) { 
+          return { ...f, follow_status: updatedFollowStatus };
         }
         return f;
-      });
-      setFollowers(newFollowers);
-
+      }));
     } catch (error) {
       console.error("팔로우 요청 중 오류 발생:", error);
     }
   };
-
   
 
   return (
@@ -81,11 +74,11 @@ export default function Mypage_follower() {
               <div key={index} className="follower-card">
                 <img
                   src={follower.profile_image}
-                  alt={follower.nick}
+                  alt={follower.nickname}
                   className="follower-image"
                 />
                 <div className="follower-info">
-                  <h3 className="follower-name">{follower.nick}</h3>
+                  <h3 className="follower-name">{follower.nickname}</h3>
                   <p className="follower-bio">{follower.status_message}</p>
                 </div>
                 <button
