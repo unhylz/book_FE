@@ -13,9 +13,12 @@ import checkbox_black from '../../assets/icons/checkbox_black.svg'
 import notice_1 from '../../assets/notice/비밀번호를 입력해주세요..svg'
 import notice_2 from '../../assets/notice/이메일을 입력해주세요..svg'
 import notice_3 from '../../assets/notice/계정 정보가 잘못됐습니다..svg'
+import { postCheckCode } from "../../modules/api/account";
 
 
 export default function PasswordSearch(props) {
+  
+  
   console.log(props);
   const [isEyeOpen, setIsEyeOpen] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
@@ -56,7 +59,7 @@ export default function PasswordSearch(props) {
           </div>
         </div>
         <div className="pw_change_btn">
-          <button onClick={props.onSubmitHandler}>비밀번호 변경</button>
+          <button type="button" onClick={props.onSubmitHandler}>비밀번호 변경</button>
         </div>
       </form>
     </div>

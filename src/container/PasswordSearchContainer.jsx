@@ -1,6 +1,6 @@
 import React,{useState, useRef, useEffect} from 'react'
 import PasswordSearch from '../components/PasswordSearch/PasswordSearch';
-import {sendAuth} from '../modules/api/account';
+import {postCheckCode, sendAuth} from '../modules/api/account';
 
 export default function PasswordSearchContainer(props) {
   
@@ -52,11 +52,16 @@ export default function PasswordSearchContainer(props) {
     //인증번호 재요청 함수
   }
 
-  const onSubmitHandler = (e)=>{
+  const onSubmitHandler = async (e)=>{
     //인증번호 검증 함수; await
     e.preventDefault();
     console.log("인증번호 검사 및 제출합니다.");
-    props.setState("passwordchange");
+    
+    const check = await postCheckCode(email,authnum)
+    
+    if(check){props.setState("passwordchange");}
+    else{console.log("인증번호 틀림.")}
+    
 
   }
 

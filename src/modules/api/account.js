@@ -1,5 +1,4 @@
 import axios from "axios"
-
 // const url = "http://3.37.54.220:3000"
 const url = ""
 
@@ -35,52 +34,54 @@ export const isLoginTrue = (email,pw)=>{
   }else return false
 }
 
-export const postLogin = (email,password) => {
-  axios.post('/users/login', {
-    email,
-    password
-  },
-  { withCredentials: true })  
-  .then(function (response) {
-    console.log("postLoginRES",response);
-    return true
-  })
-  .catch(function (error) {
-    console.log(error);
-    return false
-  });
+
+export const postLogin = async(email,password) => {
+  try{
+    const res = await axios.post('/users/login', {email,password},{ withCredentials: true });
+    console.log("postLoginRES",res);
+    return(res)
+  }
+  catch(err){
+    console.log(err);
+    return false;
+  }
 }
 
-export const postSignup = (email,password,nickname) => {
-  axios.post(`/users/signin`, {
-    email,
-    password, 
-    nickname
-  },
-  )
-  .then(function (response) {
-    console.log(response);
-    return true
-  })
-  .catch(function (error) {
-    console.log(error);
+
+export const postSignup = async (email,password,nickname) => {
+  try{
+    const res = await axios.post(
+      `/users/signin`, 
+      {email,password, nickname},
+      {withCredentials:true}
+    )
+    console.log(res)
+    if('message' in res.data)
+      {return true}
+    else
+      {return false}
+  }
+  catch(err){
+    console.log(err)
+    console.log("예상치못한 에러")
     return false
-  });
+  }
 }
 
-export const checkEmailDup = (email) => {
-  axios.post(`/users/signin/emailcheck`, 
-    {email:email}
-  )
-  .then(function (response) {
-    console.log(response);
+export const checkEmailDup = async (email) => {
+  try{
+    const res = await axios.post(
+      '/users/signin/emailcheck', 
+      {email:email})
+    console.log(res)
     return true
-  })
-  .catch(function (error) {
-    console.log(error);
+    }
+  catch(err){
+    // console.log(err)
     return false
-  });
+  } 
 }
+
 
 export const checkNickDup = (nickname) => {
   axios.post(`/users/signin/nickcheck`, {
@@ -103,11 +104,101 @@ export const sendAuth = (email)=>{
   {withCredentials:true})
   .then(function (response) {
     console.log(response);
+    console.log("메일을 보냈습니다.")
     return true
   })
   .catch(function (error) {
     console.log(error);
     return false
   });
+}
+
+export const checkAuth = async(email)=>{
+  try{
+    const res = await axios.post(
+      "/users/findpass", 
+      {email:email})
+    console.log(res)
+    return true
+    }
+  catch(err){
+    // console.log(err)
+    return false
+  }
+}
+
+
+export const getSentimen = (id)=>{
+  axios.get('/sentiments/1',
+  {withCredentials:true})
+  .then((res)=>{console.log(res)})
+  .catch((err)=>{console.log(err)})
+}
+
+export const getSentiment = async(id)=>{
+  try{
+    const res = await axios.get(
+      `/sentiments/${id}`
+      )
+    console.log(res)
+    return true
+    }
+  catch(err){
+    console.log(err.toJSON())
+    return false
+  }
+}
+
+
+
+export const postCheckCode = async(email,verificationCode)=>{
+  try{
+    const res = await axios.post(
+      '/users/findpass',
+      {email,verificationCode},
+      {withCredentials:true}
+      )
+    console.log(res)
+    if('message' in res.data)
+      {return true}
+    else if(res.data.status===409)
+    {return false }
+    else{ return false}
+  }
+  catch(err){
+    console.log(err.toJSON())
+    return false
+  }
+}
+
+export const postCheckSignupCode = async(email,verificationCode)=>{
+  try{
+    const res = await axios.post(
+      '/users/signin/auth',
+      {email,verificationCode},
+      {withCredentials:true}
+      )
+    console.log(res)
+    if('message' in res.data)
+      {return true}
+    else if(res.data.status===409)
+    {return false }
+    else{ return false}
+  }
+  catch(err){
+    console.log(err.toJSON())
+    return false
+  }
+}
+
+export const postPwChange = async(password, user_id)=>{
+  try{
+    const res = await axios.post(
+      `/users/${user_id}/changepass`,
+      {password},
+      {withCredentials:true}
+    )
+  }
+  catch{}
 }
 

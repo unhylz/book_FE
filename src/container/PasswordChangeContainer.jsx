@@ -1,5 +1,6 @@
 import React,{useState, useRef} from 'react'
 import PasswordChange from '../components/passwordChange/PasswordChange';
+import { postPwChange } from '../modules/api/account';
 
 export default function PasswordChangeContainer(props) {
   
@@ -16,6 +17,8 @@ export default function PasswordChangeContainer(props) {
   const onSubmitPwChange = (e)=>{
     e.preventDefault();
     props.setState("login");
+    const user_id = 4; //context에서 받아오기로 수정
+    postPwChange(pw,user_id);
   }
 
   const onPwChange = (e)=>{ 
