@@ -47,11 +47,11 @@ function App() {
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
 
           <Route
-            path="/sentiment/:id/:sentiment_title"
+            path="/sentiment/:content/:id/:sentiment_title"
             element={<SentimentDetailContainer />}
           />
           <Route
-            path="/book/:content/:book_title"
+            path="/book/:content/:book_title/:cursor_id/:index/:options"
             element={<BookDetailContainer />}
           ></Route>
           <Route
