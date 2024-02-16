@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import "./SentimentEdit.scss";
 import { PiStarFill, PiStarLight } from "react-icons/pi";
 import Modal from 'react-modal';
@@ -67,7 +67,9 @@ const SentimentEdit = () => {
 	const [imgFile, setImgFile] = useState("");
 	const imgRef = useRef();
 	
+	const [modifyData, setModifyData] = useState()
 	const id = useParams();
+	const user_id = 1;
 	
 	//모달 state
 	const [isOpen, setIsOpen] = useState(false);
@@ -87,7 +89,7 @@ const SentimentEdit = () => {
 			setContentValid(!!e.target.value);
 	};
 
-
+	//제목, 도서, 별점, 내용 없을 때 모달 띄우는 핸들러 
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
 		setinputTouched(true);
@@ -102,6 +104,7 @@ const SentimentEdit = () => {
 		// 	setSearchValid(false);
 		// 	return;
 		// }
+
 		if (rating === 0) {
 			setRatingValid(false);
 			return;
@@ -152,9 +155,30 @@ const SentimentEdit = () => {
 		title:'', 
 	})
 
-	const saveSentiment = async() => {
-		await axios.post(`/sentiments/{user-id}/write`, )
-	}
+	useEffect(() => {
+		axios.get(`/sentiments/${user_id}/rewrite/${id}`)
+		.then((response) => {
+			setModifyData(response.data)
+			console.log(response.data)
+		})
+		.catch(function(error) {
+			console.error("Error fetching data:", error);
+		})
+	}, [])
+
+	useEffect(() => {
+		setTitle(modifyData.sentiment_title)
+	}, [modifyData.sentimnet_title])
+	// useEffect(() => {
+	// 	setTitle(modifyData.sentiment_title)
+	// }, [modifyData.sentimnet_title])
+	// useEffect(() => {
+	// 	setTitle(modifyData.sentiment_title)
+	// }, [modifyData.sentimnet_title])
+	// useEffect(() => {
+	// 	setTitle(modifyData.sentiment_title)
+	// }, [modifyData.sentimnet_title])
+
 
 
 	return (
