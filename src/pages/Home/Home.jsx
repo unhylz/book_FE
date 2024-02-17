@@ -1,5 +1,5 @@
 // Home.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "./components/header/Header";
 import SideAd from "../../pages/Home/components/advertisement/SideAd";
@@ -7,14 +7,19 @@ import MainAd from "../../pages/Home/components/advertisement/MainAd";
 import Sentiment from "./components/sentiment/Sentiment";
 import Footer from "./components/footer/Footer";
 import AcountModalContainer from "../../container/AcountModalContainer";
+import { UserContext } from "../../context/Login";
 import "./Home.scss";
 
 export default function Home() {
-  const userId = "2"; //"2"; //임시 --------------
-  const isLogin = true;
+  const user_context = useContext(UserContext);
+  console.log("로그인 확인: ", user_context.user_data);
+
+  const userId = user_context.user_data.id; //"2"; //임시 --------------
+  const isLogin = user_context.user_data.isLogin;
 
   const [selectedButton, setSelectedButton] = useState("sentiment");
-  const [modalState, setModalState] = useState("login");
+  const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
 
   const handleButtonClick = (button) => {
     if (!isLogin && userId === null && button === "follow") {
@@ -33,12 +38,29 @@ export default function Home() {
     setSelectedButton("sentiment");
   }, []);
 
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
+
   return (
     <div>
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
       <Header
         onLogoClick={handleButtonClick}
         setModalState={setModalState}
         onCloseModal={handleCloseModal}
+        setModal={setModal}
       />
       <div className="main-content">
         {/* 1열 - 왼쪽 사이드 광고 부분 */}
@@ -79,7 +101,6 @@ export default function Home() {
         </div>
       </div>
       <Footer />
-      {modalState && <AcountModalContainer state={modalState} />}
     </div>
   );
 }

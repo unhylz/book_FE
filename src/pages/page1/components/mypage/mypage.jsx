@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./mypage.scss";
 import axios from "axios";
 import Header from "../../../../pages/Home/components/header/Header";
@@ -8,6 +8,7 @@ import UserPosts from "../mypage/section/userpost";
 import SideAd from "../../../Home/components/advertisement/SideAd";
 import Footer from "../../../../pages/Home/components/footer/Footer";
 import AcountModalContainer from "../../../../container/AcountModalContainer";
+import { UserContext } from "../../../../context/Login";
 
 function MyPage() {
   const [selectedButton, setSelectedButton] = useState("sentiment");
@@ -19,15 +20,16 @@ function MyPage() {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
   const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
 
   const fetchUserData = async () => {
     try {
       const response = await axios.get(`/users/1/mypage`);
       setUserData(response.data);
       console.log(response.data);
-    }
-     catch (error) {
+    } catch (error) {
       if (error.response) {
         if (error.response.status === 400) {
           console.log("HTTP 400 Bad Request 오류 발생");
@@ -44,10 +46,7 @@ function MyPage() {
         console.error("서버 응답 오류 정보 없음");
       }
     }
-    
   };
-
-  
 
   useEffect(() => {
     setSelectedButton("sentiment");
@@ -66,9 +65,29 @@ function MyPage() {
     setCurrentPage(newPage);
   };
 
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
+
   return (
     <div>
-      <Header onLogoClick={handleButtonClick} setModalState={setModalState} />
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
+      <Header
+        onLogoClick={handleButtonClick}
+        setModalState={setModalState}
+        setModal={setModal}
+      />
       <div className="mypage-wrapper">
         <div className="left">
           <SideAd />
@@ -90,14 +109,13 @@ function MyPage() {
           ) : (
             <p>사용자 데이터를 불러오는 중...</p>
           )}
-          <UserPosts/>
+          <UserPosts />
         </div>
         <div className="right">
           <SideAd />
         </div>
       </div>
       <Footer />
-      {modalState && <AcountModalContainer state={modalState} />}
     </div>
   );
 }

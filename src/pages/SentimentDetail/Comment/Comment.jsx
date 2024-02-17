@@ -13,32 +13,20 @@ import recommentIcon from "../../../assets/icons/comment.svg";
 import likeIcon from "../../../assets/icons/like.svg";
 import { SentimentIdSearch } from "../../../modules/api/search";
 
-export default function CommentItem({id}) {
-  const [CommentData, setCommentData] = useState(null);
-  console.log("댓글 id 확인", id);
+export default function CommentItem(data, id) {
+  const [SearchData, setSearchData] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await SentimentIdSearch(id);
-        setCommentData(data[1].comment);
+    console.log("센티먼트 데이터 확인용 55:", data);
 
-        console.log("댓글 데이터", data)
-      } catch (error) {
-        console.error("댓글데이터 가져오기 오류:", error);
-      }
-    };
-
-    fetchData();
-  }, [id]);
+    if (data) {
+      setSearchData(data.data[1].comment);
+    }
+  }, [data]);
 
   useEffect(() => {
-    if (CommentData && CommentData[1]) {
-      console.log("센티먼트 데이터 확인용 44:", CommentData[0]);
-      //setCommentData(CommentData[1].comment);
-    };
-
-  }, [CommentData]);
+    console.log("센티먼트 데이터 확인용 66:", SearchData);
+  }, [SearchData]);
 
   const getTierIcon = (tier) => {
     const tierIcons = {
@@ -59,52 +47,57 @@ export default function CommentItem({id}) {
 
   return (
     <div className="comment-list-item">
-       {CommentData && CommentData.map((result, index) => (
-        <div key={index} className="comment-result">
-          <div className="comment-header">
-            <div className="list-top">
-              <div className="profile-box">
-                <img
-                  src={result.profile_image}
-                  alt="Img"
-                  className="profile-image"
-                  style={{ width: "36px", height: "36px" }}
-                />
-              </div>
-              <div className="info-box">
-                <div className="name-tier">
-                  <div className="nickname">{result.nickname}</div>
-                  {result.tier && 
+      {SearchData &&
+        SearchData.map((result) => (
+          <div key={result.comment_id} className="comment-result">
+            <div className="comment-header">
+              <div className="list-top">
+                <div className="profile-box">
                   <img
-                    src={getTierIcon(result.tier)}
-                    alt="result.tier"
-                    className="tier-icon"
+                    src={result.profile_image}
+                    alt="profile_image"
+                    className="profile-image"
+                    style={{ width: "36px", height: "36px" }}
+                  />
+                </div>
+                <div className="info-box">
+                  <div className="name-tier">
+                    <div className="nickname">{result.nickname}</div>
+                    <img
+                      src={getTierIcon(result.tier)}
+                      alt="result.tier"
+                      className="tier-icon"
+                    />
+                  </div>
+                  <div className="time">{result.created_at}</div>
+                </div>
+              </div>
+              <div className="like-recomment-container">
+                <div className="like">
+                  <img
+                    src={likeIcon}
+                    alt="like"
+                    className="comment-like-icon"
+                  />
+                </div>
+                <div className="divider"></div>
+                <div className="recomment">
+                  <img
+                    src={recommentIcon}
+                    alt="recomment"
+                    className="recomment-icon"
                   />
                   }
                 </div>
                 <div className="time">{result.created_at}</div>
               </div>
             </div>
-            <div className="like-recomment-container">
-              <div className="like">
-                <img src={likeIcon} alt="like" className="comment-like-icon" />
-              </div>
-              <div className="divider"></div>
-              <div className="recomment">
-                <img
-                  src={recommentIcon}
-                  alt="recomment"
-                  className="recomment-icon"
-                />
-              </div>
+            <div className="comment-main">
+              <div className="content">{result.content}</div>
+              <div className="comment-like-count"></div>
             </div>
           </div>
-          <div className="comment-main">
-            <div className="content">{result.content}</div>
-            <div className="comment-like-count"></div>
-          </div>
-        </div>
-      ))}
+        ))}
       <div className="input-container">
         <div className="text-box">
           <textarea
