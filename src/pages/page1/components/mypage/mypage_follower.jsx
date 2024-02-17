@@ -4,10 +4,14 @@ import Header from "../../../../pages/Home/components/header/Header";
 import axios from "axios";
 import "./mypage.scss";
 import "../mypage/mypage_follower.scss";
+import AcountModalContainer from "../../../../container/AcountModalContainer";
 
 export default function Mypage_follower() {
   const [followers, setFollowers] = useState([]);
   const [selectedButton, setSelectedButton] = useState("sentiment");
+
+  const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
@@ -32,8 +36,6 @@ export default function Mypage_follower() {
       console.error("유효하지 않은 객체임");
       return;
     }
-  
-    
 
     try {
       // 팔로우 상태 업데이트를 서버에 요청
@@ -51,22 +53,42 @@ export default function Mypage_follower() {
       // 팔로우 상태를 업데이트합니다.
       const newFollowers = followers.map((f) => {
         if (f.nick === follower.nick) {
-          return { ...f, follow_status: follower.follow_status === "true" ? "false" : "true" };
+          return {
+            ...f,
+            follow_status: follower.follow_status === "true" ? "false" : "true",
+          };
         }
         return f;
       });
       setFollowers(newFollowers);
-
     } catch (error) {
       console.error("팔로우 요청 중 오류 발생:", error);
     }
   };
 
-  
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
 
   return (
     <div>
-      <Header onLogoClick={handleButtonClick} />
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
+      <Header
+        onLogoClick={handleButtonClick}
+        setModalState={setModalState}
+        setModal={setModal}
+      />
       <div className="mypage-wrapper">
         <div className="left">
           <SideAd />
@@ -76,31 +98,34 @@ export default function Mypage_follower() {
             <h2>팔로워</h2>
             {followers.length === 0 ? (
               <p>팔로워가 없습니다.</p>
-            ) :
-            followers.map((follower, index) => (
-              <div key={index} className="follower-card">
-                <img
-                  src={follower.profile_image}
-                  alt={follower.nick}
-                  className="follower-image"
-                />
-                <div className="follower-info">
-                  <h3 className="follower-name">{follower.nick}</h3>
-                  <p className="follower-bio">{follower.status_message}</p>
+            ) : (
+              followers.map((follower, index) => (
+                <div key={index} className="follower-card">
+                  <img
+                    src={follower.profile_image}
+                    alt={follower.nick}
+                    className="follower-image"
+                  />
+                  <div className="follower-info">
+                    <h3 className="follower-name">{follower.nick}</h3>
+                    <p className="follower-bio">{follower.status_message}</p>
+                  </div>
+                  <button
+                    onClick={() => handleFollowClick(follower)}
+                    className={`follower-status ${
+                      follower.follow_status === "true"
+                        ? "followed"
+                        : "not-followed"
+                    }`}
+                  >
+                    {follower.follow_status === "true" ? "팔로우" : "팔로잉"}
+                  </button>
                 </div>
-                <button
-                  onClick={() => handleFollowClick(follower)}
-                  className={`follower-status ${
-                    follower.follow_status === "true" ? "followed" : "not-followed"
-                  }`}
-                >
-                  {follower.follow_status === "true" ? "팔로우" : "팔로잉"}
-                </button>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
-      
+
         <div className="right">
           <SideAd />
         </div>
