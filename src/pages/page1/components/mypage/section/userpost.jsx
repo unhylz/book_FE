@@ -73,7 +73,7 @@ export default function Sentiment() {
                 className="book-link"
               >
                 <img
-                  src={`bookcover_dummy/${result.image_file}`}
+                  src={`${result.book_image}`}
                   alt={result.book_title}
                 />
               </Link>
@@ -83,10 +83,10 @@ export default function Sentiment() {
                     to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
                     className="book-link"
                   >
-                    <h3>{result.sentiment_title[0]}</h3>
+                    <h3>{result.sentiment_title}</h3>
                   </Link>
                   <p>
-                    <strong>{result.book_title[0]}</strong> ({result.author}/
+                    <strong>{result.book_title}</strong> ({result.author}/
                     {result.publisher})
                   </p>
                 </div>

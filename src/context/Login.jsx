@@ -17,11 +17,11 @@ import React, { createContext, useReducer } from "react";
       return{
         ...state,
         isLogin:false,
-        id:null,
+        id:0,
         email:null}
   }}
 
-  export const initialState = {isLogin:false,id:null,email:null};
+  export const initialState = {isLogin:false,id:0,email:null};
   
   // const [state,dispatcher] = useReducer(reducer,initialState);
   export const UserContext = createContext(initialState);
