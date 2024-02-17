@@ -87,9 +87,7 @@ export default function CommentItem(data, id) {
                     alt="recomment"
                     className="recomment-icon"
                   />
-                  }
                 </div>
-                <div className="time">{result.created_at}</div>
               </div>
             </div>
             <div className="comment-main">
