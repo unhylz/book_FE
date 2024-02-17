@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "../../../../../pages/Home/components/header/Header";
-import { sentimentDummy } from "../../../../Home/components/sentiment/sentimentDummy";
 import SideAd from "../../../../Home/components/advertisement/SideAd";
 import Footer from "../../../../../pages/Home/components/footer/Footer";
 import "../../../../Home/components/sentiment/Sentiment.scss";
@@ -19,44 +18,16 @@ import Pagination from "./pagenation";
 import axios from "axios";
 import "../mypageScrap.scss"
 
-/*function fetchTotalItems() {
-  // 서버의 특정 엔드포인트에서 전체 아이템 수를 가져옴
-  return fetch('http://3.37.54.220:3000/sentiments/{sentiment-id}')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => data.totalCount) // 'totalCount'는 서버 응답에서 전체 아이템 수를 나타내는 필드
-    .catch(error => {
-      console.error('Fetching total items count failed:', error);
-    });
-}*/
-
-function formatDateTime(dateTimeString) {
-  const dateTime = new Date(dateTimeString);
-  const year = String(dateTime.getFullYear()).slice(-2);
-  const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-  const day = String(dateTime.getDate()).padStart(2, "0");
-  const hours = String(dateTime.getHours()).padStart(2, "0");
-  const minutes = String(dateTime.getMinutes()).padStart(2, "0");
-
-  return `${year}/${month}/${day} ${hours}:${minutes}`;
-} 
 
 export default function MypageScrap() {
     const [selectedButton, setSelectedButton] = useState("sentiment");
-    const [result, setResult] = useState(sentimentDummy);
     const [modalState, setModalState] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const itemsPerPage = 10;
-    const postsPerPage = 5; // 페이지당 5개의 포스트
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = result.slice(indexOfFirstPost, indexOfLastPost);
-    const [sentimentData, setSentimentData] = useState([]);
+    const postsPerPage = 5; 
+    const [sentimentData, setSentimentData] = useState(null);
+
     const getTierIcon = (tier) => {
       const tierIcons = {
         루키: RookieIcon,
@@ -66,11 +37,7 @@ export default function MypageScrap() {
         마스터: MasterIcon,
         그랜드마스터: GrandMasterIcon,
       };
-
-      const DefaultIcon = () => null;
-      const formattedTier = tier.toLowerCase().replace(/\s/g, "");
-      const SelectedIcon = tierIcons[formattedTier] || DefaultIcon;
-      return SelectedIcon;
+      return tierIcons[tier];
     }
 
     const handleButtonClick = (button) => {
@@ -78,21 +45,20 @@ export default function MypageScrap() {
     };
 
     useEffect(() => {
-      axios.get(`users/1/sentiment`, {
+      axios.get(`users/1/scrap`, {
         withCredentials: true,
       })
       .then(response => {
-        setSentimentData(response.data.sentiments);
+        setSentimentData(response.data.sentimentObject);
+        console.log(response.data)
       }) 
       .catch(error => console.error(error));
     }, []);
     
-
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     const handlePageChange = (pageNumber) => {
       setCurrentPage(pageNumber);
-      // 페이지 변경에 따른 추가 로직
     };
 
     return (
@@ -106,22 +72,22 @@ export default function MypageScrap() {
                 <strong className="Title">스크랩</strong>
                 <div className="mypage-container">
                     <div className="search-container">
-                        {currentPosts.map((result) => (
-                            <div key={result.id} className="search-result">
+                    {sentimentData && sentimentData.map((result) => (
+                    <div key={result.sentiment_id} className="search-result"> 
                     <div className="info">
                     <Link
-                      to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                      to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
                       className="book-link"
                     >
                       <img
-                        src={`/bookcover_dummy/${result.image_file}`}
-                        alt={result.title}
+                        src={`${result.image_file}`}
+                        alt={result.book_title}
                       />
                     </Link>
                     <div className="none-img">
                       <div className="detail-info">
                         <Link
-                          to={`/sentiment/${result.id}/${result.sentiment_title}`}
+                          to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
                           className="book-link"
                         >
                           <h3>{result.sentiment_title}</h3>
@@ -145,7 +111,7 @@ export default function MypageScrap() {
                         </div>
                         <div className="likes">
                           <img src={likeIcon} alt="like" className="like-icon" />
-                          <p>{result.likes}</p>
+                          <p>{result.like_num}</p>
                         </div>
                         <div className="comments">
                           <img
@@ -153,7 +119,7 @@ export default function MypageScrap() {
                             alt="comment"
                             className="comment-icon"
                           />
-                          <p>{result.comments}</p>
+                          <p>{result.comment_num}</p>
                         </div>
                         <div className="bookmarks">
                           <img
@@ -161,9 +127,9 @@ export default function MypageScrap() {
                             alt="bookmark"
                             className="bookmark-icon"
                           />
-                          <p>{result.bookmarks}</p>
+                          <p>{result.scrap_num}</p>
                         </div>
-                        <p className="datetime">{formatDateTime(result.datetime)}</p>
+                        <p className="datetime">{(result.create_at)}</p>
                       </div>
                     </div>
                   </div>
@@ -176,7 +142,7 @@ export default function MypageScrap() {
         <div className="pagination">
         <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil(totalItems / itemsPerPage)}
+            totalPages={totalPages}
             onPageChange={handlePageChange}
           />
         </div>

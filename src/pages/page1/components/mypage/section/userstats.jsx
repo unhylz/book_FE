@@ -18,7 +18,7 @@ function UserStats({ userData }) {
 
   return (
     <div className="user-stats">
-      <div className="stat"onClick={goToMypageSentiment}>
+      <div className="stat">
         <div className="number">{userData[0].sentiment_num}</div>
         <div className="label">센티멘트</div>
       </div>

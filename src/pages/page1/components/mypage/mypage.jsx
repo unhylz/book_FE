@@ -24,6 +24,16 @@ function MyPage() {
   const [modalState, setModalState] = useState(null);
   const [modal, setModal] = useState(false);
 
+  const user_context = useContext(UserContext);
+  console.log(user_context); 
+  if (user_context && user_context.user_data) {
+  console.log(user_context.user_data.id); 
+  } else {
+  console.log("사용자 데이터가 없습니다.");
+  }
+
+  
+
   const fetchUserData = async () => {
     try {
       const response = await axios.get(`/users/1/mypage`);
@@ -96,14 +106,14 @@ function MyPage() {
           {userData ? (
             <>
               <UserProfile userData={userData} />
-              <button
-                className={`follow-button ${
-                  isFollowing ? "following" : "not-following"
-                }`}
-                onClick={toggleFollow}
-              >
-                {isFollowing ? "언팔로우" : "팔로우"}
-              </button>
+              {userData && user_context.user_data && userData.id !== user_context.user_data.id ? (
+                <button
+                  className={`follow-button ${isFollowing ? "following" : "not-following"}`}
+                  onClick={toggleFollow}
+                >
+                  {isFollowing ? "언팔로우" : "팔로우"}
+                </button>
+              ) : null}
               <UserStats userData={userData} />
             </>
           ) : (
