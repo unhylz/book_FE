@@ -62,11 +62,11 @@ export default function Sentiment({ userId, selectedButton }) {
 
         if (selectedButton === "sentiment") {
           const data = await SentimentData(cursorId);
-          setSearchData(data.result);
+          setSearchData(data.result.list);
         }
         if (selectedButton === "follow") {
           const data = await FollowSentimentData(userId, cursorId);
-          setSearchData(data.result);
+          setSearchData(data.result.list);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -78,7 +78,7 @@ export default function Sentiment({ userId, selectedButton }) {
 
   useEffect(() => {
     if (SearchData) {
-      console.log("Sentiment data:", SearchData);
+      console.log("Sentiment data ?????:", SearchData);
     }
   }, [SearchData]);
 
@@ -103,7 +103,8 @@ export default function Sentiment({ userId, selectedButton }) {
   return (
     <div>
       <div className="search-container">
-        {SearchData &&
+        {Array.isArray(SearchData) &&
+          SearchData &&
           SearchData.map((result) => (
             <div key={result.sentiment_id} className="search-result">
               <div className="info">
@@ -170,8 +171,8 @@ export default function Sentiment({ userId, selectedButton }) {
               </div>
             </div>
           ))}
+        {!Array.isArray(SearchData) && <p>센티먼트가 없습니다.</p>}
       </div>
-
       <div className="pagination-container">
         <div className="pagination">페이지네이션 추가</div>
       </div>
