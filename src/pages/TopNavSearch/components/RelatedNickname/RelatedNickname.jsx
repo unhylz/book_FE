@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import moreIcon from "../../../../assets/icons/moreicon.svg";
 import "./RelatedNickname.scss";
 import { NicknameFollow } from "../../../../modules/api/search";
+import { UserContext } from "../../../../context/Login";
 
 export default function RelatedNickname({
   searchResult,
   displayedItems,
   userId,
 }) {
-  const isLogin = true; //추후 수정 ------
+  const user_context = useContext(UserContext);
+  console.log("로그인 확인: ", user_context.user_data);
+
+  //const userId = user_context.user_data.id; //"2"; //임시 --------------
+  const isLogin = user_context.user_data.isLogin;
+
   if (!isLogin) {
     userId = "0";
   }
