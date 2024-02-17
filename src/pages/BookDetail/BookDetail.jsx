@@ -127,7 +127,7 @@ export default function BookDetail() {
 
   const handleWriteClick1 = () => {
     //navigate("/write");
-    navigate("/write", { state: { bookTitle: book_title } });
+    navigate("/bookwrite", { state: { bookTitle: book_title } });
   };
 
   const handleWriteClick2 = () => {
