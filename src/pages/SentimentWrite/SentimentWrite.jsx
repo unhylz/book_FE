@@ -8,16 +8,61 @@ import BookLogo from "./BookLogo.png";
 import ImgAdd from "./AddImg.png";
 import axios from "axios";
 import ModalFrame from "./Modal";
+import {UserContext} from "../../context/Login"
+import {SentimentBookSearch} from "./api"
 
 function DecoModal({ isOpen, onClose }) {
+  const navigate = useNavigate()
   const [issue, setIssue] = useState({
     title: "",
   });
+
+  const [content, setContent] = useState("");
+  const [bookData, setBookData] = useState("");
+  const goToSearchPage = () => {
+    if (content.trim() === "") {
+      alert("검색어를 입력해주세요.");
+    } else {
+      //도서 API 요청
+      setContent(content);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setContent(e.target.value);
+  };
+
+  const handleInputKeyUp = (e) => {
+    if (e.key === "Enter") {
+      goToSearchPage();
+    }
+  };
 
   const hSubmit = (e) => {
     e.preventDefault();
     onClose();
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await SentimentBookSearch(content);
+        setBookData(data);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    if (content) {
+      fetchData();
+    }
+  }, [content]);
+
+  useEffect(() => {
+    if (bookData && bookData.searchBookObject) {
+      console.log("검색 도서 데이터:", bookData.searchBookObject);
+    }
+  }, [bookData]);
 
   const customModalStyles = {
     content: {
@@ -40,12 +85,18 @@ function DecoModal({ isOpen, onClose }) {
             <p className="search-title" style={{fontWeight:"bold"}}>도서검색 API</p>
             <input
               style={{ borderRadius: "7px" }}
+              value={content}
               className="search-input"
               placeholder="책 제목, 출판사, 저자를 검색해보세요."
+              onChange={handleInputChange}
             ></input>
+            <button onClick={goToSearchPage}>검색</button>
           </div>
         </form>
         <button onClick={onClose}>Close</button>
+        <div>
+          {bookData && bookData.searchBookObject ()}
+        </div>
       </Modal>
     </>
   );
@@ -65,9 +116,12 @@ export default function SentimentWrite() {
   const [imgFile, setImgFile] = useState("");
   const imgRef = useRef();
 
-  // const user_context = useContext(UserContext)
-  // console.log(user_context)
-  // console.log(user_context.user_data.id)
+
+  //유저 콘텍스트-----------------------------------------------------------
+
+  const user_context = useContext(UserContext)
+  console.log(user_context)
+  console.log(user_context.user_data.id)
 
   //모달 state
   const [isOpen, setIsOpen] = useState(false);
