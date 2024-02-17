@@ -20,7 +20,9 @@ function MyPage() {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
   const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
 
   const user_context = useContext(UserContext);
   console.log(user_context); 
@@ -37,8 +39,7 @@ function MyPage() {
       const response = await axios.get(`/users/1/mypage`);
       setUserData(response.data);
       console.log(response.data);
-    }
-     catch (error) {
+    } catch (error) {
       if (error.response) {
         if (error.response.status === 400) {
           console.log("HTTP 400 Bad Request 오류 발생");
@@ -56,7 +57,6 @@ function MyPage() {
       }
     }
   };
-  
 
   useEffect(() => {
     setSelectedButton("sentiment");
@@ -75,9 +75,29 @@ function MyPage() {
     setCurrentPage(newPage);
   };
 
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
+
   return (
     <div>
-      <Header onLogoClick={handleButtonClick} setModalState={setModalState} />
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
+      <Header
+        onLogoClick={handleButtonClick}
+        setModalState={setModalState}
+        setModal={setModal}
+      />
       <div className="mypage-wrapper">
         <div className="left">
           <SideAd />
@@ -99,14 +119,13 @@ function MyPage() {
           ) : (
             <p>사용자 데이터를 불러오는 중...</p>
           )}
-          <UserPosts/>
+          <UserPosts />
         </div>
         <div className="right">
           <SideAd />
         </div>
       </div>
       <Footer />
-      {modalState && <AcountModalContainer state={modalState} />}
     </div>
   );
 }

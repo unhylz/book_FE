@@ -9,6 +9,7 @@ import LoginContainer from "./container/LoginContainer";
 import PasswordSearchContainer from "./container/PasswordSearchContainer";
 import SignupContainer from "./container/SignupContainer";
 import SentimentWrite from "./pages/SentimentWrite/SentimentWrite";
+import SentimentBookWrite from "./pages/SentimentWrite/SentimentBookWrite";
 import MypageContainer from "./container/MypageContainer";
 import HomeContainer from "./container/HomeContainer";
 import SentimentLeagueContainer from "./container/SentimentLeagueContainer";
@@ -59,6 +60,7 @@ return (
           ></Route>
 
           <Route path="/write" element={<SentimentWrite></SentimentWrite>} />
+          <Route path="/bookwrite" element={<SentimentBookWrite></SentimentBookWrite>} />
           <Route path="/passwordchange" element={<PasswordChangeContainer />} />
           <Route path="/mypage" element={<MypageContainer></MypageContainer>} />
 
@@ -103,7 +105,7 @@ return (
             element={<MypageScrapContainer></MypageScrapContainer>}
           ></Route>
           <Route
-            path="/editsentiment/:id/:book_title"
+            path="/editsentiment/:id"
             element={<EditSentiment></EditSentiment>}
           ></Route>
         </Routes>

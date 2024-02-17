@@ -249,7 +249,6 @@ export default function Ranking() {
                       >
                         <div className="table-rank">{data.ranking}</div>
                         <div className="table-tier">
-                          {data.tier}
                           {
                             <img
                               src={getTierIcon(data.tier)}

@@ -1,25 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Header from "../../Home/components/header/Header";
 import SideAd from "../../Home/components/advertisement/SideAd";
 import Footer from "../../Home/components/footer/Footer";
 import NotificationItem from "../notification/notification_item";
 import AcountModalContainer from "../../../container/AcountModalContainer";
 import axios from "axios";
+import { UserContext } from "../../../context/Login";
 
 export default function Notification() {
   const [comments, setComments] = useState([]); // 댓글 상태
   const [notificationsData, setNotificationsData] = useState([]); // 알림 상태
-  const [modalState, setModalState] = useState(null);
   const [isNotified, setIsNotified] = useState(false);
   const [userState, setUserstate] = useState(1);
 
+  const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
+
   useEffect(() => {
-    axios.get(`users/${userState}/notifications`)
-    .then(response => {
-      setNotificationsData(response.data);
-      setIsNotified(true);
-    })
-    .catch(error => console.error(error));
+    axios
+      .get(`users/${userState}/notifications`)
+      .then((response) => {
+        setNotificationsData(response.data);
+        setIsNotified(true);
+      })
+      .catch((error) => console.error(error));
   }, []);
 
   const addComment = (newComment) => {
@@ -34,9 +38,29 @@ export default function Notification() {
     // 로고 클릭 핸들러 로직
   };
 
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
+
   return (
     <div>
-      <Header onLogoClick={handleButtonClick} setModalState={setModalState} />
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
+      <Header
+        onLogoClick={handleButtonClick}
+        setModalState={setModalState}
+        setModal={setModal}
+      />
       <div className="mypage-wrapper">
         <div className="left">
           <SideAd />
@@ -58,7 +82,6 @@ export default function Notification() {
           <SideAd />
         </div>
       </div>
-      {modalState && <AcountModalContainer state={modalState} />}
       <Footer />
     </div>
   );

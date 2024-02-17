@@ -26,9 +26,8 @@ import DiaIcon from "../../assets/tiers/다이아.svg";
 import MasterIcon from "../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../assets/tiers/그랜드마스터.svg";
 import "./SentimentDetail.scss";
+import AcountModalContainer from "../../container/AcountModalContainer";
 
-import insertImg from "./insert_Img.png";
-import bookcover1 from "./book_image_1.svg";
 import { SentimentIdSearch } from "../../modules/api/search";
 
 export default function SentimentDetail() {
@@ -43,9 +42,22 @@ export default function SentimentDetail() {
   const { content, id, sentiment_title } = useParams();
   const [SearchData, setSearchData] = useState(null);
 
+  const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
+
   const handleLogoClick = () => {
     navigate("/");
   };
+
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,9 +95,9 @@ export default function SentimentDetail() {
   };
 
   // 페이지 이동시 스크롤바 위치 최상단으로 가도록
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   //추천, 스크랩 버튼
   const [isRecommand, setIsRecommand] = useState(false);
@@ -105,11 +117,6 @@ export default function SentimentDetail() {
     console.log(id);
     //console.log(content.title);
     //console.log(SentimentDetailDummy[id-1].title);
-
-    if (!SearchData) {
-      console.log("----SearchData: ", SearchData);
-      return null; // SearchData가 null인 경우 렌더링하지 않음
-    }
 
     return (
       <div>
@@ -131,7 +138,7 @@ export default function SentimentDetail() {
                 </div>
                 <div className="writer-info-box">
                   <img
-                    src={SearchData[0].sentiment.image_path}
+                    src={SearchData[0].sentiment.profile_image}
                     alt="userImg"
                     className="profile-image"
                   />
@@ -159,18 +166,33 @@ export default function SentimentDetail() {
                     src={SearchData[0].sentiment.book_image}
                     alt="Book Cover"
                   />
-                  <div className="rating">{SearchData[0].sentiment.score}</div>
+                  <div className="rating">
+                    {SearchData[0].sentiment.score.toFixed(1)}
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="detail-top-main">
-              <img
-                className="detail-main-image"
-                style={{ width: "1100px", height: "1100px" }}
-                src={SearchData[0].sentiment.book_image} //{insertImg}
-                alt="책 내용 사진"
-              />
+              {Array.isArray(SearchData[0].sentiment.image_path) &&
+                SearchData[0].sentiment.image_path.map((imagePath, index) => (
+                  <img
+                    key={index}
+                    className="detail-main-image"
+                    style={{ width: "1100px", height: "1100px" }}
+                    src={imagePath}
+                    alt={`책 내용 사진 ${index + 1}`}
+                  />
+                ))}
+              {!Array.isArray(SearchData[0].sentiment.image_path) &&
+                SearchData[0].sentiment.image_path !== null && (
+                  <img
+                    className="detail-main-image"
+                    style={{ width: "1100px", height: "1100px" }}
+                    src={SearchData[0].sentiment.image_path}
+                    alt={`책 내용 사진`}
+                  />
+                )}
               <div className="detail-main-text">
                 {SearchData[0].sentiment.content}
               </div>
@@ -286,7 +308,18 @@ export default function SentimentDetail() {
 
   return (
     <div>
-      <Header onLogoClick={handleLogoClick} defaultSearchContent={content} />
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
+      <Header
+        onLogoClick={handleLogoClick}
+        defaultSearchContent={content}
+        setModalState={setModalState}
+        setModal={setModal}
+      />
       <div className="main-content">
         {/* 1열 - 왼쪽 사이드 광고 부분 */}
         <div className="left">
@@ -294,11 +327,13 @@ export default function SentimentDetail() {
         </div>
 
         {/* 2열 - 중앙 메인 부분 */}
-        <div style={{ width: "auto" }} className="center">
+        <div className="center">
           <div className="contents">
             <DetailTop />
             <DetailBottom />
-            <CommentItem id={id} />
+            {SearchData && SearchData[1].comment.length >= 0 && (
+              <CommentItem data={SearchData} id={id} />
+            )}
           </div>
         </div>
 

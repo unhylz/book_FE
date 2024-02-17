@@ -1,16 +1,22 @@
 // RelatedNicknameMore.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
 import RelatedNicknameResults from "./components/RelatedNicknameResults";
+import AcountModalContainer from "../../container/AcountModalContainer";
 import sortIcon from "../../assets/icons/sort.svg";
 import "./RelatedNicknameMore.scss";
 import { NicknameSearch } from "../../modules/api/search";
+import { UserContext } from "../../context/Login";
 
 export default function RelatedNicknameMore() {
-  const userId = "2"; // 실제 사용자 ID로 대체 필요 ---------------
+  const user_context = useContext(UserContext);
+  console.log("로그인 확인: ", user_context.user_data);
+
+  const userId = user_context.user_data.id; //"2"; //임시 --------------
+  const isLogin = user_context.user_data.isLogin;
   const cursorId = "0";
 
   // 선택한 센티먼트 id와 title 변수
@@ -18,6 +24,9 @@ export default function RelatedNicknameMore() {
   const navigate = useNavigate();
   const [SearchData, setSearchData] = useState(null);
   const [SearchNum, setSearchNum] = useState(null);
+
+  const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
 
   console.log("content detail page: ", content);
 
@@ -52,9 +61,30 @@ export default function RelatedNicknameMore() {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
+
   return (
     <div>
-      <Header onLogoClick={handleLogoClick} defaultSearchContent={content} />
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
+      <Header
+        onLogoClick={handleLogoClick}
+        defaultSearchContent={content}
+        setModalState={setModalState}
+        setModal={setModal}
+      />
       <div className="main-content">
         {/* 1열 - 왼쪽 사이드 광고 부분 */}
         <div className="left">

@@ -1,5 +1,5 @@
 // TopNavSearch.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
@@ -12,10 +12,14 @@ import RelatedNickname from "./components/RelatedNickname/RelatedNickname";
 import AcountModalContainer from "../../container/AcountModalContainer";
 import "./TopNavSearch.scss";
 import { topNavSearch } from "../../modules/api/search";
+import { UserContext } from "../../context/Login";
 
 function TopNavSearch() {
-  //isLogin:false, id:null, email:null
-  const userId = "2"; //추후 수정 --------
+  const user_context = useContext(UserContext);
+  console.log("로그인 확인: ", user_context.user_data);
+
+  const userId = user_context.user_data.id; //"2"; //임시 --------------
+  const isLogin = user_context.user_data.isLogin;
 
   const navigate = useNavigate();
   const search_result = useLocation().state;
@@ -23,8 +27,10 @@ function TopNavSearch() {
   //const displayedItems1 = bookDummy.slice(3, 6);
   //const displayedItems2 = sentimentDummy.slice(30, 33);
   //const displayedItems3 = nicknameDummy.slice(0, 3);
-  const [modalState, setModalState] = useState(null);
   const [SearchData, setSearchData] = useState(null);
+
+  const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -53,12 +59,29 @@ function TopNavSearch() {
     }
   }, [SearchData]);
 
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
+
   return (
     <div>
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
       <Header
         onLogoClick={handleLogoClick}
         defaultSearchContent={content}
         setModalState={setModalState}
+        setModal={setModal}
       />
       <div className="main-content">
         {/* 1열 - 왼쪽 사이드 광고 부분 */}
@@ -126,7 +149,6 @@ function TopNavSearch() {
         </div>
       </div>
       <Footer />
-      {modalState && <AcountModalContainer state={modalState} />}
     </div>
   );
 }

@@ -9,25 +9,28 @@ import notificationIcon from "../../../../assets/icons/notification.svg";
 import bellIcon from "../../../../assets/icons/bell.svg";
 import logoutIcon from "../../../../assets/icons/logout.svg";
 import { userDummy } from "./userDummy.js";
-
+import { UserContext } from "../../../../context/Login";
 //import LoginContext from "../../../../modules/api/login_context";
 import "./Header.scss";
+import { postLogout } from "../../../../modules/api/account.js";
 
 export default function Header({
   onLogoClick,
   defaultSearchContent,
   setModalState,
+  setModal,
 }) {
   const [content, setContent] = useState(defaultSearchContent || "");
   const navigate = useNavigate();
   const nowContent = useRef();
   const { userName, image } = userDummy[0];
-  //const { isLoggedIn } = useContext(LoginContext); // 로그인 상태 컨텍스트 사용
-  //확인용!!
-  const isLoggedIn = true;
 
-  //Notification 알람처리
-  const [isNotified, setIsNotified] = useState(false);
+  const user_context = useContext(UserContext);
+  console.log("로그인 확인: ", user_context.user_data);
+
+  const userId = user_context.user_data.id; //"2"; //임시 --------------
+  const isLoggedIn = user_context.user_data.isLogin;
+  const [isNotified, setIsNotified] = useState(false); //Notification 알람처리
 
   const handleLogoClick = () => {
     // 로고 클릭 시 홈으로 이동하면서 sentiment-btn이 선택된 상태로 변경
@@ -40,7 +43,7 @@ export default function Header({
       // League 버튼 클릭 시 SentimentLeague 페이지로 이동
       navigate("/sentiment-league");
     } else {
-      //alert("로그인이 필요한 기능입니다.");
+      alert("로그인이 필요한 기능입니다.");
     }
   };
 
@@ -62,7 +65,9 @@ export default function Header({
   };
 
   const handleLogoutClick = () => {
-    alert("로그아웃 기능 구현 필요");
+    postLogout(); //로그아웃 함수 추가
+    user_context.setLogout();
+    alert("로그아웃 되었습니다.");
   };
 
   const handleMypageClick = () => {
@@ -74,7 +79,7 @@ export default function Header({
   };
 
   const handleLoginClick = () => {
-    //navigate("/login");
+    //navigate("/modal");
     setModalState("login");
   };
 
@@ -132,7 +137,7 @@ export default function Header({
         <input
           type="input"
           ref={nowContent}
-          value={content}
+          value={content === "main" ? "" : content}
           onChange={handleInputChange}
           placeholder="책 제목, 센티먼트, 유저를 검색하세요"
           onKeyUp={handleInputKeyUp}
@@ -157,7 +162,7 @@ export default function Header({
               로그인
             </button>
             <button className="signup-btn" onClick={handleSignupClick}>
-              회원가입
+              <p>회원가입</p>
             </button>
           </>
         )}

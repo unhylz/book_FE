@@ -4,11 +4,15 @@ import Header from "../../../../pages/Home/components/header/Header";
 import axios from "axios";
 import "./mypage.scss";
 import "../mypage/mypage_follower.scss";
+import AcountModalContainer from "../../../../container/AcountModalContainer";
 
 export default function Mypage_following() {
   const [followers, setFollowers] = useState([]);
   const [selectedButton, setSelectedButton] = useState("sentiment");
   const [followStaus, setFollowStatus] = useState([])
+
+  const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
@@ -58,7 +62,17 @@ export default function Mypage_following() {
       console.error("팔로우 요청 중 오류 발생:", error);
     }
   };
-  
+
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
+
   return (
     <div>
       <Header onLogoClick={handleButtonClick}/>

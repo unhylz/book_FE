@@ -1,5 +1,5 @@
 // BookDetail.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
@@ -14,11 +14,20 @@ import "./BookDetail.scss";
 import { BookSearch } from "../../modules/api/search";
 import { SentimentSearch } from "../../modules/api/search";
 import { topNavSearch } from "../../modules/api/search";
+import { UserContext } from "../../context/Login";
+import AcountModalContainer from "../../container/AcountModalContainer";
 
 export default function BookDetail() {
-  const isLogin = true; //추후 수정 ------
-  const userId = "2"; //추후 수정 --------
+  const user_context = useContext(UserContext);
+  console.log("로그인 확인: ", user_context.user_data);
+
+  const userId = user_context.user_data.id; //"2"; //임시 --------------
+  const isLogin = user_context.user_data.isLogin;
+
   const cursorId = "0"; // 센티먼트 커서 추후 수정 --------
+
+  const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
 
   // 책 커서
   const { content, book_title, cursor_id, index, options } = useParams();
@@ -127,16 +136,38 @@ export default function BookDetail() {
 
   const handleWriteClick1 = () => {
     //navigate("/write");
-    navigate("/write", { state: { bookTitle: book_title } });
+    navigate("/bookwrite", { state: { bookTitle: book_title } });
   };
 
   const handleWriteClick2 = () => {
     alert("평가가 완료된 책입니다.");
+    //navigate("/write", { state: { bookTitle: book_title } });
   };
+
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
 
   return (
     <div>
-      <Header onLogoClick={handleLogoClick} defaultSearchContent={content} />
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
+      <Header
+        onLogoClick={handleLogoClick}
+        defaultSearchContent={content}
+        setModalState={setModalState}
+        setModal={setModal}
+      />
       <div className="main-content">
         {/* 1열 - 왼쪽 사이드 광고 부분 */}
         <div className="left">

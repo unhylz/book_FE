@@ -1,61 +1,68 @@
-import React,{useState, useRef} from 'react'
-import PasswordChange from '../components/passwordChange/PasswordChange';
-import { postPwChange } from '../modules/api/account';
+import React, { useState, useRef } from "react";
+import PasswordChange from "../components/passwordChange/PasswordChange";
+import { postPwChange } from "../modules/api/account";
 
 export default function PasswordChangeContainer(props) {
-  
-  
-  const[pw,setPw] = useState("");
-  const[pwEye,setPwEye]=useState(true);
-  const[pwState,setPwState]=useState(0);
+  const [pw, setPw] = useState("");
+  const [pwEye, setPwEye] = useState(true);
+  const [pwState, setPwState] = useState(0);
 
-  const[pwCheck,setPwCheck] = useState("");
-  const[pwCheckEye,setPwCheckEye]=useState(true);
-  const[pwCheckState,setPwCheckState]=useState(0);
+  const [pwCheck, setPwCheck] = useState("");
+  const [pwCheckEye, setPwCheckEye] = useState(true);
+  const [pwCheckState, setPwCheckState] = useState(0);
 
-  
-  const onSubmitPwChange = (e)=>{
+  const onSubmitPwChange = (e) => {
     e.preventDefault();
     props.setState("login");
     const user_id = 4; //context에서 받아오기로 수정
-    postPwChange(pw,user_id);
-  }
+    postPwChange(pw, user_id);
+  };
 
-  const onPwChange = (e)=>{ 
-    setPw(e.target.value)
+  const onPwChange = (e) => {
+    setPw(e.target.value);
     //유효성검사
-    if(testPw(pw)){setPwState(0)}
-    else{setPwState(1)}
-  }
-  const onPwEyeClick = (e)=>{
-    if(pwEye){setPwEye(false)}
-    else{setPwEye(true)}  
-    console.log("아아아")
-  }
+    if (testPw(pw)) {
+      setPwState(0);
+    } else {
+      setPwState(1);
+    }
+  };
+  const onPwEyeClick = (e) => {
+    if (pwEye) {
+      setPwEye(false);
+    } else {
+      setPwEye(true);
+    }
+    console.log("아아아");
+  };
 
-  const onPwCheckChange = (e)=>{
-    setPwCheck(e.target.value)
+  const onPwCheckChange = (e) => {
+    setPwCheck(e.target.value);
     //유효성검사
-    if(pw===pwCheck){setPwState(0)}
-    else{setPwState(1)}
-  }
-  const onPwCheckEyeClick = (e)=>{
-    if(pwCheckEye){setPwCheckEye(false)}
-    else{setPwCheckEye(true)}
-  }
-  
-  const testPw = (pw)=>{
-    const pwreg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/
-    return(pwreg.test(pw))
-  }
+    if (pw === pwCheck) {
+      setPwState(0);
+    } else {
+      setPwState(1);
+    }
+  };
+  const onPwCheckEyeClick = (e) => {
+    if (pwCheckEye) {
+      setPwCheckEye(false);
+    } else {
+      setPwCheckEye(true);
+    }
+  };
+
+  const testPw = (pw) => {
+    const pwreg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+    return pwreg.test(pw);
+  };
 
   const onClickBg = (e) => {
-    if(e.target.classList.contains("bg_shadow")){
-      props.setState(null)
+    if (e.target.classList.contains("bg_shadow")) {
+      props.setState(null);
     }
-  
-  }
-
+  };
 
   return (
     <PasswordChange
@@ -65,6 +72,7 @@ export default function PasswordChangeContainer(props) {
       onPwCheckEyeClick={onPwCheckEyeClick}
       onSubmitPwChange={onSubmitPwChange}
       onClickBg={onClickBg}
+      setState={props.setState}
     />
-  )
+  );
 }

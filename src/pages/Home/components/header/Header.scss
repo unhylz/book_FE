@@ -1,3 +1,4 @@
+//Header.scss
 @import "../../../../lib/scss/BSL.scss";
 
 .header {
@@ -9,7 +10,7 @@
   border-bottom: 2px solid rgba($black, 0.1);
   display: flex;
   background-color: white;
-  z-index: 1000;
+  z-index: 3;
   /*
   align-items: center;
   height: 120px;
@@ -105,6 +106,7 @@
     .signup-btn {
       display: flex;
       align-items: center;
+      justify-content: center;
       font-weight: bold;
 
       margin: 0;
@@ -232,29 +234,31 @@
     }
 
     .signup-btn {
+      border: none;
       font-size: 15px;
-      border: 2px solid $black;
-      border-radius: 5px;
 
-      padding-top: 10px;
-      padding-bottom: 10px;
-      padding-left: 15px;
-      padding-right: 15px;
+      p {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid $black;
+        border-radius: 5px;
+        width: 90px;
+        height: 40px;
+        min-width: 90px;
 
-      width: 90px;
-      min-width: 90px;
+        &:hover {
+          background-color: $green;
+          color: white;
+          border-color: $green;
+          cursor: pointer;
+        }
 
-      &:hover {
-        background-color: $green;
-        color: white;
-        border-color: $green;
-        cursor: pointer;
-      }
-
-      &:active {
-        background-color: darken($green, 10%); // 클릭 시 어둡게
-        border-color: darken($green, 10%);
-        cursor: grabbing;
+        &:active {
+          background-color: darken($green, 10%); // 클릭 시 어둡게
+          border-color: darken($green, 10%);
+          cursor: grabbing;
+        }
       }
     }
   }
