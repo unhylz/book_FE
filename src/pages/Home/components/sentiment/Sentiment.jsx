@@ -62,11 +62,11 @@ export default function Sentiment({ userId, selectedButton }) {
 
         if (selectedButton === "sentiment") {
           const data = await SentimentData(cursorId);
-          setSearchData(data.result);
+          setSearchData(data.result.list);
         }
         if (selectedButton === "follow") {
           const data = await FollowSentimentData(userId, cursorId);
-          setSearchData(data.result);
+          setSearchData(data.result.list);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -78,7 +78,7 @@ export default function Sentiment({ userId, selectedButton }) {
 
   useEffect(() => {
     if (SearchData) {
-      console.log("Sentiment data:", SearchData);
+      console.log("Sentiment data ?????:", SearchData);
     }
   }, [SearchData]);
 
