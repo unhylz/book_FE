@@ -16,7 +16,6 @@ import { UserContext } from "../../../../../context/Login";
 import { useContext } from "react";
 
 
-
 function UserProfile({ userData }) {
   const [message, setMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
