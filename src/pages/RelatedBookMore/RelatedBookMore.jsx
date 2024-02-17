@@ -1,5 +1,5 @@
 // RelatedBookMore.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
@@ -8,9 +8,16 @@ import sortIcon from "../../assets/icons/sort.svg";
 import RelatedBookResults from "./components/RelatedBookResults";
 import "./RelatedBookMore.scss";
 import { BookSearch } from "../../modules/api/search";
+import { UserContext } from "../../context/Login";
+import AcountModalContainer from "../../container/AcountModalContainer";
 
 export default function RelatedBookMore() {
-  const userId = "2"; // 추후 수정 ----------------
+  const user_context = useContext(UserContext);
+  console.log("로그인 확인: ", user_context.user_data);
+
+  const userId = user_context.user_data.id; //"2"; //임시 --------------
+  const isLogin = user_context.user_data.isLogin;
+
   const cursorId = "0";
 
   // 선택한 센티먼트 id와 title 변수
@@ -23,6 +30,9 @@ export default function RelatedBookMore() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // 드롭다운 메뉴 열림/닫힘
   const [selectedSortOption, setSelectedSortOption] = useState("관련순"); // 선택된 정렬 옵션
   const sortOptions = ["관련순", "별점순"]; // 정렬 옵션 리스트
+
+  const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
 
   //console.log("content detail page: ", content);
 
@@ -92,9 +102,30 @@ export default function RelatedBookMore() {
     }
   }, [SearchData, selectedSortOption]);
 
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
+
   return (
     <div>
-      <Header onLogoClick={handleLogoClick} defaultSearchContent={content} />
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
+      <Header
+        onLogoClick={handleLogoClick}
+        defaultSearchContent={content}
+        setModalState={setModalState}
+        setModal={setModal}
+      />
       <div className="main-content">
         {/* 1열 - 왼쪽 사이드 광고 부분 */}
         <div className="left">
