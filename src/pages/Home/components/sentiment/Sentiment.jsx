@@ -66,7 +66,7 @@ export default function Sentiment({ userId, selectedButton }) {
         }
         if (selectedButton === "follow") {
           const data = await FollowSentimentData(userId, cursorId);
-          setSearchData(data.result.slice(0, itemsPerPage));
+          setSearchData(data.result);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -108,7 +108,7 @@ export default function Sentiment({ userId, selectedButton }) {
             <div key={result.sentiment_id} className="search-result">
               <div className="info">
                 <Link
-                  to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
+                  to={`/sentiment/main/${result.sentiment_id}/${result.sentiment_title}`}
                   className="book-link"
                 >
                   <img src={result.book_image} alt={result.book_title} />
@@ -116,7 +116,7 @@ export default function Sentiment({ userId, selectedButton }) {
                 <div className="none-img">
                   <div className="detail-info">
                     <Link
-                      to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
+                      to={`/sentiment/main/${result.sentiment_id}/${result.sentiment_title}`}
                       className="book-link"
                     >
                       <h3>{result.sentiment_title}</h3>
