@@ -68,7 +68,7 @@ export default function PasswordSearchContainer(props) {
 
     if (check) {
       props.setState("passwordchange");
-    } else {
+    } else {  
       console.log("인증번호 틀림.");
     }
   };
