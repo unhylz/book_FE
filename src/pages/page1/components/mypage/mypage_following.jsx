@@ -17,7 +17,7 @@ export default function Mypage_following() {
   useEffect(() => {
     const fetchFollowers = async () => {
       try {
-        const response = await axios.get("/users/2/following");
+        const response = await axios.get("/users/1/following");
         setFollowers(response.data.nicknames);
         console.log("팔로잉 데이터:", response.data);
       } catch (error) {
@@ -36,7 +36,7 @@ export default function Mypage_following() {
       return;
     }
     try {
-      const response = await axios.post(`/users/2/follow`, {
+      const response = await axios.post(`/users/1/follow`, {
         followingId: follower.user_id, // user_id를 사용
         isFollow: follower.follow_status === "1" ? 0 : 1,
       });

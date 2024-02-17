@@ -11,7 +11,7 @@ import { BookSearch } from "../../modules/api/search";
 
 export default function RelatedBookMore() {
   const userId = "2"; // 추후 수정 ----------------
-  //const cursorId = "0";
+  const cursorId = "0";
 
   // 선택한 센티먼트 id와 title 변수
   const { content } = useParams();
@@ -38,7 +38,7 @@ export default function RelatedBookMore() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await BookSearch(userId, content);
+        const data = await BookSearch(userId, cursorId, content);
         setSearchData(data);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -134,6 +134,8 @@ export default function RelatedBookMore() {
                 <RelatedBookResults
                   searchResult={content}
                   displayedItems={SortedSearchData}
+                  cursorId={cursorId}
+                  options={selectedSortOption}
                 />
               )}
             </div>

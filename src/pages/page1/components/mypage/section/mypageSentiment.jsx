@@ -31,12 +31,12 @@ function formatDateTime(dateTimeString) {
 export default function MypageScrap() {
     const [selectedButton, setSelectedButton] = useState("sentiment");
     const [sentimentData, setSentimentData] = useState(null); 
-    const [result, setResult] = useState();
     const [modalState, setModalState] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const itemsPerPage = 5;
 
+    
 
     const getTierIcon = (tier) => {
       const tierIcons = {
@@ -60,12 +60,11 @@ export default function MypageScrap() {
         withCredentials: true,
       })
       .then(response => {
-        setSentimentData(response.result)
+        setSentimentData(response.data)
       })
       .catch(error => console.error(error))
     }, []);
     
-
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     const handlePageChange = (pageNumber) => {

@@ -112,7 +112,6 @@ function UserProfile({ userData }) {
   };
   
   const uploadImg = (formData) => {
-    // 수정: 인수를 formData로 받습니다.
     const config = {
       headers: { "content-type": "multipart/form-data" },
     };
@@ -172,7 +171,6 @@ function UserProfile({ userData }) {
             <img src={flag} alt="flagIcon" />
             메시지 수정
           </button>
-          {/* 모달 컴포넌트 */}
           <MypageModal
             value={values.status_message}
             isOpen={isModalOpen}

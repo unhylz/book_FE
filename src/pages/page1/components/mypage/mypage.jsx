@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./mypage.scss";
 import axios from "axios";
 import Header from "../../../../pages/Home/components/header/Header";
@@ -8,6 +8,7 @@ import UserPosts from "../mypage/section/userpost";
 import SideAd from "../../../Home/components/advertisement/SideAd";
 import Footer from "../../../../pages/Home/components/footer/Footer";
 import AcountModalContainer from "../../../../container/AcountModalContainer";
+import { UserContext } from "../../../../context/Login";
 
 function MyPage() {
   const [selectedButton, setSelectedButton] = useState("sentiment");
@@ -20,6 +21,16 @@ function MyPage() {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
   const [modalState, setModalState] = useState(null);
+
+  const user_context = useContext(UserContext);
+  console.log(user_context); 
+  if (user_context && user_context.user_data) {
+  console.log(user_context.user_data.id); 
+  } else {
+  console.log("사용자 데이터가 없습니다.");
+  }
+
+  
 
   const fetchUserData = async () => {
     try {
@@ -44,9 +55,7 @@ function MyPage() {
         console.error("서버 응답 오류 정보 없음");
       }
     }
-    
   };
-
   
 
   useEffect(() => {
@@ -77,14 +86,14 @@ function MyPage() {
           {userData ? (
             <>
               <UserProfile userData={userData} />
-              <button
-                className={`follow-button ${
-                  isFollowing ? "following" : "not-following"
-                }`}
-                onClick={toggleFollow}
-              >
-                {isFollowing ? "언팔로우" : "팔로우"}
-              </button>
+              {userData && user_context.user_data && userData.id !== user_context.user_data.id ? (
+                <button
+                  className={`follow-button ${isFollowing ? "following" : "not-following"}`}
+                  onClick={toggleFollow}
+                >
+                  {isFollowing ? "언팔로우" : "팔로우"}
+                </button>
+              ) : null}
               <UserStats userData={userData} />
             </>
           ) : (

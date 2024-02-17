@@ -1,13 +1,10 @@
 import React,{useState, useRef, useEffect} from 'react'
 import Signup from '../components/signup/Signup';
-import {isEmailDuplication, isAuth, isNickDuplication, postSignup, postLogin, checkEmailDup, checkNickDup} from "../modules/api/account"
+import {isEmailDuplication, isAuth, isNickDuplication, postSignup, postLogin, checkEmailDup, checkNickDup, sendAuth, checkAuth, testA,postCheckCode, postCheckSignupCode} from "../modules/api/account"
 
 
 
 export default function SignupContainer(props) {
-
-  const [isEyeOpen,setIsEyeOpen] = useState(false);
-  const [isRemember,setIsRemember] = useState(false);
 
   const [email,setEmail] = useState("");
   const [emailState, setEmailState] = useState(0);
@@ -24,6 +21,8 @@ export default function SignupContainer(props) {
   const [nick,setNick] = useState("");
   const [nickState,setNickState] = useState(0);
   
+
+
   //timer
   const [timer,setTimer] = useState("05:00");
   let sec = 300;
@@ -90,20 +89,40 @@ export default function SignupContainer(props) {
     setNick(e.target.value);
   }
 
-  const onEmailBtnClick = (e) => {
+  const onEmailBtnClick = async (e) => {
     //이메일이 유효하면, 이메일 중복여부를 검사한다.
     if(checkEmail())
     {
-      if(checkEmailDup(email))
-      {setEmailState(2)}//중복된이메일입니다.
-      else{setEmailState(3)}//이메일이 확인되었습니다.
+      const isEmailTrue = await checkEmailDup(email)
+      console.log(isEmailTrue)
+      if(isEmailTrue){
+        setEmailState(3)//이메일이 확인되었습니다.
+        sendAuth(email);
+        setAuthState(1);//인증코드를 보냈습니다.(인증코드 칸)
+        
+      }
+      else{setEmailState(2)}//중복된이메일입니다.
     }
     else{setEmailState(1)}//이메일 형식이 올바르지 않습니다.
     console.log(emailState)
     
+    
   }
 
-  const onAuthBtnClick = (e) => {}
+  const onAuthBtnClick = async (e) => {
+    try{
+      const checkAuth = await postCheckSignupCode(email,auth)
+      if(checkAuth===true){
+        console.log("인증번호가 확인됨.")
+        setAuthState(3)//인증이 확인되었습니다.
+      }
+      else{
+        setAuthState(2);//올바르지 않음
+      }
+    }
+    catch{}
+    
+  }
 
   const onNickBtnClick = (e) => {
     console.log(checkNick())
@@ -135,17 +154,38 @@ export default function SignupContainer(props) {
     const nickreg = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣a-zA-Z0-9+-\_.].{3,10}$/
     return(nickreg.test(nick))}
 
+
+  const postContainerSignup = async()=>{
+    try{
+      const isSignup = await postSignup(email,pw,nick);
+      if(isSignup===true){
+        console.log("회원가입 성공")
+        props.setState("login")
+      }
+      else{
+        console.log("회원가입 실패")
+      }
+    }
+    catch{
+      console.log("예기치못한 에러")
+    }
+  }
   
-    const onClickSignupBtn = (e)=>{
+  const onClickSignupBtn = (e)=>{
     e.preventDefault();
-    
-    if(postSignup(email,pw,nick)){
-      //props.setState("login");
-    } 
-    else(
-      console.log("회원가입 에러")
-    )
-}
+    if(emailState===3){
+      if(authState===3){
+        if(pwState===2){
+          if(pwCheckState===2){
+            if(nickState===3){
+              postContainerSignup();
+              console.log("가능");
+            }else{console.log("닉네임 오류")}
+          }else{console.log("비밀번호확인 오류")}
+        }else{console.log("비밀번호 오류")}
+      }else{console.log("인증 오류")}
+    }else{console.log("이메일 오류")}
+  }
 
 
   const onClickBg = (e) => {
@@ -172,7 +212,9 @@ export default function SignupContainer(props) {
       onNickBtnClick={onNickBtnClick}
       email={email}
       emailState={emailState}
+      
       auth={auth}
+      authState={authState}
       
       nick={nick}
       nickState={nickState}

@@ -24,7 +24,7 @@ export default function RelatedBook({ searchResult, displayedItems }) {
               <div className="related-book-info">
                 <Link
                   to={{
-                    pathname: `/book/${searchResult.content}/${result.title}`,
+                    pathname: `/book/${searchResult.content}/${result.title}/${displayedItems.cursorId}/${index}/전체검색`,
                     state: { bookInfo: result }, // 책 정보를 상태로 전달
                   }}
                   className="more-book-link"
@@ -37,7 +37,7 @@ export default function RelatedBook({ searchResult, displayedItems }) {
                 </Link>
                 <div className="none-img-detail-info">
                   <Link
-                    to={`/book/${searchResult.content}/${result.title}`}
+                    to={`/book/${searchResult.content}/${result.title}/${displayedItems.cursorId}/${index}/전체검색`}
                     className="more-book-link"
                   >
                     <h3>{result.title}</h3>
