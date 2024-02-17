@@ -10,33 +10,33 @@ import axios from "axios";
 import ModalFrame from "./Modal";
 import {UserContext} from "../../context/Login"
 import {SentimentBookSearch} from "./api"
+import BookSearch from "./BookSearch"
 
 function DecoModal({ isOpen, onClose }) {
-  const navigate = useNavigate()
-  const [issue, setIssue] = useState({
-    title: "",
-  });
+  // const navigate = useNavigate()
+  // const [issue, setIssue] = useState({
+  //   title: "",
+  // });
 
   const [content, setContent] = useState("");
   const [bookData, setBookData] = useState("");
-  const goToSearchPage = () => {
-    if (content.trim() === "") {
-      alert("검색어를 입력해주세요.");
-    } else {
-      //도서 API 요청
-      setContent(content);
-    }
-  };
+  // const goToSearchPage = () => {
+  //   if (content.trim() === "") {
+  //     alert("검색어를 입력해주세요.");
+  //   } else {
+  //     setContent(content);
+  //   }
+  // };
 
   const handleInputChange = (e) => {
     setContent(e.target.value);
   };
 
-  const handleInputKeyUp = (e) => {
-    if (e.key === "Enter") {
-      goToSearchPage();
-    }
-  };
+  // const handleInputKeyUp = (e) => {
+  //   if (e.key === "Enter") {
+  //     goToSearchPage();
+  //   }
+  // };
 
   const hSubmit = (e) => {
     e.preventDefault();
@@ -90,12 +90,16 @@ function DecoModal({ isOpen, onClose }) {
               placeholder="책 제목, 출판사, 저자를 검색해보세요."
               onChange={handleInputChange}
             ></input>
-            <button onClick={goToSearchPage}>검색</button>
+            <button>검색</button>
           </div>
         </form>
         <button onClick={onClose}>Close</button>
         <div>
-          {bookData && bookData.searchBookObject ()}
+          {bookData && bookData.searchBookObject && (
+            <BookSearch 
+            displayedItems={bookData}
+            ></BookSearch>
+          )}
         </div>
       </Modal>
     </>
