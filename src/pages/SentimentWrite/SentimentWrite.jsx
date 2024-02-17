@@ -1,22 +1,23 @@
 import React from "react";
 import { useState, useRef, useEffect, useContext } from "react";
+import { useLocation } from "react-router-dom";
 import "./SentimentWrite.scss";
 import { PiStarFill, PiStarLight } from "react-icons/pi";
 import Modal from "react-modal";
-import { Link, useNavigate, useLocation} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BookLogo from "./BookLogo.png";
 import ImgAdd from "./AddImg.png";
 import axios from "axios";
 import ModalFrame from "./Modal";
-import {UserContext} from "../../context/Login"
-import {SentimentBookSearch} from "./api"
+import { UserContext } from "../../context/Login";
+import { SentimentBookSearch } from "./api";
 import BookSearch from "./BookSearch"
 
 function DecoModal({ isOpen, onClose }) {
-  // const navigate = useNavigate()
-  // const [issue, setIssue] = useState({
-  //   title: "",
-  // });
+  const navigate = useNavigate()
+  const [issue, setIssue] = useState({
+    title: "",
+  });
 
   const [content, setContent] = useState("");
   const [bookData, setBookData] = useState("");
@@ -82,7 +83,9 @@ function DecoModal({ isOpen, onClose }) {
       <Modal isOpen={isOpen} style={customModalStyles}>
         <form onSubmit={hSubmit}>
           <div className="modal-box">
-            <p className="search-title" style={{fontWeight:"bold"}}>도서검색 API</p>
+            <p className="search-title" style={{ fontWeight: "bold" }}>
+              도서검색 API
+            </p>
             <input
               style={{ borderRadius: "7px" }}
               value={content}
@@ -95,11 +98,7 @@ function DecoModal({ isOpen, onClose }) {
         </form>
         <button onClick={onClose}>Close</button>
         <div>
-          {bookData && bookData.searchBookObject && (
-            <BookSearch 
-            displayedItems={bookData}
-            ></BookSearch>
-          )}
+          {bookData && bookData.searchBookObject ()}
         </div>
       </Modal>
     </>
@@ -107,7 +106,6 @@ function DecoModal({ isOpen, onClose }) {
 }
 
 export default function SentimentWrite() {
-
   const location = useLocation();
   const bookTitle = location.state ? location.state.bookTitle : null;
   console.log("bookTitle: ", bookTitle);
@@ -125,12 +123,11 @@ export default function SentimentWrite() {
   const [imgFile, setImgFile] = useState("");
   const imgRef = useRef();
 
-
   //유저 콘텍스트-----------------------------------------------------------
 
-  const user_context = useContext(UserContext)
-  console.log(user_context)
-  console.log(user_context.user_data.id)
+  const user_context = useContext(UserContext);
+  console.log(user_context);
+  console.log(user_context.user_data.id);
 
   //모달 state
   const [isOpen, setIsOpen] = useState(false);
@@ -376,8 +373,15 @@ export default function SentimentWrite() {
                   className="close"
                   onClick={handleCloseModal}
                   style={{
-                    width: "90px", backgroundColor: "#5FCB75", color: "white", fontSize: "20px",
-                    borderRadius: "30px", padding: "10px", border: "none", marginLeft: "72%",cursor: "pointer",
+                    width: "90px",
+                    backgroundColor: "#5FCB75",
+                    color: "white",
+                    fontSize: "20px",
+                    borderRadius: "30px",
+                    padding: "10px",
+                    border: "none",
+                    marginLeft: "72%",
+                    cursor: "pointer",
                   }}
                 >
                   확인
