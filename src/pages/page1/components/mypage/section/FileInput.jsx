@@ -10,13 +10,13 @@ export default function FileInput({ label, onChange }) {
     <button onClick={onClick}>
       {label}
       <input
-        hidden
-        type="file"
-        accept="image/jpg,image/png,image/jpeg,image/gif"
-        name="image-input"
-        onChange={onChange}
-        ref={ref}
-      />
+      hidden
+      type="file"
+      accept="image/jpeg, image/png, image/gif, image/bmp"
+      name="image-input"
+      onChange={onChange}
+    ref={ref}
+/>
     </button>
   );
 }

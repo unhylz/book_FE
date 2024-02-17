@@ -8,7 +8,8 @@ import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
 import CommentItem from "./Comment/Comment";
-import SentimentDetailDummy from "./SentimentDetailDummy";
+import ModalFrame from "../SentimentWrite/Modal";
+import axios from "axios";
 import likeBlackIcon from "../../assets/icons/like_black.png";
 import bookmarkBlackIcon from "../../assets/icons/bookmark_black.png";
 import editIcon from "../../assets/icons/edit_Img.png";
@@ -25,6 +26,7 @@ import DiaIcon from "../../assets/tiers/다이아.svg";
 import MasterIcon from "../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../assets/tiers/그랜드마스터.svg";
 import "./SentimentDetail.scss";
+import AcountModalContainer from "../../container/AcountModalContainer";
 
 import insertImg from "./insert_Img.png";
 import bookcover1 from "./book_image_1.svg";
@@ -42,9 +44,22 @@ export default function SentimentDetail() {
   const { content, id, sentiment_title } = useParams();
   const [SearchData, setSearchData] = useState(null);
 
+  const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
+
   const handleLogoClick = () => {
     navigate("/");
   };
+
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,19 +90,27 @@ export default function SentimentDetail() {
       마스터: MasterIcon,
       그랜드마스터: GrandMasterIcon,
     };
-
     const DefaultIcon = () => null;
     const formattedTier = tier.toLowerCase().replace(/\s/g, "");
-
     const SelectedIcon = tierIcons[formattedTier] || DefaultIcon;
-
     return SelectedIcon;
   };
 
   // 페이지 이동시 스크롤바 위치 최상단으로 가도록
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  //추천, 스크랩 버튼
+  const [isRecommand, setIsRecommand] = useState(false);
+  const [isScrap, setIsScrap] = useState(false);
+
+  const handleRecommand = () => {
+    setIsRecommand(!isRecommand);
+  };
+  const handleScrap = () => {
+    setIsScrap(!isScrap);
+  };
 
   //상단 컴포넌트
   const DetailTop = ({ Sentiments }) => {
@@ -96,11 +119,6 @@ export default function SentimentDetail() {
     console.log(id);
     //console.log(content.title);
     //console.log(SentimentDetailDummy[id-1].title);
-
-    if (!SearchData) {
-      console.log("----SearchData: ", SearchData);
-      return null; // SearchData가 null인 경우 렌더링하지 않음
-    }
 
     return (
       <div>
@@ -122,7 +140,7 @@ export default function SentimentDetail() {
                 </div>
                 <div className="writer-info-box">
                   <img
-                    src={SearchData[0].sentiment.image_path}
+                    src={SearchData[0].sentiment.profile_image}
                     alt="userImg"
                     className="profile-image"
                   />
@@ -150,18 +168,33 @@ export default function SentimentDetail() {
                     src={SearchData[0].sentiment.book_image}
                     alt="Book Cover"
                   />
-                  <div className="rating">{SearchData[0].sentiment.score}</div>
+                  <div className="rating">
+                    {SearchData[0].sentiment.score.toFixed(1)}
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="detail-top-main">
-              <img
-                className="detail-main-image"
-                style={{ width: "1100px", height: "1100px" }}
-                src={SearchData[0].sentiment.book_image} //{insertImg}
-                alt="책 내용 사진"
-              />
+              {Array.isArray(SearchData[0].sentiment.image_path) &&
+                SearchData[0].sentiment.image_path.map((imagePath, index) => (
+                  <img
+                    key={index}
+                    className="detail-main-image"
+                    style={{ width: "1100px", height: "1100px" }}
+                    src={imagePath}
+                    alt={`책 내용 사진 ${index + 1}`}
+                  />
+                ))}
+              {!Array.isArray(SearchData[0].sentiment.image_path) &&
+                SearchData[0].sentiment.image_path !== null && (
+                  <img
+                    className="detail-main-image"
+                    style={{ width: "1100px", height: "1100px" }}
+                    src={SearchData[0].sentiment.image_path}
+                    alt={`책 내용 사진`}
+                  />
+                )}
               <div className="detail-main-text">
                 {SearchData[0].sentiment.content}
               </div>
@@ -174,17 +207,60 @@ export default function SentimentDetail() {
 
   //하단 컴포넌트
   const DetailBottom = () => {
+    //모달 state
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
       <div id="detail-bottom">
         <div className="update-delete-box">
-          <div className="update-button">
+          <div
+            className="update-button"
+            onClick={() => {
+              navigate(`/editsentiment/${id}`);
+            }}
+          >
             <img src={editIcon} alt="editIcon" className="edit-icon" />
             <div className="edit-text">수정하기</div>
           </div>
-          <div className="delete-button">
+          <div
+            className="delete-button"
+            onClick={() => {
+              setIsOpen(true);
+            }}
+          >
             <img src={deleteIcon} alt="deleteIcon" className="delete-icon" />
             <div className="delete-text">삭제하기</div>
           </div>
+          {isOpen && (
+            <ModalFrame>
+              <h3>www.booksentimentleague.com 내용:</h3>
+              <div style={{ fontWeight: "bold", marginBottom: "55px" }}>
+                정말 삭제하시겠습니까?
+              </div>
+              <button
+                className="close"
+                onClick={async () => {
+                  setIsOpen(false);
+                  //await axios.delete(`/sentiments/${user_id}/delete/${id}`);
+                  navigate(`/`);
+                }}
+                style={{
+                  width: "90px",
+                  backgroundColor: "#5FCB75",
+                  color: "white",
+                  fontSize: "20px",
+                  borderRadius: "30px",
+                  padding: "10px",
+                  paddingTop: "none",
+                  border: "none",
+                  marginLeft: "72%",
+                  cursor: "pointer",
+                }}
+              >
+                확인
+              </button>
+            </ModalFrame>
+          )}
         </div>
         <div className="bottom-button-box">
           <div className="like-box">
@@ -202,7 +278,12 @@ export default function SentimentDetail() {
             </div>
           </div>
           <div className="recommand-box">
-            <div className="recommand-button">
+            <div
+              className={`recommand-button ${
+                isRecommand ? "recommand" : "not-recommand"
+              }`}
+              onClick={handleRecommand}
+            >
               <img
                 src={likeBlackIcon}
                 alt="likeBlack"
@@ -210,7 +291,10 @@ export default function SentimentDetail() {
               />
               <div className="recommand-text">추천하기</div>
             </div>
-            <div className="scrap-button">
+            <div
+              className={`scrap-button ${isScrap ? "scrap" : "not-scrap"}`}
+              onClick={handleScrap}
+            >
               <img
                 src={bookmarkBlackIcon}
                 alt="bookmarkBlack"
@@ -226,7 +310,18 @@ export default function SentimentDetail() {
 
   return (
     <div>
-      <Header onLogoClick={handleLogoClick} defaultSearchContent={content} />
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
+      <Header
+        onLogoClick={handleLogoClick}
+        defaultSearchContent={content}
+        setModalState={setModalState}
+        setModal={setModal}
+      />
       <div className="main-content">
         {/* 1열 - 왼쪽 사이드 광고 부분 */}
         <div className="left">
@@ -234,11 +329,13 @@ export default function SentimentDetail() {
         </div>
 
         {/* 2열 - 중앙 메인 부분 */}
-        <div style={{ width: "auto" }} className="center">
+        <div className="center">
           <div className="contents">
             <DetailTop />
             <DetailBottom />
-            <CommentItem id={id} />
+            {SearchData && SearchData[1].comment.length >= 0 && (
+              <CommentItem data={SearchData} id={id} />
+            )}
           </div>
         </div>
 

@@ -16,8 +16,13 @@
     flex-direction: row;
     margin-bottom: 20px;
     padding-bottom: 30px;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid rgba($black, 0.7);
+
     .book-info-box {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
       .sort {
         font-size: 32px;
         color: #5fcb75;
@@ -25,7 +30,7 @@
         margin-bottom: 10px;
       }
       .title {
-        font-size: 42px;
+        font-size: 35px;
         font-weight: 600;
         line-height: 140%;
         font-weight: bold;
@@ -34,18 +39,23 @@
       .title-author-box {
         display: flex;
         flex-direction: row;
+        align-items: center;
+
         .book-title {
-          font-size: 32px;
-          color: gray;
+          display: flex;
+          align-items: center;
+          font-size: 25px;
+          color: rgba($black, 0.7);
           font-weight: bold;
-          margin-bottom: 10px;
         }
+
         .book-author {
-          font-size: 22px;
-          color: gray;
-          margin-top: 10px;
+          display: flex;
+          font-size: 17px;
+          color: rgba($black, 0.7);
           font-weight: 600;
-          margin-left: 5px;
+          margin-top: 9px;
+          margin-left: 10px;
           font-weight: bold;
         }
       }
@@ -53,9 +63,13 @@
         display: flex;
         flex-direction: row;
         margin-top: 15px;
+        align-items: center;
+
         .profile-image {
           width: 60px;
           height: 60px;
+          border-radius: 50%;
+          border: 1.5px solid $black;
         }
         .nick-date-box {
           margin-left: 10px;
@@ -63,7 +77,7 @@
             display: flex;
             flex-direction: row;
             .nickname {
-              font-size: 24px;
+              font-size: 20px;
               display: flex;
               flex-direction: column;
             }
@@ -84,7 +98,6 @@
     }
     .book-image-box {
       display: flex;
-      padding-left: 100px;
       .image-box {
         margin-left: 0px;
         display: flex;
@@ -104,15 +117,22 @@
       }
     }
   }
+
   .detail-top-main {
-    height: auto;
+    display: flex;
+    flex-direction: column;
+
     .detail-main-image {
-      align-content: center;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 20px;
       border: 1px solid black;
     }
+
     .detail-main-text {
-      font-size: 28px;
+      font-size: 22px;
       font-weight: bold;
       line-height: 3;
       padding-left: 10px;
@@ -142,7 +162,7 @@
       }
       .edit-text {
         margin-left: 8px;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: bold;
       }
     }
@@ -157,7 +177,7 @@
       }
       .delete-text {
         margin-left: 8px;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: bold;
       }
     }
@@ -181,7 +201,7 @@
           padding-right: 5px;
         }
         .like-count {
-          font-size: 20px;
+          font-size: 18px;
           font-weight: bold;
           color: #ff1348;
         }
@@ -197,7 +217,7 @@
           padding-right: 5px;
         }
         .comment-count {
-          font-size: 20px;
+          font-size: 18px;
           font-weight: bold;
           color: #1975ff;
         }
@@ -211,11 +231,11 @@
           width: 25px;
           height: 25px;
           padding-right: 2px;
-          font-size: 20px;
+          font-size: 18px;
           font-weight: bold;
         }
         .scrap-count {
-          font-size: 20px;
+          font-size: 18px;
           font-weight: bold;
           color: #ffc120;
         }
@@ -228,10 +248,10 @@
       .recommand-button {
         display: flex;
         flex-direction: row;
-        width: 110px;
+        width: 100px;
         height: 25px;
         padding: 5px;
-        border: 2px solid black;
+        border: 2px solid $black;
         border-radius: 10px;
         cursor: pointer;
         justify-content: center;
@@ -242,18 +262,27 @@
           height: 23px;
         }
         .recommand-text {
-          font-size: 20px;
+          font-size: 18px;
           font-weight: bold;
           margin-left: 7px;
+        }
+        &.recommand {
+          background-color: #fe5050;
+          color: white;
+          border: 2px solid #fe5050;
+        }
+        &.not-recommand {
+          background-color: white;
+          color: black;
         }
       }
       .scrap-button {
         display: flex;
         flex-direction: row;
-        width: 110px;
+        width: 100px;
         height: 25px;
         padding: 5px;
-        border: 2px solid black;
+        border: 2px solid $black;
         border-radius: 10px;
         justify-content: center;
         align-items: center;
@@ -265,9 +294,18 @@
           height: 21px;
         }
         .scrap-text {
-          font-size: 20px;
+          font-size: 18px;
           font-weight: bold;
           margin-left: 13px;
+        }
+        &.scrap {
+          background-color: #ffc120;
+          color: white;
+          border: 2px solid #ffc120;
+        }
+        &.not-scrap {
+          background-color: white;
+          color: black;
         }
       }
     }

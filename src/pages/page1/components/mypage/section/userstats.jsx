@@ -12,10 +12,13 @@ function UserStats({ userData }) {
     navigate('../mypageScrap');
   };
 
+  const goToMypageSentiment = () => {
+    navigate('../mypageSentiment')
+  }
 
   return (
     <div className="user-stats">
-      <div className="stat">
+      <div className="stat"onClick={goToMypageSentiment}>
         <div className="number">{userData[0].sentiment_num}</div>
         <div className="label">센티멘트</div>
       </div>

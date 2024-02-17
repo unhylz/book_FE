@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import MainAd from "../Home/components/advertisement/MainAd";
@@ -10,14 +10,37 @@ import "./SentimentLeague.scss";
 
 function SentimentLeague() {
   const navigate = useNavigate();
+
   const [modalState, setModalState] = useState(null);
+  const [modal, setModal] = useState(false);
+
   const handleLogoClick = () => {
     navigate("/");
   };
 
+  useEffect(() => {
+    console.log("모달 상태 변경???: ", modalState);
+
+    if (modalState != null) {
+      setModal(true);
+    } else {
+      setModal(false);
+    }
+  }, [modalState]);
+
   return (
     <div>
-      <Header onLogoClick={handleLogoClick} setModalState={setModalState} />
+      {modal && modalState && (
+        <AcountModalContainer
+          state={modalState}
+          setModalState={setModalState}
+        />
+      )}
+      <Header
+        onLogoClick={handleLogoClick}
+        setModalState={setModalState}
+        setModal={setModal}
+      />
       <div className="main-title">
         <div className="tilte-info">
           <div className="title">SentimentLeague</div>
@@ -47,7 +70,6 @@ function SentimentLeague() {
         </div>
       </div>
       <Footer />
-      {modalState && <AcountModalContainer state={modalState} />}
     </div>
   );
 }
