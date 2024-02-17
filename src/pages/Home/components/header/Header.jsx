@@ -13,7 +13,6 @@ import { UserContext } from "../../../../context/Login";
 //import LoginContext from "../../../../modules/api/login_context";
 import "./Header.scss";
 import { postLogout } from "../../../../modules/api/account.js";
-import { UserContext } from "../../../../context/Login.jsx";
 
 export default function Header({
   onLogoClick,

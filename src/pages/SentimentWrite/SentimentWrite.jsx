@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import "./SentimentWrite.scss";
 import { PiStarFill, PiStarLight } from "react-icons/pi";
 import Modal from "react-modal";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation} from "react-router-dom";
 import BookLogo from "./BookLogo.png";
 import ImgAdd from "./AddImg.png";
 import axios from "axios";

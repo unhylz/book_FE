@@ -9,7 +9,6 @@ import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
 import CommentItem from "./Comment/Comment";
 import ModalFrame from "../SentimentWrite/Modal";
-import axios from "axios";
 import likeBlackIcon from "../../assets/icons/like_black.png";
 import bookmarkBlackIcon from "../../assets/icons/bookmark_black.png";
 import editIcon from "../../assets/icons/edit_Img.png";
