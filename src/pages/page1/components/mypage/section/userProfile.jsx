@@ -12,7 +12,8 @@ import flag from "../../../../../assets/icons/lets-icons-flag-finish-alt.svg"
 import MypageModal from './mypageModal';
 import axios from "axios";
 import ImageCropperModal from "../imgCropModal";
-
+import { UserContext } from "../../../../../context/Login";
+import { useContext } from "react";
 
 
 function UserProfile({ userData }) {
@@ -48,11 +49,20 @@ function UserProfile({ userData }) {
     sendStatusMessage(status_message);
   };
 
+  const user_context = useContext(UserContext);
+  console.log(user_context);
+  if (user_context && user_context.user_data) {
+  console.log("사용자 정보: ", user_context.user_data.id); 
+  } else {
+  console.log("사용자 데이터가 없습니다.");
+  }
+
   const sendStatusMessage = (status_message) => {
     const formData = new FormData();
+    const user_Id = user_context.user_data.id;
     formData.append('status_message', status_message);
-  
-    fetch(`/users/1/mypage`, {
+    
+    fetch(`/users/${user_Id}/mypage`, {
       method: 'POST', 
       body: formData, 
     })
@@ -112,7 +122,6 @@ function UserProfile({ userData }) {
   };
   
   const uploadImg = (formData) => {
-    // 수정: 인수를 formData로 받습니다.
     const config = {
       headers: { "content-type": "multipart/form-data" },
     };
@@ -172,7 +181,6 @@ function UserProfile({ userData }) {
             <img src={flag} alt="flagIcon" />
             메시지 수정
           </button>
-          {/* 모달 컴포넌트 */}
           <MypageModal
             value={values.status_message}
             isOpen={isModalOpen}

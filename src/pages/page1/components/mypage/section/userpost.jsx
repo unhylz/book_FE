@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import starIcon from "../../../../../assets/icons/star.svg";
 import boockmarkIcon from "../../../../../assets/icons/bookmark.svg";
@@ -12,6 +12,8 @@ import MasterIcon from "../../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../../assets/tiers/그랜드마스터.svg";
 import Pagination from "./pagenation";
 import axios from "axios";
+import { UserContext } from "../../../../../context/Login"
+
 
 function formatDateTime(dateTimeString) {
   const year = dateTimeString.slice(6, 10);
@@ -30,8 +32,17 @@ export default function Sentiment() {
     const [cursorId, setCursorId] = useState(1);
     const [sentimentData, setSentimentData] = useState(null);
 
+    const user_context = useContext(UserContext);
+    console.log(user_context); 
+    if (user_context && user_context.user_data) {
+    console.log("사용자 정보: ", user_context.user_data.id); 
+    } else {
+    console.log("사용자 데이터가 없습니다.");
+    }
+
     useEffect(() => {
-      axios.get(`users/1/mypage`, {
+      const user_Id = user_context.user_data.id;
+      axios.get(`users/${user_Id}/mypage`, {
         withCredentials: true,
       })
       .then(response => {
@@ -73,7 +84,7 @@ export default function Sentiment() {
                 className="book-link"
               >
                 <img
-                  src={`bookcover_dummy/${result.image_file}`}
+                  src={`${result.book_image}`}
                   alt={result.book_title}
                 />
               </Link>
@@ -83,10 +94,10 @@ export default function Sentiment() {
                     to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
                     className="book-link"
                   >
-                    <h3>{result.sentiment_title[0]}</h3>
+                    <h3>{result.sentiment_title}</h3>
                   </Link>
                   <p>
-                    <strong>{result.book_title[0]}</strong> ({result.author}/
+                    <strong>{result.book_title}</strong> ({result.author}/
                     {result.publisher})
                   </p>
                 </div>

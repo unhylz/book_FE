@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import notification_icon from '../../../assets/icons/gravity-ui-comment.svg';
+import tierIcon from "../../../assets/icons/solar-ranking-linear.svg"
 import './notice.scss';
 
 export default function NotificationItem({ read_at, title, date, content }) {
@@ -14,10 +15,13 @@ export default function NotificationItem({ read_at, title, date, content }) {
     };
   };
 
+  // 조건에 따라 아이콘 선택
+  const icon = title.includes("댓글") ? notification_icon : title.includes("티어") ? tierIcon : notification_icon;
+
   return (
     <div className="notification-item" onClick={handleItemClick}>
       <div className="notification-icon">
-        <img src={notification_icon} alt="Notification Icon" />
+        <img src={icon} alt="Notification Icon" />
       </div>
       <div className="notification-content">
         <h4>{title}</h4>
