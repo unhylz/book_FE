@@ -12,6 +12,8 @@ import { userDummy } from "./userDummy.js";
 
 //import LoginContext from "../../../../modules/api/login_context";
 import "./Header.scss";
+import { postLogout } from "../../../../modules/api/account.js";
+import { UserContext } from "../../../../context/Login.jsx";
 
 export default function Header({
   onLogoClick,
@@ -22,6 +24,7 @@ export default function Header({
   const navigate = useNavigate();
   const nowContent = useRef();
   const { userName, image } = userDummy[0];
+  const user_context = useContext(UserContext);
   //const { isLoggedIn } = useContext(LoginContext); // 로그인 상태 컨텍스트 사용
   //확인용!!
   const isLoggedIn = true;
@@ -62,7 +65,9 @@ export default function Header({
   };
 
   const handleLogoutClick = () => {
-    alert("로그아웃 기능 구현 필요");
+    postLogout(); //로그아웃 함수 추가
+    user_context.setLogout();
+    alert("로그아웃 되었습니다.");
   };
 
   const handleMypageClick = () => {
