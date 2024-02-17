@@ -51,7 +51,7 @@ export default function LoginContainer(props) {
       console.log(`email:${email}, pw:${pw}, remember:${remember} 로그인을 시도합니다.`);
       const res = await postLogin(email,pw);
       console.log("res: ", res);
-      if ("안녕하세요" === res.data.status_message) {
+      if ('email' in res.data) {
         //setIsLoggedIn(true); // setIsLoggedIn을 컨텍스트로 전달
         setNotice(0);
         console.log("idtype:",typeof(res.data.user_id))
