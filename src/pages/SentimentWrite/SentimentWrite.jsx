@@ -53,7 +53,7 @@ function DecoModal({ isOpen, onClose }) {
 
 export default function SentimentWrite() {
   const location = useLocation();
-  const bookTitle = location.state.bookTitle;
+  const bookTitle = location.state ? location.state.bookTitle : null;
   console.log("bookTitle: ", bookTitle);
 
   const navigate = useNavigate();
