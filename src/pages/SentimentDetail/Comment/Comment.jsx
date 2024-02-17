@@ -1,7 +1,6 @@
 import "./Comment.scss";
 import React, { useEffect, useState } from "react";
 
-import CommentDummy from "./CommentDummy";
 import userImg from "../../../assets/icons/user_Img.png";
 import RookieIcon from "../../../assets/tiers/루키.svg";
 import SilverIcon from "../../../assets/tiers/실버.svg";
@@ -26,7 +25,7 @@ export default function CommentItem({id}) {
 
         console.log("댓글 데이터", data)
       } catch (error) {
-        console.error("데이터 가져오기 오류:", error);
+        console.error("댓글데이터 가져오기 오류:", error);
       }
     };
 
@@ -34,9 +33,11 @@ export default function CommentItem({id}) {
   }, [id]);
 
   useEffect(() => {
-    if (CommentData) {
-      console.log("센티먼트 데이터 확인용 44:", CommentData);
-    }
+    if (CommentData && CommentData[1]) {
+      console.log("센티먼트 데이터 확인용 44:", CommentData[0]);
+      //setCommentData(CommentData[1].comment);
+    };
+
   }, [CommentData]);
 
   const getTierIcon = (tier) => {
@@ -51,7 +52,6 @@ export default function CommentItem({id}) {
 
     const DefaultIcon = () => null;
     const formattedTier = tier.toLowerCase().replace(/\s/g, "");
-
     const SelectedIcon = tierIcons[formattedTier] || DefaultIcon;
 
     return SelectedIcon;
@@ -59,8 +59,8 @@ export default function CommentItem({id}) {
 
   return (
     <div className="comment-list-item">
-       {CommentData.map((result) => (
-        <div key={result.id} className="comment-result">
+       {CommentData && CommentData.map((result, index) => (
+        <div key={index} className="comment-result">
           <div className="comment-header">
             <div className="list-top">
               <div className="profile-box">
@@ -74,11 +74,13 @@ export default function CommentItem({id}) {
               <div className="info-box">
                 <div className="name-tier">
                   <div className="nickname">{result.nickname}</div>
+                  {result.tier && 
                   <img
                     src={getTierIcon(result.tier)}
                     alt="result.tier"
                     className="tier-icon"
                   />
+                  }
                 </div>
                 <div className="time">{result.created_at}</div>
               </div>

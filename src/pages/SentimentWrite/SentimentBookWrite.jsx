@@ -1,85 +1,39 @@
 import React from "react";
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./SentimentWrite.scss";
 import { PiStarFill, PiStarLight } from "react-icons/pi";
-import Modal from "react-modal";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import BookLogo from "./BookLogo.png";
 import ImgAdd from "./AddImg.png";
 import axios from "axios";
 import ModalFrame from "./Modal";
 
-function DecoModal({ isOpen, onClose }) {
-  const [issue, setIssue] = useState({
-    title: "",
-  });
-
-  const hSubmit = (e) => {
-    e.preventDefault();
-    onClose();
-  };
-
-  const customModalStyles = {
-    content: {
-      border: "none",
-      maxWidth: "55%",
-      maxHeight: "75%",
-      margin: "auto",
-      alignContent: "center",
-    },
-    overlay: {
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-    },
-  };
-
-  return (
-    <>
-      <Modal isOpen={isOpen} style={customModalStyles}>
-        <form onSubmit={hSubmit}>
-          <div className="modal-box">
-            <p className="search-title" style={{fontWeight:"bold"}}>도서검색 API</p>
-            <input
-              style={{ borderRadius: "7px" }}
-              className="search-input"
-              placeholder="책 제목, 출판사, 저자를 검색해보세요."
-            ></input>
-          </div>
-        </form>
-        <button onClick={onClose}>Close</button>
-      </Modal>
-    </>
-  );
-}
-
 export default function SentimentWrite() {
+  const location = useLocation();
+  const bookTitle = location.state.bookTitle;
+  console.log("bookTitle: ", bookTitle);
+
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [search, setSearch] = useState("");
   const [content, setContent] = useState("");
   const [rating, setRating] = useState(0);
   const [titleValid, setTitleValid] = useState(true);
-  const [searchValid, setSearchValid] = useState(true);
   const [contentValid, setContentValid] = useState(true);
   const [ratingValid, setRatingValid] = useState(true);
-  const [inputTouched, setinputTouched] = useState(false);
   const [imgFile, setImgFile] = useState("");
   const imgRef = useRef();
 
-  // const user_context = useContext(UserContext)
-  // console.log(user_context)
-  // console.log(user_context.user_data.id)
+  useEffect(() => {
+    if (bookTitle) {
+      setSearch(bookTitle);
+    }
+  }, [bookTitle]);
 
-  //모달 state
-  const [isOpen, setIsOpen] = useState(false);
-
+  //제목, 내용, 평점 유효성 검사 핸들러
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
     setTitleValid(!!e.target.value);
-  };
-
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-    setSearchValid(!!e.target.value);
   };
 
   const handleContentChange = (e) => {
@@ -89,17 +43,12 @@ export default function SentimentWrite() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    setinputTouched(true);
 
     if (title.trim() === "") {
       setTitleValid(false);
       return;
     }
 
-    // if(search.trim() === ""){
-    // 	setSearchValid(false);
-    // 	return;
-    // }
     if (rating === 0) {
       setRatingValid(false);
       return;
@@ -122,22 +71,6 @@ export default function SentimentWrite() {
     setRatingValid(true);
   };
 
-  //모달 열고 닫는 핸들러
-  const hModalOpen = () => {
-    setIsOpen(true);
-  };
-  const hCloseModal = () => {
-    setIsOpen(false);
-  };
-
-  //유효성 검사
-  const inputValueIsValid =
-    !titleValid &&
-    !searchValid &&
-    rating === 0 &&
-    !contentValid &&
-    inputTouched;
-
   //이미지 미리보기
   const handleImageChange = () => {
     const file = imgRef.current.files[0];
@@ -154,7 +87,7 @@ export default function SentimentWrite() {
   });
 
   const saveSentiment = async () => {
-    //await axios.post(`/sentiments/${user_id}/write`);
+    await axios.post(`/sentiments/{user-id}/write`);
   };
 
   return (
@@ -171,7 +104,7 @@ export default function SentimentWrite() {
           <button className="write-btn" onSubmit={handleFormSubmit}>
             작성하기
           </button>
-          {/* 사용자 정보 들어가야 함 */}
+          {/* 사용자 정보 들어가야함 */}
           <div className="user-box">Paul</div>
         </div>
       </header>
@@ -227,11 +160,9 @@ export default function SentimentWrite() {
           <div className="search-rating-box">
             <input
               className="search"
-              placeholder="도서검색"
               value={search}
-              onClick={hModalOpen}
+              readOnly
             />
-            <DecoModal isOpen={isOpen} onClose={hCloseModal} />
             <div className="rating-box">
               <div className="star">
                 {[...Array(rating)].map((a, i) => (
