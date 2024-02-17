@@ -1,85 +1,91 @@
-import React,{useState, useRef, useEffect} from 'react'
-import PasswordSearch from '../components/PasswordSearch/PasswordSearch';
-import {postCheckCode, sendAuth} from '../modules/api/account';
+import React, { useState, useRef, useEffect } from "react";
+import PasswordSearch from "../components/PasswordSearch/PasswordSearch";
+import { postCheckCode, sendAuth } from "../modules/api/account";
 
 export default function PasswordSearchContainer(props) {
-  
-  const [email,setEmail] = useState("");
-  const [authnum,setAuthnum] = useState("");
-  const [timer,setTimer] = useState("05:00");
-  const [test,setTest] = useState();
+  const [email, setEmail] = useState("");
+  const [authnum, setAuthnum] = useState("");
+  const [timer, setTimer] = useState("05:00");
+  const [test, setTest] = useState();
 
   let sec = 300;
 
   useEffect(() => {
     const id = setInterval(async () => {
-      if(sec===0){sec=300}
-      else{sec=sec-1}
-      setTimer(sec2timer(sec)); 
+      if (sec === 0) {
+        sec = 300;
+      } else {
+        sec = sec - 1;
+      }
+      setTimer(sec2timer(sec));
     }, 1000);
     return () => clearInterval(id);
   }, []);
 
-  const sec2timer = (sec)=>{
-    let t_min = Math.floor(sec/60);
-    let t_sec = sec%60;
+  const sec2timer = (sec) => {
+    let t_min = Math.floor(sec / 60);
+    let t_sec = sec % 60;
     let r_min = "";
     let r_sec = "";
-    if(t_min<10){r_min = `0${t_min}`}
-    else{r_min = `${t_min}`}
-    if(t_sec<10){r_sec = `0${t_sec}`}
-    else{r_sec = `${t_sec}`}
-    return `${r_min}:${r_sec}`
-  }
+    if (t_min < 10) {
+      r_min = `0${t_min}`;
+    } else {
+      r_min = `${t_min}`;
+    }
+    if (t_sec < 10) {
+      r_sec = `0${t_sec}`;
+    } else {
+      r_sec = `${t_sec}`;
+    }
+    return `${r_min}:${r_sec}`;
+  };
 
   const emailInputRef = useRef(null);
-  const emailInputFocus = ()=>{
+  const emailInputFocus = () => {
     emailInputRef.current.focus();
-  }
+  };
   const pwInputRef = useRef(null);
-  const pwInputFocus = ()=>{
+  const pwInputFocus = () => {
     pwInputRef.current.focus();
-  }
-  
-  const onClickSendBtn = ()=>{
+  };
+
+  const onClickSendBtn = () => {
     //email을 백엔드로 보내는 함수
-    console.log('email',email)
+    console.log("email", email);
     sendAuth(email);
-    
-  }
+  };
 
-  const onClickResendBtn = ()=>{
+  const onClickResendBtn = () => {
     //인증번호 재요청 함수
-  }
+  };
 
-  const onSubmitHandler = async (e)=>{
+  const onSubmitHandler = async (e) => {
     //인증번호 검증 함수; await
     e.preventDefault();
     console.log("인증번호 검사 및 제출합니다.");
-    
-    const check = await postCheckCode(email,authnum)
-    
-    if(check){props.setState("passwordchange");}
-    else{console.log("인증번호 틀림.")}
-    
 
-  }
+    const check = await postCheckCode(email, authnum);
 
-  const onEmailChange = (e)=>{
+    if (check) {
+      props.setState("passwordchange");
+    } else {
+      console.log("인증번호 틀림.");
+    }
+  };
+
+  const onEmailChange = (e) => {
     setEmail(e.target.value);
-  }
+  };
 
-  const onAuthChange = (e)=>{
+  const onAuthChange = (e) => {
     setAuthnum(e.target.value);
-  }
+  };
 
   const onClickBg = (e) => {
-    if(e.target.classList.contains("bg_shadow")){
-      props.setState(null)
-    }}
-
-
-
+    if (e.target.classList.contains("bg_shadow")) {
+      props.setState(null);
+    }
+  };
 
   return (
     <PasswordSearch
@@ -92,9 +98,9 @@ export default function PasswordSearchContainer(props) {
       onEmailChange={onEmailChange}
       onAuthChange={onAuthChange}
       onClickBg={onClickBg}
+      setState={props.setState}
     />
-  )
+  );
 }
 
 //props.onPwCancleHandler
-

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AcountModal from "../components/Acount_Modal/AcountModal";
 
 //Container import는 여기 아래에 쭈르륵 해주세요
@@ -18,13 +18,20 @@ import PasswordChange from "../components/passwordChange/PasswordChange";
  * 예시) <AcountModalContainer state={"login"}/>
  */
 export default function AcountModalContainer(props) {
-  const [state, setState] = useState(props.state);
-  console.log("state: ", state);
+  console.log("모달창 진입 확인 ?? : ");
 
+  const [state, setState] = useState(props.state);
+  console.log("state111: ", state);
+
+  useEffect(() => {
+    props.setModalState(state);
+  }, [state]);
+
+  //setModalState
   return (
     <>
       {state === "login" ? (
-        <LoginContainer setState={setState}/>
+        <LoginContainer setState={setState} />
       ) : state === "passwordsearch" ? (
         <PasswordSearchContainer setState={setState} />
       ) : state === "passwordchange" ? (

@@ -66,7 +66,7 @@ export default function Sentiment({ userId, selectedButton }) {
         }
         if (selectedButton === "follow") {
           const data = await FollowSentimentData(userId, cursorId);
-          setSearchData(data.result.slice(0, itemsPerPage));
+          setSearchData(data.result);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
