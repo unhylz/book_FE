@@ -204,3 +204,12 @@ export const postPwChange = async(password, user_id)=>{
   catch{}
 }
 
+export const postLogout = async()=>{
+  try{
+    const res = axios.post('users/logout',null,{withCredentials:true});
+    console.log(res);
+  }
+  catch(err){
+    console.log(err);
+  }
+}
