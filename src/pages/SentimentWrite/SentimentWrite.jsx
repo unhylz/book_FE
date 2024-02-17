@@ -12,6 +12,7 @@ import ModalFrame from "./Modal";
 import { UserContext } from "../../context/Login";
 import { SentimentBookSearch } from "./api";
 import BookSearch from "./BookSearch"
+import searchIcon from "./search.png"
 
 function DecoModal({ isOpen, onClose }) {
   const navigate = useNavigate()
@@ -53,7 +54,6 @@ function DecoModal({ isOpen, onClose }) {
         console.error("데이터 가져오기 오류:", error);
       }
     };
-
     if (content) {
       fetchData();
     }
@@ -96,9 +96,12 @@ function DecoModal({ isOpen, onClose }) {
             <button>검색</button>
           </div>
         </form>
+        <img src={searchIcon}></img>
         <button onClick={onClose}>Close</button>
         <div>
-          {bookData && bookData.searchBookObject ()}
+          {bookData && bookData.searchBookObject && (
+            <BookSearch displayedItems={content}></BookSearch>
+          )}
         </div>
       </Modal>
     </>
