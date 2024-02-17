@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import SideAd from "../../../Home/components/advertisement/SideAd";
 import Header from "../../../../pages/Home/components/header/Header";
 import axios from "axios";
 import "./mypage.scss";
 import "../mypage/mypage_follower.scss";
 import AcountModalContainer from "../../../../container/AcountModalContainer";
+import { UserContext } from "../../../../context/Login";
 
 export default function Mypage_follower() {
   const [followers, setFollowers] = useState([]);
@@ -17,10 +18,19 @@ export default function Mypage_follower() {
     setSelectedButton(button);
   };
 
+  const user_context = useContext(UserContext);
+  console.log(user_context); 
+  if (user_context && user_context.user_data) {
+  console.log("사용자 정보: ", user_context.user_data.id); 
+  } else {
+  console.log("사용자 데이터가 없습니다.");
+  }
+
   useEffect(() => {
+    const user_Id = user_context.user_data.id;
     const fetchFollowers = async () => {
       try {
-        const response = await axios.get("/users/2/follower");
+        const response = await axios.get(`/users/${user_Id}/follower`);
         setFollowers(response.data.nicknames);
         console.log("팔로워 데이터:", response.data);
       } catch (error) {
@@ -97,23 +107,21 @@ export default function Mypage_follower() {
                 <div key={index} className="follower-card">
                   <img
                     src={follower.profile_image}
-                    alt={follower.nick}
+                    alt={follower.nickname}
                     className="follower-image"
                   />
                   <div className="follower-info">
-                    <h3 className="follower-name">{follower.nick}</h3>
+                    <h3 className="follower-name">{follower.nickname}</h3>
                     <p className="follower-bio">{follower.status_message}</p>
                   </div>
                   <button
-                    onClick={() => handleFollowClick(follower)}
-                    className={`follower-status ${
-                      follower.follow_status === "1"
-                        ? "followed"
-                        : "not-followed"
-                    }`}
-                  >
-                    {follower.follow_status === "1" ? "팔로우" : "팔로잉"}
-                  </button>
+                  onClick={() => handleFollowClick(follower)}
+                  className={`follower-status ${
+                    follower.follow_status === "1" ? "followed" : "not-followed"
+                  }`}
+                >
+                  {follower.follow_status === "1" ? "팔로우" : "팔로잉"}
+                </button>
                 </div>
               ))
             )}

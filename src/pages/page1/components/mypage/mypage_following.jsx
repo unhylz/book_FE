@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import SideAd from "../../../Home/components/advertisement/SideAd";
 import Header from "../../../../pages/Home/components/header/Header";
 import axios from "axios";
 import "./mypage.scss";
 import "../mypage/mypage_follower.scss";
 import AcountModalContainer from "../../../../container/AcountModalContainer";
+import { UserContext } from "../../../../context/Login";
 
 export default function Mypage_following() {
   const [followers, setFollowers] = useState([]);
@@ -18,17 +19,24 @@ export default function Mypage_following() {
     setSelectedButton(button);
   };
 
+  const user_context = useContext(UserContext);
+  console.log(user_context); 
+  if (user_context && user_context.user_data) {
+  console.log("사용자 정보: ", user_context.user_data.id); 
+  } else {
+  console.log("사용자 데이터가 없습니다.");
+  }
+
   useEffect(() => {
     const fetchFollowers = async () => {
       try {
-        const response = await axios.get("/users/1/following");
+        const response = await axios.get("/users/2/following");
         setFollowers(response.data.nicknames);
         console.log("팔로잉 데이터:", response.data);
       } catch (error) {
         console.error("팔로잉 데이터를 불러오는 중 오류 발생:", error);
       }
     };
-
     fetchFollowers();
   }, []);
 
@@ -40,8 +48,8 @@ export default function Mypage_following() {
       return;
     }
     try {
-      const response = await axios.post(`/users/1/follow`, {
-        followingId: follower.user_id, // user_id를 사용
+      const response = await axios.post(`/users/2/follow`, {
+        followingId: follower.user_id, 
         isFollow: follower.follow_status === "1" ? 0 : 1,
       });
   

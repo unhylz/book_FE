@@ -17,6 +17,8 @@ import "../mypage.scss";
 import Pagination from "./pagenation";
 import axios from "axios";
 import "../mypageScrap.scss"
+import { UserContext } from "../../../../../context/Login";
+import { useContext } from "react";
 
 
 export default function MypageScrap() {
@@ -27,6 +29,13 @@ export default function MypageScrap() {
     const itemsPerPage = 10;
     const postsPerPage = 5; 
     const [sentimentData, setSentimentData] = useState(null);
+    const user_context = useContext(UserContext);
+    console.log(user_context);
+    if (user_context && user_context.user_data) {
+    console.log("사용자 정보: ", user_context.user_data.id); 
+    } else {
+    console.log("사용자 데이터가 없습니다.");
+    }
 
     const getTierIcon = (tier) => {
       const tierIcons = {
@@ -45,7 +54,8 @@ export default function MypageScrap() {
     };
 
     useEffect(() => {
-      axios.get(`users/1/scrap`, {
+      const user_Id = user_context.user_data.id;
+      axios.get(`users/${user_Id}/scrap`, {
         withCredentials: true,
       })
       .then(response => {
