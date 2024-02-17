@@ -1,7 +1,6 @@
 import "./Comment.scss";
 import React, { useEffect, useState } from "react";
 
-import CommentDummy from "./CommentDummy";
 import userImg from "../../../assets/icons/user_Img.png";
 import RookieIcon from "../../../assets/tiers/루키.svg";
 import SilverIcon from "../../../assets/tiers/실버.svg";
@@ -41,7 +40,6 @@ export default function CommentItem(data, id) {
 
     const DefaultIcon = () => null;
     const formattedTier = tier.toLowerCase().replace(/\s/g, "");
-
     const SelectedIcon = tierIcons[formattedTier] || DefaultIcon;
 
     return SelectedIcon;
@@ -89,7 +87,9 @@ export default function CommentItem(data, id) {
                     alt="recomment"
                     className="recomment-icon"
                   />
+                  }
                 </div>
+                <div className="time">{result.created_at}</div>
               </div>
             </div>
             <div className="comment-main">

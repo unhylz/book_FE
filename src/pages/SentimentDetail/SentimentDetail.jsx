@@ -28,8 +28,6 @@ import GrandMasterIcon from "../../assets/tiers/그랜드마스터.svg";
 import "./SentimentDetail.scss";
 import AcountModalContainer from "../../container/AcountModalContainer";
 
-import insertImg from "./insert_Img.png";
-import bookcover1 from "./book_image_1.svg";
 import { SentimentIdSearch } from "../../modules/api/search";
 
 export default function SentimentDetail() {

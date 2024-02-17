@@ -12,6 +12,8 @@ import { userDummy } from "./userDummy.js";
 import { UserContext } from "../../../../context/Login";
 //import LoginContext from "../../../../modules/api/login_context";
 import "./Header.scss";
+import { postLogout } from "../../../../modules/api/account.js";
+import { UserContext } from "../../../../context/Login.jsx";
 
 export default function Header({
   onLogoClick,
@@ -64,7 +66,9 @@ export default function Header({
   };
 
   const handleLogoutClick = () => {
-    alert("로그아웃 기능 구현 필요");
+    postLogout(); //로그아웃 함수 추가
+    user_context.setLogout();
+    alert("로그아웃 되었습니다.");
   };
 
   const handleMypageClick = () => {
