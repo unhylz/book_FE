@@ -16,18 +16,12 @@ export default function RelatedNickname({
   //const userId = user_context.user_data.id; //"2"; //임시 --------------
   const isLogin = user_context.user_data.isLogin;
 
-  if (!isLogin) {
-    userId = "0";
-  }
-
   const [InitialFollowStatus, setInitialFollowStatus] = useState([]);
   const [FollowStatus, setFollowStatus] = useState([]);
 
   useEffect(() => {
     //console.log("맨 처음 렌더링될 때 한 번만 실행");
-    const sortedItems = displayedItems.nicknameObject.sort(
-      (a, b) => a.user_id - b.user_id
-    );
+    const sortedItems = displayedItems.sort((a, b) => a.user_id - b.user_id);
     console.log("가장 처음 팔로우 상태: ", sortedItems);
 
     setInitialFollowStatus(
@@ -67,7 +61,7 @@ export default function RelatedNickname({
   const handleFollowClick = async (follower, index) => {
     if (!isLogin) {
       // 로그인 상태가 아닌 경우
-      alert("로그인이 필요합니다.");
+      alert("로그인이 필요한 기능입니다.");
       return;
     }
 
@@ -106,10 +100,10 @@ export default function RelatedNickname({
     <>
       <div className="related-nickname-container">
         <div className="related-nickname-list">
-          {displayedItems.nicknameObject &&
-            Array.isArray(displayedItems.nicknameObject) &&
-            displayedItems.nicknameObject.length > 0 &&
-            displayedItems.nicknameObject
+          {displayedItems &&
+            Array.isArray(displayedItems) &&
+            displayedItems.length > 0 &&
+            displayedItems
               .sort((a, b) => a.user_id - b.user_id)
               .map((follower, index) => (
                 <div key={index} className="related-follower-card">
@@ -145,15 +139,17 @@ export default function RelatedNickname({
               ))}
         </div>
       </div>
-      <div className="more-details">
-        <Link
-          to={`/${searchResult.content}/related_nickname_more`}
-          className="more-link"
-        >
-          <h3>더보기</h3>
-          <img src={moreIcon} alt="moreIcon" className="more-icon" />
-        </Link>
-      </div>
+      {displayedItems.length !== 0 && (
+        <div className="more-details">
+          <Link
+            to={`/${searchResult.content}/related_nickname_more`}
+            className="more-link"
+          >
+            <h3>더보기</h3>
+            <img src={moreIcon} alt="moreIcon" className="more-icon" />
+          </Link>
+        </div>
+      )}
     </>
   );
 }

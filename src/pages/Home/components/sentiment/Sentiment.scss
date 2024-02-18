@@ -213,30 +213,3 @@
     }
   }
 }
-
-.pagination-container {
-  .pagination {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 50px;
-    margin-right: 10px;
-
-    button {
-      background-color: white;
-      border: none;
-      color: #565656;
-      border-radius: 5px;
-      padding: 10px 15px;
-      cursor: pointer;
-      font-size: 15px;
-      //font-weight: bold;
-
-      &.active {
-        background-color: $green;
-        color: white;
-        cursor: grabbing;
-      }
-    }
-  }
-}

@@ -18,9 +18,7 @@ export default function RelatedNicknameResults({
 
   useEffect(() => {
     //console.log("맨 처음 렌더링될 때 한 번만 실행");
-    const sortedItems = displayedItems.nicknameObject.sort(
-      (a, b) => a.user_id - b.user_id
-    );
+    const sortedItems = displayedItems.sort((a, b) => a.user_id - b.user_id);
     console.log("가장 처음 팔로우 상태: ", sortedItems);
 
     setInitialFollowStatus(
@@ -93,10 +91,10 @@ export default function RelatedNicknameResults({
     <div className="related-nickname-results">
       <div className="related-nickname-results-container">
         <div className="related-nickname-results-list">
-          {displayedItems.nicknameObject &&
-            Array.isArray(displayedItems.nicknameObject) &&
-            displayedItems.nicknameObject.length > 0 &&
-            displayedItems.nicknameObject
+          {displayedItems &&
+            Array.isArray(displayedItems) &&
+            displayedItems.length > 0 &&
+            displayedItems
               .sort((a, b) => a.user_id - b.user_id)
               .map((follower, index) => (
                 <div key={index} className="related-follower-card">

@@ -10,6 +10,7 @@ import sortIcon from "../../assets/icons/sort.svg";
 import "./RelatedNicknameMore.scss";
 import { NicknameSearch } from "../../modules/api/search";
 import { UserContext } from "../../context/Login";
+import Pagination from "../BookDetail/components/pagination/Pagination";
 
 export default function RelatedNicknameMore() {
   const user_context = useContext(UserContext);
@@ -17,7 +18,9 @@ export default function RelatedNicknameMore() {
 
   const userId = user_context.user_data.id; //"2"; //임시 --------------
   const isLogin = user_context.user_data.isLogin;
-  const cursorId = "0";
+
+  const [cursorId, setCursorId] = useState(0);
+  const [pageNum, setPageNum] = useState(1);
 
   // 선택한 센티먼트 id와 title 변수
   const { content } = useParams();
@@ -27,6 +30,7 @@ export default function RelatedNicknameMore() {
 
   const [modalState, setModalState] = useState(null);
   const [modal, setModal] = useState(false);
+  const [Num, setNum] = useState(null);
 
   console.log("content detail page: ", content);
 
@@ -34,7 +38,11 @@ export default function RelatedNicknameMore() {
     const fetchData = async () => {
       try {
         const data = await NicknameSearch(userId, cursorId, content);
-        setSearchData(data);
+        const temp = (data.total_page_num - 1) * 3;
+        const num = await NicknameSearch(userId, temp, content);
+        setNum(num.cursorId);
+        setSearchData(data.list);
+        setPageNum(data.total_page_num);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
@@ -48,9 +56,17 @@ export default function RelatedNicknameMore() {
   useEffect(() => {
     if (SearchData) {
       console.log("검색 닉네임 데이터:", SearchData);
-      setSearchNum(SearchData.nicknameObject.length);
     }
   }, [SearchData]);
+
+  useEffect(() => {
+    if (Num) {
+      console.log("==----검색 num 데이터:", Num);
+      setSearchNum(Num);
+    } else {
+      setSearchNum(0);
+    }
+  }, [Num]);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -111,7 +127,15 @@ export default function RelatedNicknameMore() {
                 />
               )}
             </div>
-            <p>페이지네이션 추가</p>
+            <div className="pagination-container">
+              {Array.isArray(SearchData) && (
+                <Pagination
+                  setCursorId={setCursorId}
+                  cursorId={cursorId}
+                  pageNum={pageNum}
+                />
+              )}
+            </div>
           </div>
         </div>
 

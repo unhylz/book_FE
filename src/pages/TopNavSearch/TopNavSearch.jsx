@@ -54,8 +54,8 @@ function TopNavSearch() {
   }, [content]);
 
   useEffect(() => {
-    if (SearchData && SearchData.searchSentimentObject) {
-      console.log("검색 도서 데이터:", SearchData.searchSentimentObject);
+    if (SearchData && SearchData.searchSentimentObject.list) {
+      console.log("검색 도서 데이터:", SearchData.searchSentimentObject.list);
     }
   }, [SearchData]);
 
@@ -105,39 +105,33 @@ function TopNavSearch() {
             <div className="search-additional">
               <div className="related-book">
                 <h2>#관련서적</h2>
-                {SearchData &&
-                  SearchData.searchBookObject &&
-                  SearchData.searchBookObject.bookObject && (
-                    <RelatedBook
-                      searchResult={search_result}
-                      displayedItems={SearchData.searchBookObject}
-                      userId={userId}
-                    />
-                  )}
+                {SearchData && SearchData.searchBookObject.list && (
+                  <RelatedBook
+                    searchResult={search_result}
+                    displayedItems={SearchData.searchBookObject.list}
+                    userId={userId}
+                  />
+                )}
               </div>
               <div className="related-sentiment">
                 <h2>#센티먼트</h2>
-                {SearchData &&
-                  SearchData.searchSentimentObject &&
-                  SearchData.searchSentimentObject.sentimentObject && (
-                    <RelatedSentiment
-                      searchResult={search_result}
-                      displayedItems={SearchData.searchSentimentObject}
-                      userId={userId}
-                    />
-                  )}
+                {SearchData && SearchData.searchSentimentObject.list && (
+                  <RelatedSentiment
+                    searchResult={search_result}
+                    displayedItems={SearchData.searchSentimentObject.list}
+                    userId={userId}
+                  />
+                )}
               </div>
               <div className="related-nickname">
                 <h2>#닉네임</h2>
-                {SearchData &&
-                  SearchData.searchNicknameObject &&
-                  SearchData.searchNicknameObject.nicknameObject && (
-                    <RelatedNickname
-                      searchResult={search_result}
-                      displayedItems={SearchData.searchNicknameObject}
-                      userId={userId}
-                    />
-                  )}
+                {SearchData && SearchData.searchNicknameObject.list && (
+                  <RelatedNickname
+                    searchResult={search_result}
+                    displayedItems={SearchData.searchNicknameObject.list}
+                    userId={userId}
+                  />
+                )}
               </div>
             </div>
           </div>

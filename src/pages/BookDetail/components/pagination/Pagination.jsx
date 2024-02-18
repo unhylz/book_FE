@@ -4,17 +4,12 @@ import rightIcon from "../../../../assets/icons/chevron_right.svg";
 import leftIcon from "../../../../assets/icons/chevron_left.svg";
 import "./Pagination.scss";
 
-export default function Pagination({
-  setCursorId,
-  cursorId,
-  setPageNum,
-  pageNum,
-}) {
-  const pageItems = 5;
+export default function Pagination({ setCursorId, cursorId, pageNum }) {
+  const pageItems = 1;
   const renderPagination = () => {
     const paginationItems = [];
 
-    const startPage = Math.floor((cursorId - 1) / pageItems) * pageItems + 1;
+    const startPage = Math.floor(cursorId / pageItems) * pageItems + 1;
     const endPage = Math.min(startPage + pageItems - 1, pageNum);
 
     if (startPage > 1) {
@@ -35,8 +30,8 @@ export default function Pagination({
       paginationItems.push(
         <div
           key={i}
-          className={`pagination-item ${i === cursorId ? "active" : ""}`}
-          onClick={() => setCursorId(i)}
+          className={`pagination-item ${i - 1 === cursorId ? "active" : ""}`}
+          onClick={() => setCursorId(i - 1)}
         >
           {i}
         </div>

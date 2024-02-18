@@ -16,10 +16,10 @@ export default function RelatedBook({ searchResult, displayedItems }) {
     <>
       <div className="related-book-container">
         {/* displayedItems가 정의되어 있고, 배열이면 map 함수를 사용하도록 변경 */}
-        {displayedItems.bookObject &&
-          Array.isArray(displayedItems.bookObject) &&
-          displayedItems.bookObject.length > 0 &&
-          displayedItems.bookObject.map((result, index) => (
+        {displayedItems &&
+          Array.isArray(displayedItems) &&
+          displayedItems.length > 0 &&
+          displayedItems.map((result, index) => (
             <div key={index} className="search-result">
               <div className="related-book-info">
                 <Link
