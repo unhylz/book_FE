@@ -10,6 +10,7 @@ import AcountModalContainer from "../../container/AcountModalContainer";
 import "./RelatedSentimentMore.scss";
 import { SentimentSearch } from "../../modules/api/search";
 import { UserContext } from "../../context/Login";
+import Pagination from "../BookDetail/components/pagination/Pagination";
 
 export default function RelatedSentimentMore() {
   const user_context = useContext(UserContext);
@@ -18,7 +19,8 @@ export default function RelatedSentimentMore() {
   const userId = user_context.user_data.id; //"2"; //임시 --------------
   const isLogin = user_context.user_data.isLogin;
 
-  const cursorId = "0";
+  const [cursorId, setCursorId] = useState(0);
+  const [pageNum, setPageNum] = useState(1);
 
   // 선택한 센티먼트 id와 title 변수
   const { content } = useParams();
@@ -33,6 +35,7 @@ export default function RelatedSentimentMore() {
 
   const [modalState, setModalState] = useState(null);
   const [modal, setModal] = useState(false);
+  const [Num, setNum] = useState(null);
 
   //console.log("content detail page: ", content);
 
@@ -49,7 +52,11 @@ export default function RelatedSentimentMore() {
     const fetchData = async () => {
       try {
         const data = await SentimentSearch(userId, cursorId, content);
+        const temp = (data.total_page_num - 1) * 7;
+        const num = await SentimentSearch(userId, temp, content);
+        setNum(num.cursorId);
         setSearchData(data);
+        setPageNum(data.total_page_num);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
@@ -63,9 +70,17 @@ export default function RelatedSentimentMore() {
   useEffect(() => {
     if (SearchData && SearchData) {
       console.log("검색 센티먼트 데이터:", SearchData);
-      setSearchNum(SearchData.sentimentObject.length);
     }
   }, [SearchData]);
+
+  useEffect(() => {
+    if (Num) {
+      console.log("==----검색 num 데이터:", Num);
+      setSearchNum(Num);
+    } else {
+      setSearchNum(0);
+    }
+  }, [Num]);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -97,10 +112,7 @@ export default function RelatedSentimentMore() {
 
     if (SearchData) {
       // 선택된 정렬 옵션에 따라 데이터를 정렬
-      const sortedData = sortData(
-        SearchData.sentimentObject,
-        selectedSortOption
-      );
+      const sortedData = sortData(SearchData.list, selectedSortOption);
       // 정렬된 데이터를 RelatedSentimentResults 컴포넌트에 전달
       setSortedSearchData(sortedData);
     }
@@ -172,7 +184,15 @@ export default function RelatedSentimentMore() {
                 />
               )}
             </div>
-            <p>페이지네이션 추가</p>
+            <div className="pagination-container">
+              {Array.isArray(SortedSearchData) && (
+                <Pagination
+                  setCursorId={setCursorId}
+                  cursorId={cursorId}
+                  pageNum={pageNum}
+                />
+              )}
+            </div>
           </div>
         </div>
 

@@ -63,10 +63,10 @@ export default function RelatedSentiment({
   return (
     <>
       <div className="related-sentiment-container">
-        {displayedItems.sentimentObject &&
-          Array.isArray(displayedItems.sentimentObject) &&
-          displayedItems.sentimentObject.length > 0 &&
-          displayedItems.sentimentObject.map((result) => (
+        {displayedItems &&
+          Array.isArray(displayedItems) &&
+          displayedItems.length > 0 &&
+          displayedItems.map((result) => (
             <div key={result.sentiment_id} className="search-result">
               <div className="info">
                 <Link

@@ -16,6 +16,7 @@ import { SentimentSearch } from "../../modules/api/search";
 import { topNavSearch } from "../../modules/api/search";
 import { UserContext } from "../../context/Login";
 import AcountModalContainer from "../../container/AcountModalContainer";
+import Pagination from "./components/pagination/Pagination";
 
 export default function BookDetail() {
   const user_context = useContext(UserContext);
@@ -24,7 +25,8 @@ export default function BookDetail() {
   const userId = user_context.user_data.id; //"2"; //임시 --------------
   const isLogin = user_context.user_data.isLogin;
 
-  const cursorId = "0"; // 센티먼트 커서 추후 수정 --------
+  const [cursorId, setCursorId] = useState(0);
+  const [pageNum, setPageNum] = useState(1);
 
   const [modalState, setModalState] = useState(null);
   const [modal, setModal] = useState(false);
@@ -35,6 +37,7 @@ export default function BookDetail() {
   const location = useLocation();
   const bookId = 1; //parseInt(id, 10);
   const displayedItems2 = sentimentDummy.slice(33, 36);
+
   const [SearchData, setSearchData] = useState(null);
   const [isAssessed, setIsAssessed] = useState(true);
   const [BookSearchData, setBookSearchData] = useState(null);
@@ -44,25 +47,25 @@ export default function BookDetail() {
       try {
         if (options === "전체검색") {
           const data = await topNavSearch(content, userId);
-          setBookSearchData(data.searchBookObject.bookObject[index]);
+          setBookSearchData(data.searchBookObject.list[index]);
         } else {
           const data = await BookSearch(userId, cursor_id, content);
 
           switch (options) {
             case "관련순":
               // "관련순"인 경우에는 데이터를 그대로 설정
-              setBookSearchData(data.bookData.bookObject[index]);
+              setBookSearchData(data.list[index]);
               break;
             case "별점순":
               // "별점순"인 경우에는 데이터를 별점순으로 정렬하여 설정
-              const sortedData = data.bookData.bookObject
+              const sortedData = data.list
                 .slice()
                 .sort((a, b) => b.avr_score - a.avr_score);
               setBookSearchData(sortedData[index]);
               break;
             default:
               // 다른 경우에는 기본적으로 데이터를 그대로 설정
-              setBookSearchData(data.bookData.bookObject[index]);
+              setBookSearchData(data.list[index]);
           }
 
           //setSearchData(data);
@@ -103,7 +106,7 @@ export default function BookDetail() {
     const fetchData = async () => {
       try {
         const data = await SentimentSearch(userId, cursorId, content);
-        setSearchData(data.sentimentObject);
+        setSearchData(data.list);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
@@ -135,13 +138,21 @@ export default function BookDetail() {
   }
 
   const handleWriteClick1 = () => {
-    //navigate("/write");
-    navigate("/bookwrite", { state: { bookTitle: book_title } });
+    if (isLogin) {
+      //navigate("/write");
+      navigate("/bookwrite", { state: { bookTitle: book_title } });
+    } else {
+      alert("로그인이 필요한 기능입니다.");
+    }
   };
 
   const handleWriteClick2 = () => {
-    alert("평가가 완료된 책입니다.");
-    //navigate("/write", { state: { bookTitle: book_title } });
+    if (isLogin) {
+      alert("평가가 완료된 책입니다.");
+      //navigate("/write", { state: { bookTitle: book_title } });
+    } else {
+      alert("로그인이 필요한 기능입니다.");
+    }
   };
 
   useEffect(() => {
@@ -297,7 +308,15 @@ export default function BookDetail() {
                 displayedItems={SearchData}
               />
             )}
-            <p>페이지네이션 추가</p>
+            <div className="pagination-container">
+              {Array.isArray(SearchData) && (
+                <Pagination
+                  setCursorId={setCursorId}
+                  cursorId={cursorId}
+                  pageNum={pageNum}
+                />
+              )}
+            </div>
           </div>
         </div>
 

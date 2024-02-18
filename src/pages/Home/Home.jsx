@@ -8,6 +8,8 @@ import Sentiment from "./components/sentiment/Sentiment";
 import Footer from "./components/footer/Footer";
 import AcountModalContainer from "../../container/AcountModalContainer";
 import { UserContext } from "../../context/Login";
+import { SentimentData } from "../../modules/api/search";
+import { FollowSentimentData } from "../../modules/api/search";
 import "./Home.scss";
 
 export default function Home() {
@@ -21,8 +23,38 @@ export default function Home() {
   const [modalState, setModalState] = useState(null);
   const [modal, setModal] = useState(false);
 
+  const [cursorId, setCursorId] = useState(1);
+  const [pageNum, setPageNum] = useState(1);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log(selectedButton);
+
+        if (selectedButton === "sentiment") {
+          const data = await SentimentData(cursorId);
+          setPageNum(data.result.total_page_num);
+        }
+        if (selectedButton === "follow") {
+          const data = await FollowSentimentData(userId, cursorId);
+          setPageNum(data.result.total_page_num);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [userId, selectedButton]);
+
+  useEffect(() => {
+    if (pageNum) {
+      console.log("pageNum data ?????:", pageNum);
+    }
+  }, [pageNum]);
+
   const handleButtonClick = (button) => {
-    if (!isLogin && userId === null && button === "follow") {
+    if (!isLogin && button === "follow") {
       alert("로그인이 필요한 기능입니다.");
     } else {
       setSelectedButton(button);
@@ -91,7 +123,14 @@ export default function Home() {
                 팔로우
               </button>
             </div>
-            <Sentiment userId={userId} selectedButton={selectedButton} />
+            <Sentiment
+              userId={userId}
+              selectedButton={selectedButton}
+              setCursorId={setCursorId}
+              cursorId={cursorId}
+              setPageNum={setPageNum}
+              pageNum={pageNum}
+            />
           </div>
         </div>
 
