@@ -19,12 +19,23 @@ export default function Notification() {
   const [modal, setModal] = useState(false);
 
   const user_context = useContext(UserContext);
+
   const userId = user_context.user_data.id;
   const isLoggedIn = user_context.user_data.isLogin;
 
+  console.log(user_context);
+  if (user_context && user_context.user_data) {
+  console.log("사용자 정보: ", user_context.user_data.id); 
+  } else {
+  console.log("사용자 데이터가 없습니다.");
+  }
+
   useEffect(() => {
+    const user_Id = user_context.user_data.id;
     axios
+
       .get(`users/${userId}/notifications`)
+
       .then((response) => {
         setNotificationsData(response.data);
         setIsNotified(true);
