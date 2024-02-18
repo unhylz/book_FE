@@ -114,8 +114,7 @@ export default function SentimentDetail() {
     const { id } = useParams();
 
     console.log(id);
-    //console.log(content.title);
-    //console.log(SentimentDetailDummy[id-1].title);
+
 
     return (
       <div>
