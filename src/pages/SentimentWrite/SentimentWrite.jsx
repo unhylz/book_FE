@@ -14,7 +14,7 @@ import searchIcon from "./search.png"
 import axios from "axios";
 import "./BookSearch.scss";
 
-function DecoModal({ isOpen, onClose, search }) {
+function DecoModal({ isOpen, onClose, search, setSelectedBook }) {
   const [issue, setIssue] = useState({
     title: "",
   });
@@ -22,6 +22,7 @@ function DecoModal({ isOpen, onClose, search }) {
   const [content, setContent] = useState("");
   const [searchContent, setSearchContent] = useState("");
   const [bookData, setBookData] = useState("");
+  //const [selectedBook, setSelectedBook] = useState("");
 
   const handleInputChange = (e) => {
     setContent(e.target.value);
@@ -35,6 +36,35 @@ function DecoModal({ isOpen, onClose, search }) {
     e.preventDefault();
     //onClose();
   };
+
+  const customModalStyles = {
+    content: {
+      border: "none",
+      maxWidth: "55%",
+      maxHeight: "75%",
+      margin: "auto",
+      alignContent: "center",
+    },
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+  };
+  function formatPublishYear(dateTimeString) {
+    //const dateTime = new Date(dateTimeString);
+    //const year = String(dateTime.getFullYear()).slice(-4);
+    const year = dateTimeString.slice(0, 4);
+    const month = dateTimeString.slice(4, 6);
+
+    return `${year}년 ${month}월`;
+  }
+  const hButtonClick=(index)=>{
+    console.log(index)
+    console.log("선택한 책이에요요요옹ㅇ", bookData[index].title);
+    if (bookData[index] && bookData[index].title) {
+      setSelectedBook(bookData[index].title);
+      onClose();
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,33 +86,6 @@ function DecoModal({ isOpen, onClose, search }) {
       console.log("검색 도서 데이터:", bookData[0].title);
     }
   }, [bookData]);
-
-  const customModalStyles = {
-    content: {
-      border: "none",
-      maxWidth: "55%",
-      maxHeight: "75%",
-      margin: "auto",
-      alignContent: "center",
-    },
-    overlay: {
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-    },
-  };
-  function formatPublishYear(dateTimeString) {
-    //const dateTime = new Date(dateTimeString);
-    //const year = String(dateTime.getFullYear()).slice(-4);
-    const year = dateTimeString.slice(0, 4);
-
-    return `${year}`;
-  }
-  function hButtonClick(search){
-    console.log(search);
-    search = search;
-    onClose();
-    // search = e.target.value;
-    // console.log("ㅎㅇ", e.target.value)
-  }
 
   return (
     <>
@@ -120,7 +123,7 @@ function DecoModal({ isOpen, onClose, search }) {
                       <div className="publish-info">
                         <p style={{fontSize:"16px"}}>
                           {result.author}{"(저자)"} | {result.publisher} |{" "}
-                          {formatPublishYear(result.pubdate)}년
+                          {formatPublishYear(result.pubdate)} 
                         </p>
                       </div>
                       <div className="vote-info">
@@ -129,7 +132,8 @@ function DecoModal({ isOpen, onClose, search }) {
                         <p className="vote-num">&nbsp; ({result.eval_num}명 평가)</p>
                       </div>
                     </div>
-                    <button className="select-book" onClick={hButtonClick}>선택</button>
+                    <button className="select-book" onClick={()=>hButtonClick(index)}>선택
+                    </button>
                   </div>
                 </div>
               ))}
@@ -142,9 +146,9 @@ function DecoModal({ isOpen, onClose, search }) {
 }
 
 export default function SentimentWrite() {
-  const location = useLocation();
-  const bookTitle = location.state ? location.state.bookTitle : null;
-  console.log("bookTitle: ", bookTitle);
+  // const location = useLocation();
+  // const bookTitle = location.state ? location.state.bookTitle : null;
+  // console.log("bookTitle: ", bookTitle);
 
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -157,6 +161,7 @@ export default function SentimentWrite() {
   const [ratingValid, setRatingValid] = useState(true);
   const [inputTouched, setinputTouched] = useState(false);
   const [imgFile, setImgFile] = useState("");
+  const [selectedBook, setSelectedBook] = useState(""); // 선택한 도서 제목 상태 추가
   const imgRef = useRef();
 
   //유저 콘텍스트-----------------------------------------------------------
@@ -377,11 +382,11 @@ export default function SentimentWrite() {
             <input
               className="search"
               placeholder="도서검색"
-              value={search}
+              value={selectedBook}
               onClick={hModalOpen}
               onChange={handleSearchChange}
             />
-            <DecoModal isOpen={isOpen} onClose={hCloseModal} search={search}/>
+            <DecoModal isOpen={isOpen} onClose={hCloseModal} search={search} setSelectedBook={setSelectedBook}/>
             {!searchValid && (
               <ModalFrame _handleModal={handleCloseModal}>
                 <h3>www.booksentimentleague.com 내용:</h3>
