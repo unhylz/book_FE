@@ -95,7 +95,9 @@ export default function Sentiment({
                   to={`/sentiment/main/${result.sentiment_id}/${result.sentiment_title}`}
                   className="book-link"
                 >
-                  <img src={result.book_image} alt={result.book_title} />
+                  <div className="info-img">
+                    <img src={result.book_image} alt={result.book_title} />
+                  </div>
                 </Link>
                 <div className="none-img">
                   <div className="detail-info">

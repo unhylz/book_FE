@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 //import { Link } from "react-router-dom";
 import "./RelatedNicknameResults.scss";
 import { NicknameFollow } from "../../../modules/api/search";
+import { UserContext } from "../../../context/Login";
 
 export default function RelatedNicknameResults({
   searchResult,
   displayedItems,
   userId,
 }) {
-  const isLogin = true; //추후 수정 ------
-  if (!isLogin) {
-    userId = "0";
-  }
+  const user_context = useContext(UserContext);
+  console.log("로그인 확인: ", user_context.user_data);
+
+  //const userId = user_context.user_data.id; //"2"; //임시 --------------
+  const isLogin = user_context.user_data.isLogin;
 
   const [InitialFollowStatus, setInitialFollowStatus] = useState([]);
   const [FollowStatus, setFollowStatus] = useState([]);
@@ -58,7 +60,7 @@ export default function RelatedNicknameResults({
   const handleFollowClick = async (follower, index) => {
     if (!isLogin) {
       // 로그인 상태가 아닌 경우
-      alert("로그인이 필요합니다.");
+      alert("로그인이 필요한 기능입니다.");
       return;
     }
 

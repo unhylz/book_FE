@@ -2,7 +2,7 @@
 // 나경 to 지현
 // 이 파일이 홈페이지에서 센티먼트 항목 클릭하면 연결 돼요!
 // 센티먼트 페이지 만들고 나중에 여기로 옮기면 될 것 같아요:)
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
@@ -26,7 +26,7 @@ import MasterIcon from "../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../assets/tiers/그랜드마스터.svg";
 import "./SentimentDetail.scss";
 import AcountModalContainer from "../../container/AcountModalContainer";
-
+import { UserContext } from "../../context/Login";
 import { SentimentIdSearch } from "../../modules/api/search";
 
 function formatDateTime(dateTimeString) {
@@ -46,6 +46,12 @@ export default function SentimentDetail() {
   console.log("검색어가 있으면 ", content);
   console.log(sentiment_title);
   */
+
+  const user_context = useContext(UserContext);
+  console.log("로그인 확인: ", user_context.user_data);
+
+  const userId = user_context.user_data.id;
+  const isLoggedIn = user_context.user_data.isLogin;
 
   const navigate = useNavigate();
   const { content, id, sentiment_title } = useParams();

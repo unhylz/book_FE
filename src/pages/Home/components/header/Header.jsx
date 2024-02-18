@@ -1,5 +1,5 @@
 // Header.jsx
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BSL_logo from "../../../../assets/logos/BSL_logo.svg";
 import topSearch from "../../../../assets/icons/topSearch.svg";
@@ -13,6 +13,8 @@ import { UserContext } from "../../../../context/Login";
 //import LoginContext from "../../../../modules/api/login_context";
 import "./Header.scss";
 import { postLogout } from "../../../../modules/api/account.js";
+import { UnreadNotification } from "../../../../modules/api/search";
+import { MyPageProfile } from "../../../../modules/api/search";
 
 export default function Header({
   onLogoClick,
@@ -28,9 +30,41 @@ export default function Header({
   const user_context = useContext(UserContext);
   console.log("로그인 확인: ", user_context.user_data);
 
-  const userId = user_context.user_data.id; //"2"; //임시 --------------
+  const userId = user_context.user_data.id;
   const isLoggedIn = user_context.user_data.isLogin;
   const [isNotified, setIsNotified] = useState(false); //Notification 알람처리
+
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await UnreadNotification(userId);
+        const profile = await MyPageProfile(userId);
+        setProfile(profile[0]);
+        setUnreadNotificationCount(data.unreadCount);
+      } catch (error) {
+        console.error("데이터 가져오기 오류 - 프로필:", error);
+      }
+    };
+
+    if (user_context.user_data.isLogin) {
+      fetchData();
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (unreadNotificationCount) {
+      console.log(
+        "===== unreadNotificationCount 데이터:",
+        unreadNotificationCount
+      );
+    }
+    if (profile) {
+      console.log("===== profile 데이터:", profile);
+    }
+  }, [unreadNotificationCount, profile]);
 
   const handleLogoClick = () => {
     // 로고 클릭 시 홈으로 이동하면서 sentiment-btn이 선택된 상태로 변경
@@ -137,7 +171,9 @@ export default function Header({
         <input
           type="input"
           ref={nowContent}
-          value={content === "main" ? "" : content}
+          value={
+            content === "main" || content === "notification" ? "" : content
+          }
           onChange={handleInputChange}
           placeholder="책 제목, 센티먼트, 유저를 검색하세요"
           onKeyUp={handleInputKeyUp}
@@ -172,7 +208,7 @@ export default function Header({
               className="notification-btn"
               onClick={handleNotificationClick}
             >
-              {isNotified && (
+              {unreadNotificationCount > 0 && (
                 <>
                   <img
                     src={bellIcon}
@@ -181,7 +217,7 @@ export default function Header({
                   />
                 </>
               )}
-              {!isNotified && (
+              {unreadNotificationCount <= 0 && (
                 <>
                   <img
                     src={notificationIcon}
@@ -196,18 +232,20 @@ export default function Header({
               <img src={logoutIcon} alt="Logout" className="logout-icon" />
               Logout
             </button>
-            <button className="mypage-btn" onClick={handleMypageClick}>
-              <div className="icon-container">
-                <div className="image-container">
-                  <img
-                    src={`/user_image_dummy/${image}`}
-                    alt="MyPage"
-                    className="mypage-icon"
-                  />
+            {isLoggedIn && profile && (
+              <button className="mypage-btn" onClick={handleMypageClick}>
+                <div className="icon-container">
+                  <div className="image-container">
+                    <img
+                      src={profile.profile_image}
+                      alt="MyPage"
+                      className="mypage-icon"
+                    />
+                  </div>
                 </div>
-              </div>
-              {userName}
-            </button>
+                <div className="profile-nickname">{profile.nickname}</div>
+              </button>
+            )}
           </>
         )}
       </div>
