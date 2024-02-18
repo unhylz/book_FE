@@ -4,12 +4,12 @@ import notification_icon from '../../../assets/icons/gravity-ui-comment.svg';
 import tierIcon from "../../../assets/icons/solar-ranking-linear.svg"
 import './notice.scss';
 
-export default function NotificationItem({ read_at, title, date, content }) {
+export default function NotificationItem({ read_at, title, date, content, sentiment_id }) {
   const navigate = useNavigate();
 
   const handleItemClick = () => {
     if (title.includes("댓글")) {
-      navigate(`/sentiment/${read_at}/${title}`);
+      navigate(`/sentiment/${sentiment_id}/${read_at}`);
     } else if (title.includes("티어")) {
       navigate("/mypage"); 
     };

@@ -74,99 +74,100 @@ export default function MypageScrap() {
 
 
     return (
-        <div>
-            <Header onLogoClick={handleButtonClick} setModalState={setModalState} />
-            <div className="mypage-wrapper">
-                <div className="left">
-                    <SideAd />
-                </div>
-                <div className="main-container">
-                <strong className="Title">센티멘트</strong>
-                <div className="mypage-container">
-                    <div className="search-container">
-                    {sentimentData && sentimentData.map((result) => (
-                    <div key={result.sentiment_id} className="search-result"> 
-                    <div className="info">
-                    <Link
-                      to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
-                      className="book-link"
-                    >
-                      <img
-                        src={`/bookcover_dummy/${result.book_image}`}
-                        alt={result.book_title}
-                      />
-                    </Link>
-                    <div className="none-img">
-                      <div className="detail-info">
+      <div>
+        <Header onLogoClick={handleButtonClick} setModalState={setModalState} />
+        <div className="mypage-wrapper">
+          <div className="left">
+            <SideAd />
+          </div>
+          <div className="main-container">
+            <strong className="Title">센티멘트</strong>
+            <div className="mypage-container">
+              <div className="search-container">
+                {sentimentData && sentimentData.length > 0 ? (
+                  sentimentData.map((result) => (
+                    <div key={result.sentiment_id} className="search-result">
+                      <div className="info">
                         <Link
                           to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
                           className="book-link"
                         >
-                          <h3>{result.sentiment_title}</h3>
+                          <img
+                            src={`/bookcover_dummy/${result.book_image}`}
+                            alt={result.book_title}
+                          />
                         </Link>
-                        <p>
-                          <strong>{result.book_title}</strong> ({result.author}/
-                          {result.publisher})
-                        </p>
-                      </div>
-                      <div className="additional-info">
-                        <div className="nickname">
-                          <p>닉네임: {result.nickname} </p>
+                        <div className="none-img">
+                          <div className="detail-info">
+                            <Link
+                              to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
+                              className="book-link"
+                            >
+                              <h3>{result.sentiment_title}</h3>
+                            </Link>
+                            <p>
+                              <strong>{result.book_title}</strong> ({result.author}/
+                              {result.publisher})
+                            </p>
+                          </div>
+                          <div className="additional-info">
+                            <div className="nickname">
+                              <p>닉네임: {result.nickname} </p>
+                            </div>
+                            <div className="tier">
+                              <p>티어: </p>
+                              <img
+                                src={getTierIcon(result.tier)}
+                                alt="result.tier"
+                                className="tier-icon"
+                              />
+                            </div>
+                            <div className="likes">
+                              <img src={likeIcon} alt="like" className="like-icon" />
+                              <p>{result.likes}</p>
+                            </div>
+                            <div className="comments">
+                              <img
+                                src={commentIcon}
+                                alt="comment"
+                                className="comment-icon"
+                              />
+                              <p>{result.comments}</p>
+                            </div>
+                            <div className="bookmarks">
+                              <img
+                                src={boockmarkIcon}
+                                alt="bookmark"
+                                className="bookmark-icon"
+                              />
+                              <p>{result.bookmarks}</p>
+                            </div>
+                            <p className="datetime">{result.datetime}</p>
+                          </div>
                         </div>
-                        <div className="tier">
-                          <p>티어: </p>
-                          <img
-                            src={getTierIcon(result.tier)}
-                            alt="result.tier"
-                            className="tier-icon"
-                          />
-                        </div>
-                        <div className="likes">
-                          <img src={likeIcon} alt="like" className="like-icon" />
-                          <p>{result.likes}</p>
-                        </div>
-                        <div className="comments">
-                          <img
-                            src={commentIcon}
-                            alt="comment"
-                            className="comment-icon"
-                          />
-                          <p>{result.comments}</p>
-                        </div>
-                        <div className="bookmarks">
-                          <img
-                            src={boockmarkIcon}
-                            alt="bookmark"
-                            className="bookmark-icon"
-                          />
-                          <p>{result.bookmarks}</p>
-                        </div>
-                        <p className="datetime">{formatDateTime(result.datetime)}</p>
                       </div>
                     </div>
-                  </div>
-                </div>
-                
-              ))}
-            </div>
+                  ))
+                ) : (
+                  <p>작성한 센티멘트가 없습니다. 센티멘트를 작성해주세요!</p>
+                )}
+              </div>
             </div>
             <div className="pagination-container">
-        <div className="pagination">
-        <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        </div>
-      </div>
+              <div className="pagination">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            </div>
           </div>
           <div className="right">
-          <SideAd />
+            <SideAd />
           </div>
-          <div>
-    </div>
-          </div>
-          <Footer />
         </div>
+        <Footer />
+      </div>
     );
-}
+}    

@@ -6,6 +6,7 @@ import "./mypage.scss";
 import "../mypage/mypage_follower.scss";
 import AcountModalContainer from "../../../../container/AcountModalContainer";
 import { UserContext } from "../../../../context/Login";
+import xIcon from "../../../../assets/icons/xIcon.svg"
 
 export default function Mypage_follower() {
   const [followers, setFollowers] = useState([]);
@@ -42,12 +43,13 @@ export default function Mypage_follower() {
   }, []);
 
   const handleFollowClick = async (follower) => {
+    const user_Id = user_context.user_data.id;
     if (!follower) {
       console.error("유효하지 않은 객체임");
       return;
     }
     try {
-      const response = await axios.post(`/users/2/follow`, {
+      const response = await axios.post(`/users/${user_Id}/follow`, {
         followingId: follower.user_id, // user_id를 사용
         isFollow: follower.follow_status === "1" ? 0 : 1,
       });
@@ -65,6 +67,9 @@ export default function Mypage_follower() {
         }
         return f;
       }));
+  
+      // 로그 메시지 업데이트
+      console.log(`${follower.nickname}의 팔로우 상태가 변경되었습니다.`);
     } catch (error) {
       console.error("팔로우 요청 중 오류 발생:", error);
     }
@@ -101,8 +106,11 @@ export default function Mypage_follower() {
           <div className="user-list">
             <h2>팔로워</h2>
             {followers.length === 0 ? (
+              <div className="noSentiment">
+              <img src={xIcon}/>
               <p>팔로워가 없습니다.</p>
-            ) : (
+              </div>
+            ) : 
               followers.map((follower, index) => (
                 <div key={index} className="follower-card">
                   <img
@@ -123,8 +131,7 @@ export default function Mypage_follower() {
                   {follower.follow_status === "1" ? "팔로우" : "팔로잉"}
                 </button>
                 </div>
-              ))
-            )}
+              ))}
           </div>
         </div>
 

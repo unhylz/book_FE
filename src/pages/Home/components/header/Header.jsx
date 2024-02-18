@@ -10,7 +10,6 @@ import bellIcon from "../../../../assets/icons/bell.svg";
 import logoutIcon from "../../../../assets/icons/logout.svg";
 import { userDummy } from "./userDummy.js";
 import { UserContext } from "../../../../context/Login";
-//import LoginContext from "../../../../modules/api/login_context";
 import "./Header.scss";
 import { postLogout } from "../../../../modules/api/account.js";
 
@@ -28,7 +27,7 @@ export default function Header({
   const user_context = useContext(UserContext);
   console.log("로그인 확인: ", user_context.user_data);
 
-  const userId = user_context.user_data.id; //"2"; //임시 --------------
+  const userId = user_context.user_data.id; 
   const isLoggedIn = user_context.user_data.isLogin;
   const [isNotified, setIsNotified] = useState(false); //Notification 알람처리
 

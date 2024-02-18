@@ -8,8 +8,8 @@ import axios from "axios";
 import { UserContext } from "../../../context/Login";
 
 export default function Notification() {
-  const [comments, setComments] = useState([]); // 댓글 상태
-  const [notificationsData, setNotificationsData] = useState([]); // 알림 상태
+  const [comments, setComments] = useState([]); 
+  const [notificationsData, setNotificationsData] = useState([]); 
   const [isNotified, setIsNotified] = useState(false);
   const [userState, setUserstate] = useState(1);
 
@@ -79,7 +79,7 @@ export default function Notification() {
             {notificationsData.map((notification, index) => (
               <NotificationItem
                 key={index}
-                id={notification.id}
+                id={notification.sentiment_id}
                 title={notification.title}
                 date={notification.date}
                 content={notification.content}
