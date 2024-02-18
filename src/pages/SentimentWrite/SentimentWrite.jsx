@@ -7,61 +7,53 @@ import Modal from "react-modal";
 import { Link, useNavigate } from "react-router-dom";
 import BookLogo from "./BookLogo.png";
 import ImgAdd from "./AddImg.png";
-import axios from "axios";
 import ModalFrame from "./Modal";
 import { UserContext } from "../../context/Login";
 import { SentimentBookSearch } from "./api";
+import searchIcon from "./search.png"
+import axios from "axios";
+import "./BookSearch.scss";
 
-function DecoModal({ isOpen, onClose }) {
-  const navigate = useNavigate();
+function DecoModal({ isOpen, onClose, search }) {
   const [issue, setIssue] = useState({
     title: "",
   });
 
   const [content, setContent] = useState("");
+  const [searchContent, setSearchContent] = useState("");
   const [bookData, setBookData] = useState("");
-  const goToSearchPage = () => {
-    if (content.trim() === "") {
-      alert("검색어를 입력해주세요.");
-    } else {
-      //도서 API 요청
-      setContent(content);
-    }
-  };
 
   const handleInputChange = (e) => {
     setContent(e.target.value);
   };
-
-  const handleInputKeyUp = (e) => {
-    if (e.key === "Enter") {
-      goToSearchPage();
-    }
+  const handleSearch = () => {
+    setSearchContent(content);
+    console.log(searchContent)
   };
 
   const hSubmit = (e) => {
     e.preventDefault();
-    onClose();
+    //onClose();
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await SentimentBookSearch(content);
-        setBookData(data);
+        const data = await SentimentBookSearch(searchContent);
+        setBookData(data.list);
+        console.log(bookData)
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
     };
-
-    if (content) {
+    if (searchContent) {
       fetchData();
     }
-  }, [content]);
+  }, [searchContent]);
 
   useEffect(() => {
-    if (bookData && bookData.searchBookObject) {
-      console.log("검색 도서 데이터:", bookData.searchBookObject);
+    if (bookData && bookData[0].title) {
+      console.log("검색 도서 데이터:", bookData[0].title);
     }
   }, [bookData]);
 
@@ -77,27 +69,73 @@ function DecoModal({ isOpen, onClose }) {
       backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
   };
+  function formatPublishYear(dateTimeString) {
+    //const dateTime = new Date(dateTimeString);
+    //const year = String(dateTime.getFullYear()).slice(-4);
+    const year = dateTimeString.slice(0, 4);
+
+    return `${year}`;
+  }
+  function hButtonClick(search){
+    console.log(search);
+    search = search;
+    onClose();
+    // search = e.target.value;
+    // console.log("ㅎㅇ", e.target.value)
+  }
 
   return (
     <>
-      <Modal isOpen={isOpen} style={customModalStyles}>
+      <Modal isOpen={isOpen} style={customModalStyles} search={search}>
         <form onSubmit={hSubmit}>
           <div className="modal-box">
             <p className="search-title" style={{ fontWeight: "bold" }}>
               도서검색 API
             </p>
-            <input
-              style={{ borderRadius: "7px" }}
-              value={content}
-              className="search-input"
-              placeholder="책 제목, 출판사, 저자를 검색해보세요."
-              onChange={handleInputChange}
-            ></input>
-            <button onClick={goToSearchPage}>검색</button>
+            <div style={{borderRadius:'7px'}} className="search-input-box">
+              <input
+                value={content}
+                className="search-input"
+                placeholder="책 제목, 출판사, 저자를 검색해보세요."
+                onChange={handleInputChange}
+              ></input>
+              <img className="search-icon" src={searchIcon} alt="검색 아이콘" style={{width:"28px", height:"28px"}} onClick={handleSearch}></img>
+            </div>
           </div>
         </form>
-        <button onClick={onClose}>Close</button>
-        <div>{bookData && bookData.searchBookObject()}</div>
+        <div>
+          {bookData && bookData[0].title && (
+            <div className="book-results">
+              <div className="sort">정확도순</div>
+              {bookData.map((result, index) => (
+                <div key={index} className="search-result">
+                  <div className="book-info">
+                    <img
+                      src={result.image}
+                      alt={result.title}
+                      className="book-image"
+                    />
+                    <div className="none-img-detail-info">
+                      <h2>{result.title}</h2>
+                      <div className="publish-info">
+                        <p style={{fontSize:"16px"}}>
+                          {result.author}{"(저자)"} | {result.publisher} |{" "}
+                          {formatPublishYear(result.pubdate)}년
+                        </p>
+                      </div>
+                      <div className="vote-info">
+                        <p className="vote-avg">유저평점: &nbsp;</p>
+                        <p className="vote-avg">{result.avr_score}</p>
+                        <p className="vote-num">&nbsp; ({result.eval_num}명 평가)</p>
+                      </div>
+                    </div>
+                    <button className="select-book" onClick={hButtonClick}>선택</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </Modal>
     </>
   );
@@ -145,7 +183,7 @@ export default function SentimentWrite() {
     setContentValid(!!e.target.value);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setinputTouched(true);
 
@@ -163,9 +201,34 @@ export default function SentimentWrite() {
       return;
     }
 
-    if (content.trim() === "") {
+    if (content.trim() === "" || content.length < 20) {
       setContentValid(false);
       return;
+    }
+
+    try {
+      // 모든 유효성 검사를 통과한 경우에만 API에 데이터를 전송
+      const user_id = user_context.user_data.id; // 사용자 ID
+      const data = {
+        title: title,
+        search: search,
+        content: content,
+        rating: rating,
+        userId: user_id
+      };
+  
+      // API 요청
+      const response = await axios.post(`/sentiments/${user_id}/write`, data);
+      console.log('응답 데이터:', response.data);
+  
+      // API 요청이 성공했을 때 추가 작업 수행
+      // 예를 들어, 사용자에게 성공 메시지를 보여주거나 페이지를 리디렉션할 수 있습니다.
+      alert("api 전송 성공")
+  
+    } catch (error) {
+      console.error('글 등록 오류:', error);
+      // API 요청이 실패한 경우 에러 처리
+      // 예를 들어, 사용자에게 에러 메시지를 보여줄 수 있습니다.
     }
   };
 
@@ -175,7 +238,7 @@ export default function SentimentWrite() {
 
   const handleCloseModal = () => {
     setTitleValid(true); // 모달이 닫힐 때 유효성 상태를 초기화
-    // setSearchValid(true);
+    setSearchValid(true);
     setContentValid(true);
     setRatingValid(true);
   };
@@ -189,12 +252,12 @@ export default function SentimentWrite() {
   };
 
   //유효성 검사
-  const inputValueIsValid =
-    !titleValid &&
-    !searchValid &&
-    rating === 0 &&
-    !contentValid &&
-    inputTouched;
+  // const inputValueIsValid =
+  //   !titleValid &&
+  //   !searchValid &&
+  //   rating === 0 &&
+  //   !contentValid &&
+  //   inputTouched;
 
   //이미지 미리보기
   const handleImageChange = () => {
@@ -211,9 +274,47 @@ export default function SentimentWrite() {
     title: "",
   });
 
-  const saveSentiment = async () => {
-    //await axios.post(`/sentiments/${user_id}/write`);
-  };
+//========================= API 연동 ================================
+
+  // const saveSentiment = async () => {
+  //   try {
+  //     const user_id = user_context.user_data.id; // 사용자 ID
+  //     const data = {
+  //       title: title,
+  //       search: search,
+  //       content: content,
+  //       rating: rating,
+  //       userId: user_id // 사용자 ID를 요청에 포함시킴
+  //     };
+
+  //     // POST 요청을 보내고 응답을 기다림
+  //     const response = await axios.post('/sentiments/write', data);
+
+  //     // 응답 확인 및 처리
+  //     console.log('응답 데이터:', response.data);
+
+  //     // 여기서 필요한 추가 작업 수행
+  //   } catch (error) {
+  //     console.error('글 등록 오류:', error);
+  //   }
+  // };
+  // const handleWriteButtonClick = async (e) => {
+  //   e.preventDefault();
+  //   await saveSentiment();
+  //   // API 요청이 완료된 후에 수행해야 할 작업이 있다면 여기에 추가할 수 있습니다.
+  // };
+
+  const modalstyle ={
+    width: "90px",
+    backgroundColor: "#5FCB75",
+    color: "white",
+    fontSize: "20px",
+    borderRadius: "30px",
+    padding: "10px",
+    border: "none",
+    marginLeft: "72%",
+    cursor: "pointer",
+  }
 
   return (
     <form onSubmit={handleFormSubmit}>
@@ -226,7 +327,7 @@ export default function SentimentWrite() {
           />
         </Link>
         <div className="btn-user-container">
-          <button className="write-btn" onSubmit={handleFormSubmit}>
+          <button type="submit" className="write-btn" >
             작성하기
           </button>
           {/* 사용자 정보 들어가야 함 */}
@@ -266,17 +367,7 @@ export default function SentimentWrite() {
               <button
                 className="close"
                 onClick={handleCloseModal}
-                style={{
-                  width: "90px",
-                  backgroundColor: "#5FCB75",
-                  color: "white",
-                  fontSize: "20px",
-                  borderRadius: "30px",
-                  padding: "10px",
-                  border: "none",
-                  marginLeft: "72%",
-                  cursor: "pointer",
-                }}
+                style={ modalstyle }
               >
                 확인
               </button>
@@ -288,8 +379,24 @@ export default function SentimentWrite() {
               placeholder="도서검색"
               value={search}
               onClick={hModalOpen}
+              onChange={handleSearchChange}
             />
-            <DecoModal isOpen={isOpen} onClose={hCloseModal} />
+            <DecoModal isOpen={isOpen} onClose={hCloseModal} search={search}/>
+            {!searchValid && (
+              <ModalFrame _handleModal={handleCloseModal}>
+                <h3>www.booksentimentleague.com 내용:</h3>
+                <div style={{ fontWeight: "bold", marginBottom: "55px" }}>
+                  도서를 선택해주세요.
+                </div>
+                <button
+                  className="close"
+                  onClick={handleCloseModal}
+                  style={ modalstyle }
+                >
+                  확인
+                </button>
+              </ModalFrame>
+            )}
             <div className="rating-box">
               <div className="star">
                 {[...Array(rating)].map((a, i) => (
@@ -329,17 +436,7 @@ export default function SentimentWrite() {
                   <button
                     className="close"
                     onClick={handleCloseModal}
-                    style={{
-                      width: "90px",
-                      backgroundColor: "#5FCB75",
-                      color: "white",
-                      fontSize: "20px",
-                      borderRadius: "30px",
-                      padding: "10px",
-                      border: "none",
-                      marginLeft: "72%",
-                      cursor: "pointer",
-                    }}
+                    style={ modalstyle }
                   >
                     확인
                   </button>
@@ -370,17 +467,7 @@ export default function SentimentWrite() {
                 <button
                   className="close"
                   onClick={handleCloseModal}
-                  style={{
-                    width: "90px",
-                    backgroundColor: "#5FCB75",
-                    color: "white",
-                    fontSize: "20px",
-                    borderRadius: "30px",
-                    padding: "10px",
-                    border: "none",
-                    marginLeft: "72%",
-                    cursor: "pointer",
-                  }}
+                  style={modalstyle}
                 >
                   확인
                 </button>

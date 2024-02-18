@@ -39,7 +39,7 @@ function DecoModal({isOpen, onClose}) {
         <>
         <Modal isOpen={isOpen} style={customModalStyles}>
             <form onSubmit={hSubmit}>
-                <div className='modal-box'>
+                <div className='modal-box1'>
                     <p className='search-title'>도서검색 API</p>
                     <input style={{borderRadius:'7px'}} className='search-input' placeholder='책 제목, 출판사, 저자를 검색해보세요.'></input>
                 </div>

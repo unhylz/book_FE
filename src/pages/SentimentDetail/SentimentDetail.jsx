@@ -9,7 +9,6 @@ import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
 import CommentItem from "./Comment/Comment";
 import ModalFrame from "../SentimentWrite/Modal";
-import axios from "axios";
 import likeBlackIcon from "../../assets/icons/like_black.png";
 import bookmarkBlackIcon from "../../assets/icons/bookmark_black.png";
 import editIcon from "../../assets/icons/edit_Img.png";
@@ -29,6 +28,16 @@ import "./SentimentDetail.scss";
 import AcountModalContainer from "../../container/AcountModalContainer";
 
 import { SentimentIdSearch } from "../../modules/api/search";
+
+function formatDateTime(dateTimeString) {
+  const year = dateTimeString.slice(6, 10);
+  const month = dateTimeString.slice(0, 2);
+  const day = dateTimeString.slice(3, 5);
+  const hours = dateTimeString.slice(12, 14);
+  const minutes = dateTimeString.slice(15, 17);
+
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
+}
 
 export default function SentimentDetail() {
   // 선택한 센티먼트 id와 title 변수
@@ -115,8 +124,7 @@ export default function SentimentDetail() {
     const { id } = useParams();
 
     console.log(id);
-    //console.log(content.title);
-    //console.log(SentimentDetailDummy[id-1].title);
+
 
     return (
       <div>
@@ -133,7 +141,7 @@ export default function SentimentDetail() {
                     {SearchData[0].sentiment.book_title}
                   </div>
                   <div className="book-author">
-                    {SearchData[0].sentiment.author}
+                    {SearchData[0].sentiment.author} | {SearchData[0].sentiment.publisher}
                   </div>
                 </div>
                 <div className="writer-info-box">
@@ -154,7 +162,7 @@ export default function SentimentDetail() {
                       />
                     </div>
                     <div className="date">
-                      {SearchData[0].sentiment.created_at}
+                      {formatDateTime(SearchData[0].sentiment.created_at)}
                     </div>
                   </div>
                 </div>

@@ -7,6 +7,8 @@
 @import "../../lib/scss/BSL.scss";
 
 
+//============================헤더=========================
+
 
 .header-container {
 	height: 120px;
@@ -40,29 +42,44 @@
 	}
 }
 
-
+//=============================모달===================================
 
 
 .modal-box{
 	justify-content: center;
 	align-content: center;
 	.search-title{
-			font-size: 34px;
-			text-align: center;
+		font-size: 34px;
+		text-align: center;
 	}
-	.search-input{
-			width: 80%;
-			height: 40px;
-			padding-left: 10px;
-			border: 3px solid #5fcb75;
+	.search-input-box{
+		width: 80%;
+		height: 40px;
+		border: 3px solid #5fcb75;
+		font-size: 18px;
+		margin-left: 10%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-evenly;
+		.search-input {
+			width: 90%;
+			border: none;
+			height: 32px;
 			font-size: 18px;
-			margin-left: 10%;
+		}
+		.search-input:focus{
+			outline: none;
+		}
+		.search-icon {
+			display: flex;
+		}
 	}
 }
 
 
 
-
+//===============================글쓰기================================
 
 
 .write{
@@ -97,6 +114,9 @@
 				border-radius: 10px;
 			}
 		}
+		.title:focus {
+			outline: none;
+		}
 		.search-rating-box{
 			display: flex;
 			flex-direction: row;
@@ -109,6 +129,9 @@
 				background-color: #F8F8F8;
 				padding-left: 25px;
 				font-size: 24px;
+			}
+			.search:focus {
+				outline: none;
 			}
 			.rating-box{
 				width: 25%;
@@ -137,6 +160,9 @@
 			font-size: 24px;
 			padding-left: 25px;
 			margin-top: 25px;
+		}
+		.input_box:focus {
+			outline: none;
 		}
 	}
 }
