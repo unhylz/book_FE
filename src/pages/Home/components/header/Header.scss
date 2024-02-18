@@ -184,6 +184,12 @@
 
       margin-left: 30px;
 
+      .profile-nickname {
+        //border: 2px dashed red;
+        min-width: 70px;
+        margin-top: 3px;
+      }
+
       .icon-container {
         position: relative;
         display: inline-block;
