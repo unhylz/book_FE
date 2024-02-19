@@ -28,6 +28,8 @@ import "./SentimentDetail.scss";
 import AcountModalContainer from "../../container/AcountModalContainer";
 import { UserContext } from "../../context/Login";
 import { SentimentIdSearch } from "../../modules/api/search";
+import { PiStarFill, PiStarLight } from "react-icons/pi";
+import axios from 'axios';
 
 function formatDateTime(dateTimeString) {
   const year = dateTimeString.slice(6, 10);
@@ -50,12 +52,13 @@ export default function SentimentDetail() {
   const user_context = useContext(UserContext);
   console.log("로그인 확인: ", user_context.user_data);
 
-  const userId = user_context.user_data.id;
+  const user_id = user_context.user_data.id;
   const isLoggedIn = user_context.user_data.isLogin;
 
   const navigate = useNavigate();
   const { content, id, sentiment_title } = useParams();
   const [SearchData, setSearchData] = useState(null);
+  const [sentimentData, setSentimentData] = useState("");
 
   const [modalState, setModalState] = useState(null);
   const [modal, setModal] = useState(false);
@@ -79,19 +82,15 @@ export default function SentimentDetail() {
       try {
         const data = await SentimentIdSearch(id);
         setSearchData(data);
+        setSentimentData(data[0].sentiment);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
     };
 
     fetchData();
-  }, [id]);
+  }, []);
 
-  useEffect(() => {
-    if (SearchData && SearchData[0].sentiment) {
-      console.log("센티먼트 데이터 확인용 33:", SearchData[0].sentiment);
-    }
-  }, [SearchData]);
 
   //티어 아이콘 색상 변경용
   const getTierIcon = (tier) => {
@@ -118,11 +117,35 @@ export default function SentimentDetail() {
   const [isRecommand, setIsRecommand] = useState(false);
   const [isScrap, setIsScrap] = useState(false);
 
-  const handleRecommand = () => {
-    setIsRecommand(!isRecommand);
+  const handleRecommand = async () => {
+    if(isLoggedIn){
+      if(user_id === SearchData[0].sentiment.user_id) {
+        alert("본인 센티먼트는 추천할 수 없습니다.")
+      }
+      else {
+        setIsRecommand(!isRecommand);
+        const response = await axios.post(`/users/${user_id}/like/sentiment/${id}`);
+        console.log("추천 성공", response.data)
+      }
+    }
+    else {
+      alert("로그인 후 가능합니다.")
+    }
   };
-  const handleScrap = () => {
-    setIsScrap(!isScrap);
+  const handleScrap = async () => {
+    if(isLoggedIn){
+      if(user_id === SearchData[0].sentiment.user_id) {
+        alert("본인 센티먼트는 스크랩할 수 없습니다.")
+      }
+      else {
+        setIsScrap(!isScrap);
+      const response = await axios.post(`/users/${user_id}/scrap/${id}`);
+      console.log("스크랩 성공", response.data)
+      }
+    }
+    else {
+      alert("로그인 후 가능합니다")
+    }
   };
 
   //상단 컴포넌트
@@ -151,11 +174,16 @@ export default function SentimentDetail() {
                   </div>
                 </div>
                 <div className="writer-info-box">
-                  <img
+                  {(SearchData[0].sentiment.profile_image === "기본 프로필") && 
+                    <img src={userImg} alt="userImg" className="profile-image" />
+                  }
+                  {!(SearchData[0].sentiment.profile_image === "기본 프로필") && 
+                    <img
                     src={SearchData[0].sentiment.profile_image}
                     alt="userImg"
                     className="profile-image"
                   />
+                  }
                   <div className="nick-date-box">
                     <div className="nickname-tier">
                       <div className="nickname">
@@ -181,6 +209,15 @@ export default function SentimentDetail() {
                     alt="Book Cover"
                   />
                   <div className="rating">
+                    <div className="star">
+                      {[...Array(Math.floor(SearchData[0].sentiment.score))].map((_, i) => (
+                        <PiStarFill
+                          color="#5FCB75"
+                          className="star-lg"
+                          key={i}
+                        />
+                      ))}
+                    </div>
                     {SearchData[0].sentiment.score.toFixed(1)}
                   </div>
                 </div>
@@ -223,70 +260,75 @@ export default function SentimentDetail() {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
+      <>
+      {SearchData && SearchData[0].sentiment && (
       <div id="detail-bottom">
-        <div className="update-delete-box">
-          <div
-            className="update-button"
-            onClick={() => {
-              navigate(`/editsentiment/${id}`);
-            }}
-          >
-            <img src={editIcon} alt="editIcon" className="edit-icon" />
-            <div className="edit-text">수정하기</div>
+        {isLoggedIn && (user_id === SearchData[0].sentiment.user_id) && (
+          <div className="update-delete-box">
+            <div
+              className="update-button"
+              onClick={() => {
+                navigate(`/editsentiment/${id}`, {state: { id }});
+              }}
+            >
+              <img src={editIcon} alt="editIcon" className="edit-icon" />
+              <div className="edit-text">수정하기</div>
+            </div>
+            <div
+              className="delete-button"
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              <img src={deleteIcon} alt="deleteIcon" className="delete-icon" />
+              <div className="delete-text">삭제하기</div>
+            </div>
+            {isOpen && (
+              <ModalFrame>
+                <h3>www.booksentimentleague.com 내용:</h3>
+                <div style={{ fontWeight: "bold", marginBottom: "55px" }}>
+                  정말 삭제하시겠습니까?
+                </div>
+                <button
+                  className="close"
+                  onClick={async () => {
+                    setIsOpen(false);
+                    await axios.delete(`/sentiments/${user_id}/delete/${id}`);
+                    navigate(`/`);
+                  }}
+                  style={{
+                    width: "90px",
+                    backgroundColor: "#5FCB75",
+                    color: "white",
+                    fontSize: "20px",
+                    borderRadius: "30px",
+                    padding: "10px",
+                    paddingTop: "none",
+                    border: "none",
+                    marginLeft: "72%",
+                    cursor: "pointer",
+                  }}
+                >
+                  확인
+                </button>
+              </ModalFrame>
+            )}
           </div>
-          <div
-            className="delete-button"
-            onClick={() => {
-              setIsOpen(true);
-            }}
-          >
-            <img src={deleteIcon} alt="deleteIcon" className="delete-icon" />
-            <div className="delete-text">삭제하기</div>
-          </div>
-          {isOpen && (
-            <ModalFrame>
-              <h3>www.booksentimentleague.com 내용:</h3>
-              <div style={{ fontWeight: "bold", marginBottom: "55px" }}>
-                정말 삭제하시겠습니까?
-              </div>
-              <button
-                className="close"
-                onClick={async () => {
-                  setIsOpen(false);
-                  //await axios.delete(`/sentiments/${user_id}/delete/${id}`);
-                  navigate(`/`);
-                }}
-                style={{
-                  width: "90px",
-                  backgroundColor: "#5FCB75",
-                  color: "white",
-                  fontSize: "20px",
-                  borderRadius: "30px",
-                  padding: "10px",
-                  paddingTop: "none",
-                  border: "none",
-                  marginLeft: "72%",
-                  cursor: "pointer",
-                }}
-              >
-                확인
-              </button>
-            </ModalFrame>
-          )}
-        </div>
+        )}
+
         <div className="bottom-button-box">
           <div className="like-box">
             <div className="like">
               <img src={likeIcon} alt="like" className="like-icon" />
-              <div className="like-count">12</div>
+              <div className="like-count">{SearchData[0].sentiment.like_num}</div>
             </div>
             <div className="comment">
               <img src={commentIcon} alt="comment" className="comment-icon" />
-              <div className="comment-count">3</div>
+              <div className="comment-count">{SearchData[0].sentiment.comment_num}</div>
             </div>
             <div className="scrap">
               <img src={bookmarkIcon} alt="scrap" className="scrap-icon" />
-              <div className="scrap-count">0</div>
+              <div className="scrap-count">{SearchData[0].sentiment.scrap_num}</div>
             </div>
           </div>
           <div className="recommand-box">
@@ -317,8 +359,13 @@ export default function SentimentDetail() {
           </div>
         </div>
       </div>
+      )}
+      </>
     );
   };
+  useEffect(() => {
+    console.log("센티먼트 데이터 확인용 77:", SearchData);
+  }, [SearchData]);
 
   return (
     <div>
@@ -346,7 +393,7 @@ export default function SentimentDetail() {
             <DetailTop />
             <DetailBottom />
             {SearchData && SearchData[1].comment.length >= 0 && (
-              <CommentItem data={SearchData} id={id} />
+              <CommentItem data={SearchData} id={id} user_id={user_id}/>
             )}
           </div>
         </div>

@@ -140,7 +140,8 @@ export default function BookDetail() {
   const handleWriteClick1 = () => {
     if (isLogin) {
       //navigate("/write");
-      navigate("/bookwrite", { state: { bookTitle: book_title } });
+      navigate("/bookwrite", { state: { bookTitle: book_title, bookImageFile: BookSearchData.image, 
+        author: BookSearchData.author, publisher: BookSearchData.publisher} });
     } else {
       alert("로그인이 필요한 기능입니다.");
     }
