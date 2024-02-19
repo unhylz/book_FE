@@ -4,23 +4,33 @@ import { postCheckCode, sendAuth } from "../modules/api/account";
 
 export default function PasswordSearchContainer(props) {
   const [email, setEmail] = useState("");
+  const [emailState, setEmailState] = useState(0);
+
+
   const [authnum, setAuthnum] = useState("");
+  const [authState,setAuthState] = useState(0);
+
   const [timer, setTimer] = useState("05:00");
+  const [isTimerOn, setIsTimerOn] = useState(false);
   const [test, setTest] = useState();
+  
 
   let sec = 300;
 
   useEffect(() => {
-    const id = setInterval(async () => {
-      if (sec === 0) {
-        sec = 300;
-      } else {
-        sec = sec - 1;
-      }
-      setTimer(sec2timer(sec));
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
+    if(isTimerOn===true)
+    {
+      const id = setInterval(async () => {
+        if (sec === 0) {
+          sec = 300;
+        } else {
+          sec = sec - 1;
+        }
+        setTimer(sec2timer(sec));
+      }, 1000);
+      return () => clearInterval(id);
+    }
+  }, [isTimerOn]);
 
   const sec2timer = (sec) => {
     let t_min = Math.floor(sec / 60);
@@ -49,10 +59,15 @@ export default function PasswordSearchContainer(props) {
     pwInputRef.current.focus();
   };
 
-  const onClickSendBtn = () => {
+  const onClickSendBtn = async() => {
+    //이메일 검사
     //email을 백엔드로 보내는 함수
     console.log("email", email);
-    sendAuth(email);
+    const res = await sendAuth(email);
+    console.log(res,res,res)
+    setEmailState(2)
+    
+    setIsTimerOn(true); 
   };
 
   const onClickResendBtn = () => {
@@ -68,8 +83,10 @@ export default function PasswordSearchContainer(props) {
 
     if (check) {
       props.setState("passwordchange");
-    } else {
+      setAuthState(2)
+    } else {  
       console.log("인증번호 틀림.");
+      setAuthState(1)
     }
   };
 
@@ -90,7 +107,9 @@ export default function PasswordSearchContainer(props) {
   return (
     <PasswordSearch
       email={email}
+      emailState={emailState}
       authnum={authnum}
+      authState={authState}
       timer={timer}
       onClickSendBtn={onClickSendBtn}
       onClickResendBtn={onClickResendBtn}

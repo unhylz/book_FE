@@ -33,18 +33,22 @@ export default function SignupContainer(props) {
 
   //timer
   const [timer, setTimer] = useState("05:00");
+  const [isTimerOn, setIsTimerOn] = useState(false);
   let sec = 300;
   useEffect(() => {
-    const id = setInterval(async () => {
-      if (sec === 0) {
-        sec = 300;
-      } else {
-        sec = sec - 1;
-      }
-      setTimer(sec2timer(sec));
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
+    if(isTimerOn===true){
+      const id = setInterval(async () => {
+        if (sec === 0) {
+          sec = 300;
+        } else {
+          sec = sec - 1;
+        }
+        setTimer(sec2timer(sec));
+      }, 1000);
+      return () => clearInterval(id);
+    }
+  }, [isTimerOn]);
+
   const sec2timer = (sec) => {
     let t_min = Math.floor(sec / 60);
     let t_sec = sec % 60;
@@ -118,6 +122,7 @@ export default function SignupContainer(props) {
         setEmailState(3); //이메일이 확인되었습니다.
         sendAuth(email);
         setAuthState(1); //인증코드를 보냈습니다.(인증코드 칸)
+        setIsTimerOn(true);
       } else {
         setEmailState(2);
       } //중복된이메일입니다.
