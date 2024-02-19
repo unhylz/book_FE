@@ -12,6 +12,7 @@ import MasterIcon from "../../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../../assets/tiers/그랜드마스터.svg";
 import Pagination from "./pagenation";
 import axios from "axios";
+import xIcon from "../../../../../assets/icons/xIcon.svg"
 import { UserContext } from "../../../../../context/Login"
 
 
@@ -73,11 +74,12 @@ export default function Sentiment() {
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  return (
-    <div>
-      <div className="search-container">
-      {sentimentData && sentimentData.map((result) => (
-        <div key={result.sentiment_id} className="search-result"> 
+return (
+  <div>
+    <div className="search-container">
+      {sentimentData && sentimentData.length > 0 ? (
+        sentimentData.map((result) => (
+          <div key={result.sentiment_id} className="search-result">
             <div className="info">
               <Link
                 to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
@@ -145,17 +147,22 @@ export default function Sentiment() {
             </div>
           </div>
         ))
-        }
-      </div>
-      <div className="pagination-container">
-        <div className="pagination">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+      ) : (
+        <div className="noSentiment">
+        <img src={xIcon} />
+        <p>작성한 센티멘트가 없습니다. 센티멘트를 작성해주세요!</p>
         </div>
+      )}
+    </div>
+    <div className="pagination-container">
+      <div className="pagination">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
-  );
+  </div>
+);
 }
