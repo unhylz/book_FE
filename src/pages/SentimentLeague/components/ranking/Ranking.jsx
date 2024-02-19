@@ -14,11 +14,10 @@ import GrandMasterIcon from "../../../../assets/tiers/그랜드마스터.svg";
 import x_circleIcon from "../../../../assets/icons/x-circle.svg";
 import "./Ranking.scss";
 import { RankingData } from "../../../../modules/api/search";
-//import { TotalRankingData } from "../../../../modules/api/search";
+import { TotalRankingData } from "../../../../modules/api/search";
+import Pagination from "../../../Home/components/pagination/Pagination";
 
 export default function Ranking() {
-  const pageNumber = "1"; // 추후 수정 -------
-
   const [SearchData, setSearchData] = useState(null);
   //const [SearchNicknameData, setSearchNicknameData] = useState(null);
   const dropdownItems = ["Season 1", "Season 2"]; // 시즌 선택 데이터
@@ -31,6 +30,11 @@ export default function Ranking() {
   const [isSearching, setIsSearching] = useState(false); // 검색 중 여부를 나타내는 상태
   const dropdownRef = useRef(null);
 
+  const [rankData, setRankData] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPageNumber, setTotalPageNumber] = useState(null);
+  //const pageNumber = "1"; // 추후 수정 -------
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,7 +45,9 @@ export default function Ranking() {
           SetSeasonNum("2");
         }
 
-        const data = await RankingData(pageNumber, seasonNum);
+        const data = await TotalRankingData(pageNumber, seasonNum);
+        setRankData(data.result);
+        setTotalPageNumber(data.result.total_page_num);
         setSearchData(data.result.totalRank);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -52,10 +58,10 @@ export default function Ranking() {
   }, [pageNumber, selectedItem]);
 
   useEffect(() => {
-    if (SearchData) {
-      console.log("전체 랭킹 데이터:", SearchData);
+    if (rankData) {
+      console.log("전체 랭킹 데이터:", rankData);
     }
-  }, [SearchData]);
+  }, [rankData]);
 
   //티어 아이콘 색상 변경용
   const getTierIcon = (tier) => {
@@ -138,7 +144,7 @@ export default function Ranking() {
         SetSeasonNum("2");
       }
 
-      const data = await RankingData(pageNumber, seasonNum);
+      const data = await TotalRankingData(pageNumber, seasonNum);
       setSearchData(data.result.totalRank);
 
       if (searchedString === "") {
@@ -323,7 +329,16 @@ export default function Ranking() {
             </div>
           </div>
         </div>
-        <p>페이지네이션 추가</p>
+        <div className="pagination-container">
+          {Array.isArray(SearchData) && (
+            <Pagination
+              setCursorId={setPageNumber}
+              cursorId={pageNumber}
+              setPageNum={setTotalPageNumber}
+              pageNum={totalPageNumber}
+            />
+          )}
+        </div>
       </div>
     </>
   );
