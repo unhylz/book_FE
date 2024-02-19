@@ -84,6 +84,7 @@ export default function SentimentDetail() {
   useEffect(() => {
     if (SearchData && SearchData[0].sentiment) {
       console.log("센티먼트 데이터 확인용 33:", SearchData[0].sentiment);
+      console.log("센티먼트 데이터 확인용 333333:", SearchData[0].sentiment.comment_num);
     }
   }, [SearchData]);
 
@@ -217,6 +218,8 @@ export default function SentimentDetail() {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
+      <>
+      {SearchData && SearchData[0].sentiment && (
       <div id="detail-bottom">
         <div className="update-delete-box">
           <div
@@ -272,15 +275,15 @@ export default function SentimentDetail() {
           <div className="like-box">
             <div className="like">
               <img src={likeIcon} alt="like" className="like-icon" />
-              <div className="like-count">12</div>
+              <div className="like-count">{SearchData[0].sentiment.like_num}</div>
             </div>
             <div className="comment">
               <img src={commentIcon} alt="comment" className="comment-icon" />
-              <div className="comment-count">3</div>
+              <div className="comment-count">{SearchData[0].sentiment.comment_num}</div>
             </div>
             <div className="scrap">
               <img src={bookmarkIcon} alt="scrap" className="scrap-icon" />
-              <div className="scrap-count">0</div>
+              <div className="scrap-count">{SearchData[0].sentiment.scrap_num}</div>
             </div>
           </div>
           <div className="recommand-box">
@@ -311,6 +314,8 @@ export default function SentimentDetail() {
           </div>
         </div>
       </div>
+      )}
+      </>
     );
   };
 
