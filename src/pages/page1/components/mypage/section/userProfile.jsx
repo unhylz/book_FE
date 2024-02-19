@@ -158,15 +158,15 @@ const sendStatusMessage = (statusMessage) => {
   return (
     <div className="user-profile">
       <div className="img-container">
-          <div className="round-image">
-          {selectedImage ? (
-            <img src={selectedImage} alt="thumbnail" />
-          ) : userData[0] && userData[0].profile_image ? (
-            <img src={userData[0].profile_image} alt="profile" />
-          ) : (
-            <img src={profileImg} alt="default profile" />
-          )}
-        </div>
+        <div className="round-image">
+        {selectedImage ? (
+          <img src={selectedImage} alt="thumbnail" />
+        ) : userData[0] && userData[0].profile_image ? (
+          <img src={userData[0].profile_image} alt="profile" />
+        ) : (
+          <img src={profileImg} alt="default profile" />
+        )}
+      </div>
         <form>
           <input type="file" accept="image/*" onChange={handleFileChange} />
       {isCropModalOpen && (
