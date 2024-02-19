@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import notification_icon from "../../../assets/icons/gravity-ui-comment.svg";
 import tierIcon from "../../../assets/icons/solar-ranking-linear.svg";
@@ -8,6 +8,7 @@ import { UserContext } from "../../../context/Login";
 
 export default function NotificationItem({
   key,
+  alarm_id,
   read_at,
   created_at,
   title,
@@ -24,7 +25,10 @@ export default function NotificationItem({
 
   const handleItemClick = async () => {
     try {
-      await NotificationCheck(userId, key);
+
+      // 알림 확인 요청
+      await NotificationCheck(userId, alarm_id); //key 부분을 alarm_id로 대체 필요 ====
+      console.log("alarm_id: ", alarm_id);
 
       if (title.includes("댓글")) {
         navigate(`/sentiment/notification/${sentiment_id}/${title}`);

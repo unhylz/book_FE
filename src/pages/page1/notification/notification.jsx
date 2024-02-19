@@ -25,9 +25,9 @@ export default function Notification() {
 
   console.log(user_context);
   if (user_context && user_context.user_data) {
-  console.log("사용자 정보: ", user_context.user_data.id); 
+    console.log("사용자 정보: ", user_context.user_data.id);
   } else {
-  console.log("사용자 데이터가 없습니다.");
+    console.log("사용자 데이터가 없습니다.");
   }
 
   useEffect(() => {
@@ -45,6 +45,8 @@ export default function Notification() {
 
   useEffect(() => {
     console.log("notificationsData =====: ", notificationsData);
+    // read_at 값이 1 이상인 데이터만 필터링하여 새로운 배열 생성
+    window.scrollTo(0, 0);
   }, [notificationsData]);
 
   const addComment = (newComment) => {
@@ -82,24 +84,34 @@ export default function Notification() {
         setModalState={setModalState}
         setModal={setModal}
       />
-      <div className="mypage-wrapper">
+      <div className="main-content">
+        {/* 1열 - 왼쪽 사이드 광고 부분 */}
         <div className="left">
           <SideAd />
         </div>
-        <div className="mypage-container">
+
+        {/* 2열 - 중앙 메인 광고 부분 */}
+        <div className="center">
           <div className="notifications-container">
-            {notificationsData.map((notification, index) => (
-              <NotificationItem
-                key={index}
-                sentiment_id={notification.sentiment_id}
-                title={notification.title}
-                read_at={notification.read_at}
-                created_at={notification.created_at}
-                content={notification.content}
-              />
-            ))}
+            <h1>알림</h1>
+            {notificationsData &&
+              notificationsData
+                .filter((notification) => notification.read_at < 1)
+                .map((notification, index) => (
+                  <NotificationItem
+                    key={index}
+                    alarm_id={notification.alarm_id}
+                    sentiment_id={notification.sentiment_id}
+                    title={notification.title}
+                    read_at={notification.read_at}
+                    created_at={notification.created_at}
+                    content={notification.content}
+                  />
+                ))}
           </div>
         </div>
+
+        {/* 3열 - 오른쪽 사이드 광고 부분 */}
         <div className="right">
           <SideAd />
         </div>
