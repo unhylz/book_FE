@@ -13,6 +13,7 @@ import { SentimentBookSearch } from "./api";
 import searchIcon from "./search.png"
 import axios from "axios";
 import "./BookSearch.scss";
+import { MyPageProfile } from "../../modules/api/search";
 
 function DecoModal({ isOpen, onClose, search, setSelectedBook, setBookImageFile, setAuthor, setPublisher }) {
   const [issue, setIssue] = useState({
@@ -167,7 +168,8 @@ export default function SentimentWrite() {
   const [bookImageFile, setBookImageFile] = useState("");
   const [author, setAuthor] = useState("");
   const [publisher, setPublisher] = useState("");
-  const [selectedBook, setSelectedBook] = useState(""); // 선택한 도서 제목 상태 추가
+  const [selectedBook, setSelectedBook] = useState("");
+  const [profile, setProfile] = useState(null);
   const imgRef = useRef();
 
   //유저 콘텍스트-----------------------------------------------------------
@@ -175,6 +177,8 @@ export default function SentimentWrite() {
   const user_context = useContext(UserContext);
   console.log(user_context);
   console.log(user_context.user_data.id);
+  const user_id = user_context.user_data.id; // 사용자 ID
+  const isLoggedIn = user_context.user_data.isLogin;
 
   //모달 state
   const [isOpen, setIsOpen] = useState(false);
@@ -220,7 +224,6 @@ export default function SentimentWrite() {
 
     try {
       // 모든 유효성 검사를 통과한 경우에만 API에 데이터를 전송
-      const user_id = user_context.user_data.id; // 사용자 ID
       const formData = new FormData();
       formData.append("sentiment_title", title);
       formData.append("book_title", selectedBook);
@@ -286,10 +289,28 @@ export default function SentimentWrite() {
     marginLeft: "72%",
     cursor: "pointer",
   }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const profile = await MyPageProfile(user_id);
+        setProfile(profile[0]);
+      } catch (error) {
+        console.error("데이터 가져오기 오류 - 프로필:", error);
+      }
+    };
+
+    if (user_context.user_data.isLogin) {
+      fetchData();
+    }
+    if (profile) {
+      console.log("===== profile 데이터:", profile);
+    }
+  }, []);
 
   return (
     <form onSubmit={handleFormSubmit}>
-      <header className="header-container">
+      {isLoggedIn && profile && (
+        <header className="header-container">
         <Link to="/" className="logo">
           <img
             style={{ width: "175px", height: "84px" }}
@@ -301,10 +322,15 @@ export default function SentimentWrite() {
           <button type="submit" className="write-btn" >
             작성하기
           </button>
-          {/* 사용자 정보 들어가야 함 */}
-          <div className="user-box">Paul</div>
+          <img
+            src={profile.profile_image}
+            alt="MyPage"
+            className="user-image"
+          />
+          <div className="user-box">{profile.nickname}</div>
         </div>
       </header>
+      )}
 
       <div className="write">
         <div className="image-add-container">

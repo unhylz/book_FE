@@ -28,6 +28,7 @@ import "./SentimentDetail.scss";
 import AcountModalContainer from "../../container/AcountModalContainer";
 import { UserContext } from "../../context/Login";
 import { SentimentIdSearch } from "../../modules/api/search";
+import axios from 'axios';
 
 function formatDateTime(dateTimeString) {
   const year = dateTimeString.slice(6, 10);
@@ -50,7 +51,7 @@ export default function SentimentDetail() {
   const user_context = useContext(UserContext);
   console.log("로그인 확인: ", user_context.user_data);
 
-  const userId = user_context.user_data.id;
+  const user_id = user_context.user_data.id;
   const isLoggedIn = user_context.user_data.isLogin;
 
   const navigate = useNavigate();
@@ -85,14 +86,8 @@ export default function SentimentDetail() {
     };
 
     fetchData();
-  }, [id]);
+  }, []);
 
-  useEffect(() => {
-    if (SearchData && SearchData[0].sentiment) {
-      console.log("센티먼트 데이터 확인용 33:", SearchData[0].sentiment);
-      console.log("센티먼트 데이터 확인용 333333:", SearchData[0].sentiment.comment_num);
-    }
-  }, [SearchData]);
 
   //티어 아이콘 색상 변경용
   const getTierIcon = (tier) => {
@@ -152,11 +147,16 @@ export default function SentimentDetail() {
                   </div>
                 </div>
                 <div className="writer-info-box">
-                  <img
+                  {(SearchData[0].sentiment.profile_image === "기본 프로필") && 
+                    <img src={userImg} alt="userImg" className="profile-image" />
+                  }
+                  {!(SearchData[0].sentiment.profile_image === "기본 프로필") && 
+                    <img
                     src={SearchData[0].sentiment.profile_image}
                     alt="userImg"
                     className="profile-image"
                   />
+                  }
                   <div className="nick-date-box">
                     <div className="nickname-tier">
                       <div className="nickname">
@@ -227,56 +227,59 @@ export default function SentimentDetail() {
       <>
       {SearchData && SearchData[0].sentiment && (
       <div id="detail-bottom">
-        <div className="update-delete-box">
-          <div
-            className="update-button"
-            onClick={() => {
-              navigate(`/editsentiment/${id}`);
-            }}
-          >
-            <img src={editIcon} alt="editIcon" className="edit-icon" />
-            <div className="edit-text">수정하기</div>
+        {isLoggedIn && (user_id === SearchData[0].sentiment.user_id) && (
+          <div className="update-delete-box">
+            <div
+              className="update-button"
+              onClick={() => {
+                navigate(`/editsentiment/${id}`);
+              }}
+            >
+              <img src={editIcon} alt="editIcon" className="edit-icon" />
+              <div className="edit-text">수정하기</div>
+            </div>
+            <div
+              className="delete-button"
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              <img src={deleteIcon} alt="deleteIcon" className="delete-icon" />
+              <div className="delete-text">삭제하기</div>
+            </div>
+            {isOpen && (
+              <ModalFrame>
+                <h3>www.booksentimentleague.com 내용:</h3>
+                <div style={{ fontWeight: "bold", marginBottom: "55px" }}>
+                  정말 삭제하시겠습니까?
+                </div>
+                <button
+                  className="close"
+                  onClick={async () => {
+                    setIsOpen(false);
+                    await axios.delete(`/sentiments/${user_id}/delete/${id}`);
+                    navigate(`/`);
+                  }}
+                  style={{
+                    width: "90px",
+                    backgroundColor: "#5FCB75",
+                    color: "white",
+                    fontSize: "20px",
+                    borderRadius: "30px",
+                    padding: "10px",
+                    paddingTop: "none",
+                    border: "none",
+                    marginLeft: "72%",
+                    cursor: "pointer",
+                  }}
+                >
+                  확인
+                </button>
+              </ModalFrame>
+            )}
           </div>
-          <div
-            className="delete-button"
-            onClick={() => {
-              setIsOpen(true);
-            }}
-          >
-            <img src={deleteIcon} alt="deleteIcon" className="delete-icon" />
-            <div className="delete-text">삭제하기</div>
-          </div>
-          {isOpen && (
-            <ModalFrame>
-              <h3>www.booksentimentleague.com 내용:</h3>
-              <div style={{ fontWeight: "bold", marginBottom: "55px" }}>
-                정말 삭제하시겠습니까?
-              </div>
-              <button
-                className="close"
-                onClick={async () => {
-                  setIsOpen(false);
-                  //await axios.delete(`/sentiments/${user_id}/delete/${id}`);
-                  navigate(`/`);
-                }}
-                style={{
-                  width: "90px",
-                  backgroundColor: "#5FCB75",
-                  color: "white",
-                  fontSize: "20px",
-                  borderRadius: "30px",
-                  padding: "10px",
-                  paddingTop: "none",
-                  border: "none",
-                  marginLeft: "72%",
-                  cursor: "pointer",
-                }}
-              >
-                확인
-              </button>
-            </ModalFrame>
-          )}
-        </div>
+        )}
+
         <div className="bottom-button-box">
           <div className="like-box">
             <div className="like">
@@ -351,7 +354,7 @@ export default function SentimentDetail() {
             <DetailTop />
             <DetailBottom />
             {SearchData && SearchData[1].comment.length >= 0 && (
-              <CommentItem data={SearchData} id={id} />
+              <CommentItem data={SearchData} id={id} user_id={user_id}/>
             )}
           </div>
         </div>
