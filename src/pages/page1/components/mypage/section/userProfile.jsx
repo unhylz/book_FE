@@ -60,7 +60,7 @@ function UserProfile({ userData }) {
   
   const sendStatusMessage = (status_message) => {
     const user_Id = user_context.user_data.id;
-    const url = `users/${user_Id}/mypage/status_message`; 
+    const url = `users/${user_Id}/mypage/message`; 
     const config = {
       headers: { "Content-Type": "application/json" },
     };
@@ -144,7 +144,7 @@ const sendStatusMessage = (statusMessage) => {
     const config = {
       headers: { "content-type": "multipart/form-data" },
     };
-    axios.post(`users/${user_Id}/mypage/profile_image`, formData, config)
+    axios.post(`users/${user_Id}/mypage/profile`, formData, config)
       .then((res) => {
         if (res.data.success) {
           console.log('Image upload successful', res.data);
@@ -158,11 +158,13 @@ const sendStatusMessage = (statusMessage) => {
   return (
     <div className="user-profile">
       <div className="img-container">
-        <div className="round-image" >
-        {selectedImage ? (
+          <div className="round-image">
+          {selectedImage ? (
             <img src={selectedImage} alt="thumbnail" />
+          ) : userData[0] && userData[0].profile_image ? (
+            <img src={userData[0].profile_image} alt="profile" />
           ) : (
-            <img src={userData[0].profile_image}/>
+            <img src={profileImg} alt="default profile" />
           )}
         </div>
         <form>
