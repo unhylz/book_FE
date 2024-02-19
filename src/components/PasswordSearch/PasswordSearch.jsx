@@ -47,9 +47,13 @@ export default function PasswordSearch(props) {
               </div>
             </div>
             <div className="input_notices">
-              <div className="input_notice_1">인증번호를 보냈습니다!</div>
-              {/* <div className='input_notice_2'>이메일을 입력해주세요.</div>
-            <div className='input_notice_3'>등록되지 않거나 형식에 맞지 않는 이메일입니다.</div> */}
+
+              {[
+              <div className="input_notice_0"></div>,
+              <div className="input_notice_1">이메일을 입력해주세요.</div>,
+              <div className='input_notice_2'>인증번호를 보냈습니다!</div>,
+              <div className='input_notice_3'>등록되지 않거나 형식에 맞지 않는 이메일입니다.</div>]
+              [props.emailState]}
             </div>
           </div>
           <div className="auth_form">
@@ -69,8 +73,13 @@ export default function PasswordSearch(props) {
               <div className="timer">{props.timer}</div>
             </div>
             <div className="notices">
-              <div className="notice">인증번호가 올바르지 않습니다!</div>
-            </div>
+            {
+                [
+                  <div className="auth_notice_0"></div>,
+                  <div className="auth_notice_1">인증번호가 올바르지 않습니다!</div>,
+                  <div className="auth_notice_2">인증번호가 확인되었습니다.</div>,
+                ][props.authState]
+              }            </div>
             <div className="explain">
               본인 계정의 이메일을 입력하세요.
               <br />

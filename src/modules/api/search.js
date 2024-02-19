@@ -165,3 +165,43 @@ export const SentimentIdSearch = async (sentiment_id) => {
     throw error;
   }
 };
+
+export const UnreadNotification = async (user_id) => {
+  try {
+    const response = await axios.get(`/users/${user_id}/notifications/unread`, {
+      withCredentials: true,
+    });
+    console.log("UnreadNotification response.data: ", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("UnreadNotification response error: ", error);
+    throw error;
+  }
+};
+
+export const MyPageProfile = async (user_id) => {
+  try {
+    const response = await axios.get(`/users/${user_id}/mypage`, {
+      withCredentials: true,
+    });
+    console.log("MyPageProfile response.data: ", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("MyPageProfile response error: ", error);
+    throw error;
+  }
+};
+
+export const NotificationCheck = async (user_id, alarm_id) => {
+  try {
+    const response = await axios.patch(
+      `/users/${user_id}/notifications/${alarm_id}`,
+      { withCredentials: true }
+    );
+    console.log("NotificationCheck response.data: ", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("NotificationCheck response error: ", error);
+    throw error;
+  }
+};
