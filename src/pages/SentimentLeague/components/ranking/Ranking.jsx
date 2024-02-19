@@ -15,16 +15,20 @@ import x_circleIcon from "../../../../assets/icons/x-circle.svg";
 import "./Ranking.scss";
 import { RankingData } from "../../../../modules/api/search";
 import { TotalRankingData } from "../../../../modules/api/search";
-import Pagination from "../../../Home/components/pagination/Pagination";
+import Pagination from "../pagination/Pagination";
 
 export default function Ranking() {
-  const [SearchData, setSearchData] = useState(null);
-  //const [SearchNicknameData, setSearchNicknameData] = useState(null);
   const dropdownItems = ["Season 1", "Season 2"]; // 시즌 선택 데이터
-  const [isModalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(dropdownItems[0]);
-  const [searchedNickname, setSearchedNickname] = useState("");
   const [seasonNum, SetSeasonNum] = useState("");
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const [SearchData, setSearchData] = useState(null);
+  const [searchedNickname, setSearchedNickname] = useState("");
+  const [userRankData, setUserRankData] = useState(null);
+  const [searchResult, setSearchResult] = useState(null);
+
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [updatedResults, setUpdatedResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false); // 검색 중 여부를 나타내는 상태
@@ -32,6 +36,9 @@ export default function Ranking() {
 
   const [rankData, setRankData] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+
+  const [isClicked, setIsClicked] = useState(false);
+
   const [totalPageNumber, setTotalPageNumber] = useState(null);
   //const pageNumber = "1"; // 추후 수정 -------
 
@@ -129,8 +136,49 @@ export default function Ranking() {
   };
 
   const handleTierSearchButtonClick = () => {
-    handleSearch();
+    setIsClicked(true);
+    rankingSearch();
   };
+
+  const rankingSearch = async () => {
+    //userRank 검색
+
+    try {
+      const data = await RankingData(pageNumber, seasonNum, searchedNickname);
+      setUserRankData(data.result.userRank);
+    } catch (error) {
+      console.error("데이터 가져오기 오류:", error);
+    }
+  }; //api 연결할 부분
+
+  useEffect(() => {
+    //setPageNumber(userRankData.pageNum);
+    setPageNumber(1); //임시
+    setSearchResult(userRankData.nickname);
+  }, [userRankData]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await TotalRankingData(pageNumber, seasonNum);
+        const updatedResults = data.result.totalRank.map((data) => ({
+          ...data,
+          isHighlighted:
+            searchResult &&
+            data.nickname.toLowerCase() === searchResult.toLowerCase(),
+        }));
+        setUpdatedResults(updatedResults);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    fetchData();
+  }, [pageNumber, searchResult]);
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchedNickname]);
 
   const handleSearch = async () => {
     setIsSearching(true); // 검색 중임을 표시
@@ -168,15 +216,17 @@ export default function Ranking() {
   };
 
   const handleInputChange = (e) => {
-    //console.log("setSearchedNickname: ", e.target.value);
     setSearchedNickname(e.target.value);
-    //highlightRows(e.target.value);
-    //highlightRows(searchedNickname);
+    if (!e.target.value) {
+      console.log("입력된 값 없음");
+      setIsClicked(false);
+    }
   };
 
   const handleInputKeyUp = (e) => {
     if (e.key === "Enter") {
-      handleSearch();
+      setIsClicked(true);
+      rankingSearch();
     } else if (e.key === "Backspace" && searchedNickname === "") {
       // Backspace 키를 누르고 검색어가 비어있는 경우, 전체 랭킹 데이터 표시
       setUpdatedResults(SearchData);
@@ -275,19 +325,20 @@ export default function Ranking() {
               )}
               {searchedNickname !== "" && ( //검색어가 있을 때
                 <>
-                  {updatedResults.filter((data) => data.isHighlighted) //검색어와 일치하는 데이터 x
-                    .length === 0 && (
-                    <>
-                      <div className="nickname-search-results">
-                        <img
-                          src={x_circleIcon}
-                          alt="x_circleIcon"
-                          className="x-circle-icon"
-                        />
-                        <p>해당 닉네임은 존재하지 않습니다.</p>
-                      </div>
-                    </>
-                  )}
+                  {isClicked &&
+                    updatedResults.filter((data) => data.isHighlighted) //검색어와 일치하는 데이터 x
+                      .length === 0 && (
+                      <>
+                        <div className="nickname-search-results">
+                          <img
+                            src={x_circleIcon}
+                            alt="x_circleIcon"
+                            className="x-circle-icon"
+                          />
+                          <p>해당 닉네임은 존재하지 않습니다.</p>
+                        </div>
+                      </>
+                    )}
                   {updatedResults.filter((data) => data.isHighlighted) //검색어와 일치하는 데이터 o
                     .length !== 0 && (
                     <>
@@ -301,14 +352,11 @@ export default function Ranking() {
                           >
                             <div className="table-rank">{data.ranking}</div>
                             <div className="table-tier">
-                              {data.tier}
-                              {/*                             
                               <img
                                 src={getTierIcon(data.tier)}
                                 alt="result.tier"
                                 className="tier-icon"
-                              /> 
-                              */}
+                              />
                             </div>
                             <div className="table-nickname">
                               {data.nickname}
