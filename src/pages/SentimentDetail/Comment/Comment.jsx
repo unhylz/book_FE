@@ -88,6 +88,10 @@ export default function CommentItem({data, id, user_id}) {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+    const body = JSON.stringify({ commentContent, commentParent });
 
     if (commentContent.trim() === "") {
       setCommentValid(false);
@@ -98,15 +102,16 @@ export default function CommentItem({data, id, user_id}) {
 
     try {
       // 모든 유효성 검사를 통과한 경우에만 API에 데이터를 전송
-      const commentData = new FormData();
-      console.log("댓글 입력",commentContent)
-      commentData.append("parent_id", commentParent);
-      commentData.append("content", commentContent);
-      console.log("전달할 댓글 확인", commentData.get("content"))
-      console.log("부모 아이디 확인", commentData.get("parent_id"))
+      // const commentData = new FormData();
+      // console.log("댓글 입력",commentContent)
+      // commentData.append("parent_id", commentParent);
+      // commentData.append("content", commentContent);
+      // console.log("전달할 댓글 확인", commentData.get("content"))
+      // console.log("부모 아이디 확인", commentData.get("parent_id"))
+      const body = JSON.stringify({ commentContent, commentParent });
   
       // API 요청
-      const response = await axios.post(`/sentiments/${id}/comments/${user_id}/write`, commentData);
+      const response = await axios.post(`/sentiments/${id}/comments/${user_id}/write`, body, config);
       console.log('응답 데이터:', response.data);
       alert("api 전송 성공");
   
