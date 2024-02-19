@@ -10,7 +10,6 @@ import bellIcon from "../../../../assets/icons/bell.svg";
 import logoutIcon from "../../../../assets/icons/logout.svg";
 import { userDummy } from "./userDummy.js";
 import { UserContext } from "../../../../context/Login";
-//import LoginContext from "../../../../modules/api/login_context";
 import "./Header.scss";
 import { postLogout } from "../../../../modules/api/account.js";
 import { UnreadNotification } from "../../../../modules/api/search";

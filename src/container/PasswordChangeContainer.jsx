@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PasswordChange from "../components/passwordChange/PasswordChange";
 import { postPwChange } from "../modules/api/account";
 
@@ -13,13 +13,35 @@ export default function PasswordChangeContainer(props) {
 
   const onSubmitPwChange = (e) => {
     e.preventDefault();
-    props.setState("login");
-    const user_id = 4; //context에서 받아오기로 수정
-    postPwChange(pw, user_id);
+    if (pw===pwCheck)
+    {
+      props.setState("login");
+      const user_id = 4; //context에서 받아오기로 수정
+      postPwChange(pw, user_id);
+    }
+
   };
+
+  useEffect(()=>{
+    if (testPw(pw)) {
+      setPwState(0);
+    } else {
+      setPwState(1);
+    }
+  },[pw])
+
+  useEffect(()=>{
+    if (pw === pwCheck) {
+      setPwCheckState(2);
+    } else {
+      setPwCheckState(1);
+    }
+    console.log("pwCheckState",pwCheckState)
+  },[pwCheck,pw])
 
   const onPwChange = (e) => {
     setPw(e.target.value);
+    console.log("pw",pw)
     //유효성검사
     if (testPw(pw)) {
       setPwState(0);
@@ -38,11 +60,13 @@ export default function PasswordChangeContainer(props) {
 
   const onPwCheckChange = (e) => {
     setPwCheck(e.target.value);
+    setPwCheckEye(e.target.value)
+    console.log("pwCheck",pwCheck)
     //유효성검사
     if (pw === pwCheck) {
-      setPwState(0);
+      setPwCheckState(1);
     } else {
-      setPwState(1);
+      setPwCheckState(2);
     }
   };
   const onPwCheckEyeClick = (e) => {
@@ -73,6 +97,14 @@ export default function PasswordChangeContainer(props) {
       onSubmitPwChange={onSubmitPwChange}
       onClickBg={onClickBg}
       setState={props.setState}
+      pwCheck={pwCheck}
+      pw={pw}
+      pwState={pwState}
+      pwCheckState={pwCheckState}
+      pwEye={pwEye}
+      setPwEye={setPwEye}
+      pwCheckEye={pwCheckEye}
+      setPwCheckEye={setPwCheckEye}
     />
   );
 }

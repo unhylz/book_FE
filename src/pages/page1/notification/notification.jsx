@@ -10,8 +10,8 @@ import "./notice.scss";
 import "../components/mypage/mypage.scss";
 
 export default function Notification() {
-  const [comments, setComments] = useState([]); // 댓글 상태
-  const [notificationsData, setNotificationsData] = useState([]); // 알림 상태
+  const [comments, setComments] = useState([]); 
+  const [notificationsData, setNotificationsData] = useState([]); 
   const [isNotified, setIsNotified] = useState(false);
   const [userState, setUserstate] = useState(1);
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import "./SentimentWrite.scss";
 import { PiStarFill, PiStarLight } from "react-icons/pi";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -7,10 +7,17 @@ import BookLogo from "./BookLogo.png";
 import ImgAdd from "./AddImg.png";
 import axios from "axios";
 import ModalFrame from "./Modal";
+import { UserContext } from "../../context/Login";
+import { MyPageProfile } from "../../modules/api/search";
+import userImg from "../../assets/icons/user_Img.png"
 
-export default function SentimentWrite() {
+export default function SentimentBookWrite() {
   const location = useLocation();
   const bookTitle = location.state.bookTitle;
+  const author = location.state.author;
+  const bookImageFile = location.state.bookImageFile;
+  const publisher = location.state.publisher;
+
   console.log("bookTitle: ", bookTitle);
 
   const navigate = useNavigate();
@@ -22,11 +29,20 @@ export default function SentimentWrite() {
   const [contentValid, setContentValid] = useState(true);
   const [ratingValid, setRatingValid] = useState(true);
   const [imgFile, setImgFile] = useState("");
+  const [selectedBook, setSelectedBook] = useState("");
+  const [profile, setProfile] = useState(null);
   const imgRef = useRef();
+
+  const user_context = useContext(UserContext);
+  console.log(user_context);
+  console.log(user_context.user_data.id);
+  const user_id = user_context.user_data.id; // 사용자 ID
+  const isLoggedIn = user_context.user_data.isLogin;
 
   useEffect(() => {
     if (bookTitle) {
       setSearch(bookTitle);
+      setSelectedBook(bookTitle);
     }
   }, [bookTitle]);
 
@@ -41,7 +57,7 @@ export default function SentimentWrite() {
     setContentValid(!!e.target.value);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     if (title.trim() === "") {
@@ -58,10 +74,35 @@ export default function SentimentWrite() {
       setContentValid(false);
       return;
     }
+
+    try {
+      // 모든 유효성 검사를 통과한 경우에만 API에 데이터를 전송
+      const formData = new FormData();
+      formData.append("sentiment_title", title);
+      formData.append("book_title", selectedBook);
+      formData.append("content", content);
+      formData.append("score", rating);
+      formData.append("user_id", user_id);
+      if (imgFile) {
+        formData.append("image_path", imgFile);
+      }
+      formData.append("author", author);
+      formData.append("publisher", publisher);
+      formData.append("book_image", bookImageFile);
+  
+      // API 요청
+      const response = await axios.post(`/sentiments/${user_id}/write`, formData);
+      console.log('응답 데이터:', response.data);
+      alert("api 전송 성공");
+  
+    } catch (error) {
+      console.error('글 등록 오류:', error);
+    }
+    goToSentiment();
   };
 
   const goToSentiment = () => {
-    navigate("/sentiment/:id");
+    navigate("/");
   };
 
   const handleCloseModal = () => {
@@ -90,8 +131,27 @@ export default function SentimentWrite() {
     await axios.post(`/sentiments/{user-id}/write`);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const profile = await MyPageProfile(user_id);
+        setProfile(profile[0]);
+      } catch (error) {
+        console.error("데이터 가져오기 오류 - 프로필:", error);
+      }
+    };
+
+    if (user_context.user_data.isLogin) {
+      fetchData();
+    }
+    if (profile) {
+      console.log("===== profile 데이터:", profile);
+    }
+  }, []);
+
   return (
     <form onSubmit={handleFormSubmit}>
+      {profile && (
       <header className="header-container">
         <Link to="/" className="logo">
           <img
@@ -104,10 +164,24 @@ export default function SentimentWrite() {
           <button className="write-btn" onSubmit={handleFormSubmit}>
             작성하기
           </button>
-          {/* 사용자 정보 들어가야함 */}
-          <div className="user-box">Paul</div>
+          {(profile.profile_image === null || profile.profile_image === "기본 프로필") && (
+            <img
+              src={userImg}
+              alt="MyPage"
+              className="user-image"
+            />
+          )}
+          {!(profile.profile_image === null || profile.profile_image === "기본 프로필") && (
+            <img
+              src={profile.profile_image}
+              alt="MyPage"
+              className="user-image"
+            />
+          )}
+          <div className="user-box">{profile.nickname}</div>
         </div>
       </header>
+      )}
 
       <div className="write">
         <div className="image-add-container">
@@ -167,6 +241,7 @@ export default function SentimentWrite() {
               <div className="star">
                 {[...Array(rating)].map((a, i) => (
                   <PiStarFill
+                    color="#5FCB75"
                     className="star-lg"
                     key={i}
                     onClick={() => setRating(i + 1)}

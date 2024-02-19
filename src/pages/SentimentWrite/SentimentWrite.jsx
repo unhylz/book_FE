@@ -13,8 +13,10 @@ import { SentimentBookSearch } from "./api";
 import searchIcon from "./search.png"
 import axios from "axios";
 import "./BookSearch.scss";
+import { MyPageProfile } from "../../modules/api/search";
+import userImg from "../../assets/icons/user_Img.png"
 
-function DecoModal({ isOpen, onClose, search, setSelectedBook }) {
+function DecoModal({ isOpen, onClose, search, setSelectedBook, setBookImageFile, setAuthor, setPublisher }) {
   const [issue, setIssue] = useState({
     title: "",
   });
@@ -62,6 +64,9 @@ function DecoModal({ isOpen, onClose, search, setSelectedBook }) {
     console.log("선택한 책이에요요요옹ㅇ", bookData[index].title);
     if (bookData[index] && bookData[index].title) {
       setSelectedBook(bookData[index].title);
+      setAuthor(bookData[index].author);
+      setPublisher(bookData[index].publisher);
+      setBookImageFile(bookData[index].image)
       onClose();
     }
   }
@@ -161,7 +166,11 @@ export default function SentimentWrite() {
   const [ratingValid, setRatingValid] = useState(true);
   const [inputTouched, setinputTouched] = useState(false);
   const [imgFile, setImgFile] = useState("");
-  const [selectedBook, setSelectedBook] = useState(""); // 선택한 도서 제목 상태 추가
+  const [bookImageFile, setBookImageFile] = useState("");
+  const [author, setAuthor] = useState("");
+  const [publisher, setPublisher] = useState("");
+  const [selectedBook, setSelectedBook] = useState("");
+  const [profile, setProfile] = useState(null);
   const imgRef = useRef();
 
   //유저 콘텍스트-----------------------------------------------------------
@@ -169,6 +178,8 @@ export default function SentimentWrite() {
   const user_context = useContext(UserContext);
   console.log(user_context);
   console.log(user_context.user_data.id);
+  const user_id = user_context.user_data.id; // 사용자 ID
+  const isLoggedIn = user_context.user_data.isLogin;
 
   //모달 state
   const [isOpen, setIsOpen] = useState(false);
@@ -201,6 +212,7 @@ export default function SentimentWrite() {
     // 	setSearchValid(false);
     // 	return;
     // }
+
     if (rating === 0) {
       setRatingValid(false);
       return;
@@ -213,32 +225,32 @@ export default function SentimentWrite() {
 
     try {
       // 모든 유효성 검사를 통과한 경우에만 API에 데이터를 전송
-      const user_id = user_context.user_data.id; // 사용자 ID
-      const data = {
-        title: title,
-        search: search,
-        content: content,
-        rating: rating,
-        userId: user_id
-      };
+      const formData = new FormData();
+      formData.append("sentiment_title", title);
+      formData.append("book_title", selectedBook);
+      formData.append("content", content);
+      formData.append("score", rating);
+      formData.append("user_id", user_id);
+      if (imgFile) {
+        formData.append("image_path", imgFile);
+      }
+      formData.append("author", author);
+      formData.append("publisher", publisher);
+      formData.append("book_image", bookImageFile);
   
       // API 요청
-      const response = await axios.post(`/sentiments/${user_id}/write`, data);
+      const response = await axios.post(`/sentiments/${user_id}/write`, formData);
       console.log('응답 데이터:', response.data);
-  
-      // API 요청이 성공했을 때 추가 작업 수행
-      // 예를 들어, 사용자에게 성공 메시지를 보여주거나 페이지를 리디렉션할 수 있습니다.
-      alert("api 전송 성공")
+      alert("api 전송 성공");
   
     } catch (error) {
       console.error('글 등록 오류:', error);
-      // API 요청이 실패한 경우 에러 처리
-      // 예를 들어, 사용자에게 에러 메시지를 보여줄 수 있습니다.
     }
+    goToSentiment();
   };
 
   const goToSentiment = () => {
-    navigate("/sentiment/:id");
+    navigate("/");
   };
 
   const handleCloseModal = () => {
@@ -256,58 +268,16 @@ export default function SentimentWrite() {
     setIsOpen(false);
   };
 
-  //유효성 검사
-  // const inputValueIsValid =
-  //   !titleValid &&
-  //   !searchValid &&
-  //   rating === 0 &&
-  //   !contentValid &&
-  //   inputTouched;
-
   //이미지 미리보기
   const handleImageChange = () => {
     const file = imgRef.current.files[0];
+    setImgFile(file);
     const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
+    reader.onload = () => {
       setImgFile(reader.result);
     };
+    reader.readAsDataURL(file);
   };
-
-  //글 등록
-  const [sentiment, setSentiment] = useState({
-    title: "",
-  });
-
-//========================= API 연동 ================================
-
-  // const saveSentiment = async () => {
-  //   try {
-  //     const user_id = user_context.user_data.id; // 사용자 ID
-  //     const data = {
-  //       title: title,
-  //       search: search,
-  //       content: content,
-  //       rating: rating,
-  //       userId: user_id // 사용자 ID를 요청에 포함시킴
-  //     };
-
-  //     // POST 요청을 보내고 응답을 기다림
-  //     const response = await axios.post('/sentiments/write', data);
-
-  //     // 응답 확인 및 처리
-  //     console.log('응답 데이터:', response.data);
-
-  //     // 여기서 필요한 추가 작업 수행
-  //   } catch (error) {
-  //     console.error('글 등록 오류:', error);
-  //   }
-  // };
-  // const handleWriteButtonClick = async (e) => {
-  //   e.preventDefault();
-  //   await saveSentiment();
-  //   // API 요청이 완료된 후에 수행해야 할 작업이 있다면 여기에 추가할 수 있습니다.
-  // };
 
   const modalstyle ={
     width: "90px",
@@ -320,10 +290,28 @@ export default function SentimentWrite() {
     marginLeft: "72%",
     cursor: "pointer",
   }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const profile = await MyPageProfile(user_id);
+        setProfile(profile[0]);
+      } catch (error) {
+        console.error("데이터 가져오기 오류 - 프로필:", error);
+      }
+    };
+
+    if (user_context.user_data.isLogin) {
+      fetchData();
+    }
+    if (profile) {
+      console.log("===== profile 데이터:", profile);
+    }
+  }, []);
 
   return (
     <form onSubmit={handleFormSubmit}>
-      <header className="header-container">
+      {isLoggedIn && profile && (
+        <header className="header-container">
         <Link to="/" className="logo">
           <img
             style={{ width: "175px", height: "84px" }}
@@ -335,10 +323,24 @@ export default function SentimentWrite() {
           <button type="submit" className="write-btn" >
             작성하기
           </button>
-          {/* 사용자 정보 들어가야 함 */}
-          <div className="user-box">Paul</div>
+          {(profile.profile_image === null || profile.profile_image === "기본 프로필") && (
+            <img
+              src={userImg}
+              alt="MyPage"
+              className="user-image"
+            />
+          )}
+          {!(profile.profile_image === null || profile.profile_image === "기본 프로필") && (
+            <img
+              src={profile.profile_image}
+              alt="MyPage"
+              className="user-image"
+            />
+          )}
+          <div className="user-box">{profile.nickname}</div>
         </div>
       </header>
+      )}
 
       <div className="write">
         <div className="image-add-container">
@@ -349,12 +351,19 @@ export default function SentimentWrite() {
             onChange={handleImageChange}
             ref={imgRef}
           />
-          <img
+          <label htmlFor="imageInput">
+            <img
+              style={{ width: "60px", height: "60px", cursor: "pointer" }}
+              src={ImgAdd}
+              alt="addbtn"
+            />
+          </label>
+          {/* <img
             style={{ width: "60px", height: "60px" }}
             src={ImgAdd}
             alt="addbtn"
             onClick={() => document.getElementById("imageInput").click()}
-          />
+          /> */}
         </div>
         <div className="write-container">
           <input
@@ -386,7 +395,9 @@ export default function SentimentWrite() {
               onClick={hModalOpen}
               onChange={handleSearchChange}
             />
-            <DecoModal isOpen={isOpen} onClose={hCloseModal} search={search} setSelectedBook={setSelectedBook}/>
+            <DecoModal isOpen={isOpen} onClose={hCloseModal} search={search} setSelectedBook={setSelectedBook}
+            setBookImageFile={setBookImageFile} setAuthor={setAuthor} setPublisher={setPublisher}
+            />
             {!searchValid && (
               <ModalFrame _handleModal={handleCloseModal}>
                 <h3>www.booksentimentleague.com 내용:</h3>
@@ -406,6 +417,7 @@ export default function SentimentWrite() {
               <div className="star">
                 {[...Array(rating)].map((a, i) => (
                   <PiStarFill
+                    color="#5FCB75"
                     className="star-lg"
                     key={i}
                     onClick={() => setRating(i + 1)}

@@ -44,11 +44,6 @@ function UserProfile({ userData }) {
     setIsModalOpen(false);
   };
 
-  const handleModalSubmit = (status_message) => {
-    setMessage(status_message);
-    sendStatusMessage(status_message);
-  };
-
   const user_context = useContext(UserContext);
   console.log(user_context);
   if (user_context && user_context.user_data) {
@@ -57,29 +52,52 @@ function UserProfile({ userData }) {
   console.log("사용자 데이터가 없습니다.");
   }
 
-  const sendStatusMessage = (status_message) => {
-    const formData = new FormData();
-    const user_Id = user_context.user_data.id;
-    formData.append('status_message', status_message);
-    
-    fetch(`/users/${user_Id}/mypage`, {
-      method: 'POST', 
-      body: formData, 
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json(); 
-      } else {
-        throw new Error('Network response was not ok.'); 
-    }
-    })
-    .then(data => {
-      console.log("Status message updated successfully", data);
-    })
-    .catch(error => {
-      console.error("Error updating status message:", error);
-    });
+  const handleModalSubmit = (status_message) => {
+    // 상태 메시지를 상태로 설정
+    setMessage(status_message);
+    sendStatusMessage(status_message);
   };
+  
+  const sendStatusMessage = (status_message) => {
+    const user_Id = user_context.user_data.id;
+    const url = `users/${user_Id}/mypage/status_message`; 
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+    const body = JSON.stringify({ status_message }); 
+  
+    axios.post(url, body, config)
+      .then((res) => {
+        if (res.data.success) {
+          console.log('Status message upload successful', res.data);
+        } 
+      })
+      .catch(err => {
+        console.error('Error uploading status message', err);
+      });
+  };
+
+/*const handleModalSubmit = (newStatusMessage) => {
+  const updatedUserData = [...userData];
+  updatedUserData[0].status_message = newStatusMessage;
+  setUserData(updatedUserData);
+
+  sendStatusMessage(updatedUserData[0].status_message);
+};
+
+const sendStatusMessage = (statusMessage) => {
+  const user_Id = user_context.user_data.id;
+  const url = `/users/${user_Id}/mypage/status`;
+  const data = { status_message: statusMessage }; //
+
+  axios.post(url, data)
+    .then((response) => {
+      console.log('Status message update successful', response.data);
+    })
+    .catch((error) => {
+      console.error('Error updating status message', error);
+    });
+};*/
 
   const getTierIcon = (tier) => {
     const tierIcons = {
@@ -122,10 +140,11 @@ function UserProfile({ userData }) {
   };
   
   const uploadImg = (formData) => {
+    const user_Id = user_context.user_data.id;
     const config = {
       headers: { "content-type": "multipart/form-data" },
     };
-    axios.post(`users/1/mypage`, formData, config)
+    axios.post(`users/${user_Id}/mypage/profile_image`, formData, config)
       .then((res) => {
         if (res.data.success) {
           console.log('Image upload successful', res.data);
@@ -160,7 +179,7 @@ function UserProfile({ userData }) {
       </div>
       <div className="userdata-container">
         <div className="last-tier">
-          <strong>Season 1: Master</strong>
+          <strong>{userData[0].last_tier}</strong>
         </div>
         <div className="nameAndTier">
           <h2 className="name">{userData[0].nickname}</h2>
@@ -174,20 +193,20 @@ function UserProfile({ userData }) {
         </div>
         <p className="email">{userData[0].email}</p>
         <div className="message-edit">
-          <div className="message-box">
-            <h5>{message}</h5>
-          </div>
-          <button className="edit-button2" onClick={handleEditButtonClick}>
-            <img src={flag} alt="flagIcon" />
-            메시지 수정
-          </button>
-          <MypageModal
-            value={values.status_message}
-            isOpen={isModalOpen}
-            onClose={handleModalClose}
-            onSubmit={handleModalSubmit}
-          />
+        <div className="message-box">
+          {message ? <h5>{message}</h5> : <h5>...</h5>}
         </div>
+        <button className="edit-button2" onClick={handleEditButtonClick}>
+          <img src={flag} alt="flagIcon" />
+          메시지 수정
+        </button>
+        <MypageModal
+          value={values.status_message}
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
+          onSubmit={handleModalSubmit}
+        />
+      </div>
         <div className="userDetail-container">
           <div
             className="follower-count detail-item"

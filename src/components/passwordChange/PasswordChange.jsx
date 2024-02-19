@@ -34,18 +34,18 @@ export default function PasswordChange(props) {
               <div className={`pw_input`}>
                 <input
                   ref={props.pwInputRef}
-                  type={isEyeOpen ? "text" : "password"}
+                  type={props.pwEye ? "text" : "password"}
                   placeholder="비밀번호"
                   onChange={props.onPwChange}
                   value={props.pw}
                 />
 
-                {isEyeOpen ? (
+                {props.pwEye ? (
                   <img
                     className="eye"
                     src={eye_icon}
                     onClick={() => {
-                      setIsEyeOpen(false);
+                      props.setPwEye(false);
                     }}
                   />
                 ) : (
@@ -53,7 +53,7 @@ export default function PasswordChange(props) {
                     className="eye_off"
                     src={eye_off_icon}
                     onClick={() => {
-                      setIsEyeOpen(true);
+                      props.setPwEye(true);
                     }}
                   />
                 )}
@@ -66,30 +66,29 @@ export default function PasswordChange(props) {
               </div>
             </div>
             <div className="notice">
-              <div className="notice_0"></div>
-              <div className="notice_1">
-                비밀번호 양식이 맞지 않습니다. *특수문자 미사용
+              {[<div className="notice_0"></div>,
+              <div className="notice_1">비밀번호 양식이 맞지 않습니다.</div>,
+              <div className='notice_2'>지난 비밀번호와 같습니다. 다른 비밀번호를 사용해주세요.</div>
+            ][props.pwState]}
               </div>
-              {/* <div className='notice_2'>지난 비밀번호와 같습니다. 다른 비밀번호를 사용해주세요.</div> */}
-            </div>
           </div>
           <div className="pwcheck_form">
             <div className="pwcheck_line">
               <div className={`pwcheck_input`}>
                 <input
                   ref={props.pwInputRef}
-                  type={isEyeOpen ? "text" : "password"}
+                  type={props.pwCheckEye ? "text" : "password"}
                   placeholder="비밀번호확인"
-                  onChange={props.onPwChange}
-                  value={props.pw}
+                  onChange={props.onPwCheckChange}
+                  value={props.pwCheck}
                 />
 
-                {isEyeOpen ? (
+                {props.pwCheckEye ? (
                   <img
                     className="eye"
                     src={eye_icon}
                     onClick={() => {
-                      setIsEyeOpen(false);
+                      props.setPwCheckEye(false);
                     }}
                   />
                 ) : (
@@ -97,7 +96,7 @@ export default function PasswordChange(props) {
                     className="eye_off"
                     src={eye_off_icon}
                     onClick={() => {
-                      setIsEyeOpen(true);
+                      props.setPwCheckEye(true);
                     }}
                   />
                 )}
@@ -110,10 +109,11 @@ export default function PasswordChange(props) {
               </div>
             </div>
             <div className="notice">
-              <div className="notice_0"></div>
-              <div className="notice_1">
-                확인 버튼을 누르면 비밀번호가 변경됩니다!
-              </div>
+              {[
+              <div className="notice_0"></div>,
+              <div className="notice_1">비밀번호가 일치하지 않습니다.</div>,
+              <div className="notice_2">비밀번호가 일치합니다.<br/>확인 버튼을 누르면 비밀번호가 변경됩니다!</div>
+              ][props.pwCheckState]}
             </div>
           </div>
           <div className="explain">
