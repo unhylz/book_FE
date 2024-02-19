@@ -34,6 +34,7 @@ export default function CommentItem({data, id, user_id}) {
   const [commentValid, setCommentValid] = useState(true);
   const [parent_id, setParentID] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [inputCount, setInputCount] = useState(0);
 
   const modalstyle ={
     width: "90px",
@@ -83,6 +84,7 @@ export default function CommentItem({data, id, user_id}) {
   };
 
   const handleCommentChange = (e) => {
+    setInputCount(e.target.value.length);
     setContent(e.target.value);
     setParentID(null)
     setCommentValid(!!e.target.value);
@@ -146,6 +148,12 @@ export default function CommentItem({data, id, user_id}) {
                       alt="result.tier"
                       className="tier-icon"
                     />
+                    { (data[0].sentiment.user_id === result.user_id) && (
+                      <div className="writer-comment">(작성자)</div>
+                    )}
+                    { (user_id === result.user_id) && (
+                      <div className="my-comment">(내가 쓴 댓글)</div>
+                    )}
                   </div>
                   <div className="time">{formatDateTime(result.created_at)}</div>
                 </div>
@@ -225,7 +233,8 @@ export default function CommentItem({data, id, user_id}) {
               </button>
             </ModalFrame>
           )}
-          <div className="text-count">0/300</div>
+          <div className="text-count">
+            <div>{inputCount}</div>/300</div>
         </div>
         <button type="submit" className="comment-button">{"작성하기"}</button>
       </div>
