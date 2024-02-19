@@ -6,6 +6,7 @@ import "./mypage.scss";
 import "../mypage/mypage_follower.scss";
 import AcountModalContainer from "../../../../container/AcountModalContainer";
 import { UserContext } from "../../../../context/Login";
+import xIcon from "../../../../assets/icons/xIcon.svg"
 
 export default function Mypage_following() {
   const [followers, setFollowers] = useState([]);
@@ -28,9 +29,10 @@ export default function Mypage_following() {
   }
 
   useEffect(() => {
+    const user_Id = user_context.user_data.id;
     const fetchFollowers = async () => {
       try {
-        const response = await axios.get("/users/2/following");
+        const response = await axios.get(`/users/${user_Id}/following`);
         setFollowers(response.data.nicknames);
         console.log("팔로잉 데이터:", response.data);
       } catch (error) {
@@ -43,33 +45,33 @@ export default function Mypage_following() {
 
 
   const handleFollowClick = async (follower) => {
+    const user_Id = user_context.user_data.id;
     if (!follower) {
       console.error("유효하지 않은 객체임");
       return;
     }
     try {
-      const response = await axios.post(`/users/2/follow`, {
+      const response = await axios.post(`/users/${user_Id}/follow`, {
         followingId: follower.user_id, 
-        isFollow: follower.follow_status === "1" ? 0 : 1,
+        isFollow: follower.follow_status === "0" ? 1 : 0
       });
   
-      if (response.data.follow_status === "1") {
-        console.log(`${follower.nickname}를 팔로우했습니다.`);
-      } else {
-        console.log(`${follower.nickname} 팔로우를 취소했습니다.`);
-      }
-  
-      const updatedFollowStatus = response.data.follow_status;
+      // 팔로우 상태 업데이트 로직 수정
+      const updatedFollowStatus = response.data.follow_status === "0" ? "1" : "0";
       setFollowers(followers.map(f => {
         if (f.user_id === follower.user_id) { 
           return { ...f, follow_status: updatedFollowStatus };
         }
         return f;
       }));
+  
+      // 로그 메시지 업데이트
+      console.log(`${follower.nickname}의 팔로우 상태가 변경되었습니다.`);
     } catch (error) {
       console.error("팔로우 요청 중 오류 발생:", error);
     }
   };
+  
 
   useEffect(() => {
     console.log("모달 상태 변경???: ", modalState);
@@ -92,7 +94,10 @@ export default function Mypage_following() {
           <div className="user-list">
             <h2>팔로잉</h2>
             {followers.length === 0 ? (
-              <p>팔로워가 없습니다.</p>
+              <div className="noSentiment">
+              <img src={xIcon}/>
+              <p>팔로잉이 없습니다.</p>
+              </div>
             ) :
             followers.map((follower, index) => (
               <div key={index} className="follower-card">
@@ -108,10 +113,10 @@ export default function Mypage_following() {
                 <button
                   onClick={() => handleFollowClick(follower)}
                   className={`follower-status ${
-                    follower.follow_status === "1" ? "followed" : "not-followed"
+                    follower.follow_status === "0" ? "not-followed" : "followed"
                   }`}
                 >
-                  {follower.follow_status === "1" ? "팔로우" : "팔로잉"}
+                  {follower.follow_status === "0" ? "팔로잉" : "팔로우"}
                 </button>
               </div>
             ))}

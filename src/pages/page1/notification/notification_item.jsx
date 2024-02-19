@@ -24,10 +24,8 @@ export default function NotificationItem({
 
   const handleItemClick = async () => {
     try {
-      // 알림 확인 요청
-      await NotificationCheck(userId, key); //key 부분을 alarm_id로 대체 필요 ====
+      await NotificationCheck(userId, key);
 
-      // 알림이 "댓글"인 경우 센티먼트 상세 페이지로 이동
       if (title.includes("댓글")) {
         navigate(`/sentiment/notification/${sentiment_id}/${title}`);
       }
@@ -37,7 +35,6 @@ export default function NotificationItem({
       }
     } catch (error) {
       console.error("알림 확인 오류:", error);
-      // 알림 확인에 실패한 경우에 대한 처리 추가
     }
   };
 
