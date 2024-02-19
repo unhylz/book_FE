@@ -53,35 +53,51 @@ function UserProfile({ userData }) {
   }
 
   const handleModalSubmit = (status_message) => {
-    fetch(status_message)
-    
-    .then(response => {
-      return response.json();
-    })
-    .then(blob => {
-      const formData = new FormData();
-      formData.append('files', blob );
-    })
+    // 상태 메시지를 상태로 설정
     setMessage(status_message);
     sendStatusMessage(status_message);
   };
-
-
+  
   const sendStatusMessage = (status_message) => {
     const user_Id = user_context.user_data.id;
+    const url = `users/${user_Id}/mypage/status_message`; 
     const config = {
-      headers: { "content-type": "multipart/form-data" },
+      headers: { "Content-Type": "application/json" },
     };
-    axios.post(`users/${user_Id}/mypage`, status_message, config)
-    .then((res) => {
-      if (res.data.success) {
-        console.log('statusMessage upload successful', res.data);
-      } 
-    })
-    .catch(err => {
-      console.error('Error uploading statusMessage', err);
-    });
+    const body = JSON.stringify({ status_message }); 
+  
+    axios.post(url, body, config)
+      .then((res) => {
+        if (res.data.success) {
+          console.log('Status message upload successful', res.data);
+        } 
+      })
+      .catch(err => {
+        console.error('Error uploading status message', err);
+      });
   };
+
+/*const handleModalSubmit = (newStatusMessage) => {
+  const updatedUserData = [...userData];
+  updatedUserData[0].status_message = newStatusMessage;
+  setUserData(updatedUserData);
+
+  sendStatusMessage(updatedUserData[0].status_message);
+};
+
+const sendStatusMessage = (statusMessage) => {
+  const user_Id = user_context.user_data.id;
+  const url = `/users/${user_Id}/mypage/status`;
+  const data = { status_message: statusMessage }; //
+
+  axios.post(url, data)
+    .then((response) => {
+      console.log('Status message update successful', response.data);
+    })
+    .catch((error) => {
+      console.error('Error updating status message', error);
+    });
+};*/
 
   const getTierIcon = (tier) => {
     const tierIcons = {
@@ -128,7 +144,7 @@ function UserProfile({ userData }) {
     const config = {
       headers: { "content-type": "multipart/form-data" },
     };
-    axios.post(`users/${user_Id}/mypage`, formData, config)
+    axios.post(`users/${user_Id}/mypage/profile_image`, formData, config)
       .then((res) => {
         if (res.data.success) {
           console.log('Image upload successful', res.data);

@@ -104,19 +104,21 @@ function MyPage() {
         <div className="mypage-container">
           {userData ? (
             <>
-              <UserProfile userData={userData} />
-              {userData &&
-              user_context.user_data &&
-              userData.id !== user_context.user_data.id ? (
-                <button
-                  className={`follow-button ${
-                    isFollowing ? "following" : "not-following"
-                  }`}
-                  onClick={toggleFollow}
-                >
-                  {isFollowing ? "언팔로우" : "팔로우"}
-                </button>
-              ) : null}
+                {userData && user_context.user_data && (
+                  <>
+                    <UserProfile userData={userData} />
+                    {userData[0].user_id !== user_context.user_data.id && (
+                      <button
+                        className={`follow-button ${
+                          isFollowing ? "following" : "not-following"
+                        }`}
+                        onClick={toggleFollow}
+                      >
+                        {isFollowing ? "언팔로우" : "팔로우"}
+                      </button>
+                    )}
+                  </>
+                )}
               <UserStats userData={userData} />
             </>
           ) : (
