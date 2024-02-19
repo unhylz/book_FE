@@ -11,12 +11,11 @@ import DiaIcon from "../../../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../../assets/tiers/그랜드마스터.svg";
 import Pagination from "./pagenation";
-import "../../../../Home/components/sentiment/Sentiment.scss"
-import "./userProfile.scss"
+import "../../../../Home/components/sentiment/Sentiment.scss";
+import "./userProfile.scss";
 import axios from "axios";
-import xIcon from "../../../../../assets/icons/xIcon.svg"
-import { UserContext } from "../../../../../context/Login"
-
+import xIcon from "../../../../../assets/icons/xIcon.svg";
+import { UserContext } from "../../../../../context/Login";
 
 function formatDateTime(dateTimeString) {
   const year = dateTimeString.slice(6, 10);
@@ -28,33 +27,34 @@ function formatDateTime(dateTimeString) {
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
 
-export default function Sentiment() { 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalItems, setTotalItems] = useState(0);
-    const itemsPerPage = 3;
-    const [cursorId, setCursorId] = useState(1);
-    const [sentimentData, setSentimentData] = useState(null);
+export default function Sentiment() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 3;
+  const [cursorId, setCursorId] = useState(1);
+  const [sentimentData, setSentimentData] = useState(null);
 
-    const user_context = useContext(UserContext);
-    console.log(user_context); 
-    if (user_context && user_context.user_data) {
-    console.log("사용자 정보: ", user_context.user_data.id); 
-    } else {
+  const user_context = useContext(UserContext);
+  console.log(user_context);
+  if (user_context && user_context.user_data) {
+    console.log("사용자 정보: ", user_context.user_data.id);
+  } else {
     console.log("사용자 데이터가 없습니다.");
-    }
+  }
 
-    useEffect(() => {
-      const user_Id = user_context.user_data.id;
-      axios.get(`users/${user_Id}/mypage`, {
+  useEffect(() => {
+    const user_Id = user_context.user_data.id;
+    axios
+      .get(`users/${user_Id}/mypage`, {
         withCredentials: true,
       })
-      .then(response => {
-        if(response.data.length > 1){
-        setSentimentData(response.data[1].sentimentObject);
-      }
-      }) 
-      .catch(error => console.error(error));
-    }, []);
+      .then((response) => {
+        if (response.data.length > 1) {
+          setSentimentData(response.data[1].sentimentObject);
+        }
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
   const getTierIcon = (tier) => {
     const tierIcons = {
@@ -68,104 +68,103 @@ export default function Sentiment() {
     return tierIcons[tier];
   };
 
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-return (
-  <div>
-    <div className="search-container">
-      {sentimentData && sentimentData.length > 0 ? (
-        sentimentData.map((result) => (
-          <div key={result.sentiment_id} className="search-result">
-            <div className="info">
-              <Link
-                to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
-                className="book-link"
-              >
-                <img
-                  src={`${result.book_image}`}
-                  alt={result.book_title}
-                  width="100" height="148"
-                />
-              </Link>
-              <div className="none-img">
-                <div className="detail-info">
-                  <Link
-                    to={`/sentiment/${result.sentiment_id}/${result.sentiment_title}`}
-                    className="book-link"
-                  >
-                    <h3>{result.sentiment_title}</h3>
-                  </Link>
-                  <p>
-                    <strong>{result.book_title}</strong> ({result.author}/
-                    {result.publisher})
-                  </p>
-                </div>
-                <div className="additional-info">
-                  <div className="nickname">
-                    <p>닉네임: {result.nickname} </p>
+  return (
+    <div>
+      <div className="search-container">
+        {sentimentData && sentimentData.length > 0 ? (
+          sentimentData.map((result) => (
+            <div key={result.sentiment_id} className="search-result">
+              <div className="info">
+                <Link
+                  to={`/sentiment/mypage/${result.sentiment_id}/${result.sentiment_title}`}
+                  className="book-link"
+                >
+                  <img
+                    src={`${result.book_image}`}
+                    alt={result.book_title}
+                    width="100"
+                    height="148"
+                  />
+                </Link>
+                <div className="none-img">
+                  <div className="detail-info">
+                    <Link
+                      to={`/sentiment//mypage/${result.sentiment_id}/${result.sentiment_title}`}
+                      className="book-link"
+                    >
+                      <h3>{result.sentiment_title}</h3>
+                    </Link>
+                    <p>
+                      <strong>{result.book_title}</strong> ({result.author}/
+                      {result.publisher})
+                    </p>
                   </div>
-                  <div className="tier">
-                    <p>티어: </p>
-                    <img
-                      src={getTierIcon(result.tier)}
-                      alt="result.tier"
-                      className="tier-icon"
-                    />
+                  <div className="additional-info">
+                    <div className="nickname">
+                      <p>닉네임: {result.nickname} </p>
+                    </div>
+                    <div className="tier">
+                      <p>티어: </p>
+                      <img
+                        src={getTierIcon(result.tier)}
+                        alt="result.tier"
+                        className="tier-icon"
+                      />
+                    </div>
+                    <div className="likes">
+                      <img src={likeIcon} alt="like" className="like-icon" />
+                      <p>{result.like_num}</p>
+                    </div>
+                    <div className="comments">
+                      <img
+                        src={commentIcon}
+                        alt="comment"
+                        className="comment-icon"
+                      />
+                      <p>{result.comment_num}</p>
+                    </div>
+                    <div className="bookmarks">
+                      <img
+                        src={boockmarkIcon}
+                        alt="bookmark"
+                        className="bookmark-icon"
+                      />
+                      <p>{result.scrap_num}</p>
+                    </div>
+                    <p className="datetime">
+                      {formatDateTime(result.created_at)}
+                    </p>
                   </div>
-                  <div className="likes">
-                    <img src={likeIcon} alt="like" className="like-icon" />
-                    <p>{result.like_num}</p>
-                  </div>
-                  <div className="comments">
-                    <img
-                      src={commentIcon}
-                      alt="comment"
-                      className="comment-icon"
-                    />
-                    <p>{result.comment_num}</p>
-                  </div>
-                  <div className="bookmarks">
-                    <img
-                      src={boockmarkIcon}
-                      alt="bookmark"
-                      className="bookmark-icon"
-                    />
-                    <p>{result.scrap_num}</p>
-                  </div>
-                  <p className="datetime">
-                    {formatDateTime(result.created_at)}
-                  </p>
                 </div>
               </div>
+              <div className="rating-info">
+                <img src={starIcon} alt="star" className="star-icon" />
+                <p>{result.score.toFixed(1)}</p>
+              </div>
             </div>
-            <div className="rating-info">
-              <img src={starIcon} alt="star" className="star-icon" />
-              <p>{result.score.toFixed(1)}</p>
-            </div>
+          ))
+        ) : (
+          <div className="noSentiment">
+            <img src={xIcon} />
+            <p>작성한 센티멘트가 없습니다. 센티멘트를 작성해주세요!</p>
           </div>
-        ))
-      ) : (
-        <div className="noSentiment">
-        <img src={xIcon} />
-        <p>작성한 센티멘트가 없습니다. 센티멘트를 작성해주세요!</p>
+        )}
+      </div>
+      <div className="pagination-container">
+        <div className="pagination">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
-      )}
-    </div>
-    <div className="pagination-container">
-      <div className="pagination">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
       </div>
     </div>
-  </div>
-);
+  );
 }

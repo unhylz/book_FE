@@ -171,7 +171,11 @@ export default function Header({
           type="input"
           ref={nowContent}
           value={
-            content === "main" || content === "notification" ? "" : content
+            content === "main" ||
+            content === "notification" ||
+            content === "mypage"
+              ? ""
+              : content
           }
           onChange={handleInputChange}
           placeholder="책 제목, 센티먼트, 유저를 검색하세요"
