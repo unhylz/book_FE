@@ -42,38 +42,36 @@ export default function Mypage_follower() {
     fetchFollowers();
   }, []);
 
-  const handleFollowClick = async (follower) => {
-    const user_Id = user_context.user_data.id;
-    if (!follower) {
-      console.error("유효하지 않은 객체임");
-      return;
-    }
-    try {
-      const response = await axios.post(`/users/${user_Id}/follow`, {
-        followingId: follower.user_id, // user_id를 사용
-        isFollow: follower.follow_status === "1" ? 0 : 1,
-      });
-  
-      if (response.data.follow_status === "1") {
-        console.log(`${follower.nickname}를 팔로우했습니다.`);
-      } else {
-        console.log(`${follower.nickname} 팔로우를 취소했습니다.`);
-      }
-  
-      const updatedFollowStatus = response.data.follow_status;
-      setFollowers(followers.map(f => {
-        if (f.user_id === follower.user_id) { 
-          return { ...f, follow_status: updatedFollowStatus };
+      const handleFollowClick = async (follower) => {
+        const user_Id = user_context.user_data.id;
+        if (!follower) {
+          console.error("유효하지 않은 객체임");
+          return;
         }
-        return f;
-      }));
-  
-      // 로그 메시지 업데이트
-      console.log(`${follower.nickname}의 팔로우 상태가 변경되었습니다.`);
-    } catch (error) {
-      console.error("팔로우 요청 중 오류 발생:", error);
-    }
-  };
+      
+        try {
+          const response = await axios.post(`/users/${user_Id}/follow`, {
+            followingId: follower.user_id, // 팔로우하려는 사용자의 ID
+            isFollow: follower.follow_status === "1" ? false : true, // 팔로우 상태 반전
+          });
+          // 요청 성공 시, 로그 메시지 출력 및 상태 업데이트
+          if (response.data.follow_status === "follow" || response.data.follow_status === "following") {
+            const newFollowStatus = response.data.follow_status === "following" ? "1" : "0";
+            console.log(`${follower.nickname}를 팔로우했습니다.`);
+            // 팔로워 목록 상태 업데이트
+              setFollowers(followers.map(f => {
+                if (f.user_id === follower.user_id) {
+                  return { ...f, follow_status: newFollowStatus };
+                }
+                return f;
+              }));
+            } else {
+              alert("팔로우 상태 변경 실패");
+            }
+          } catch (error) {
+            console.error("팔로우 요청 중 오류 발생:", error);
+          }
+        };
 
   useEffect(() => {
     console.log("모달 상태 변경???: ", modalState);
@@ -123,13 +121,11 @@ export default function Mypage_follower() {
                     <p className="follower-bio">{follower.status_message}</p>
                   </div>
                   <button
-                  onClick={() => handleFollowClick(follower)}
-                  className={`follower-status ${
-                    follower.follow_status === "1" ? "followed" : "not-followed"
-                  }`}
-                >
-                  {follower.follow_status === "1" ? "팔로우" : "팔로잉"}
-                </button>
+                    onClick={() => handleFollowClick(follower)}
+                    className={`follower-status ${follower.follow_status === "1" ? "followed" : "not-followed"}`}
+                  >
+                    {follower.follow_status === "1" ? "팔로잉" : "팔로우"} 
+                  </button>
                 </div>
               ))}
           </div>
