@@ -99,11 +99,34 @@
         }
       }
     }
-    .content {
+    .comment-content {
       font-size: 18px;
       font-weight: bold;
       line-height: 150%;
       margin-top: 15px;
+    }
+    .like-delete-box {
+      display: flex;
+      justify-content: space-between;
+      .comment-like-count{
+
+      }
+      .comment-delete-button {
+        display: flex;
+        align-items: center;
+        margin-right: 27px;
+        cursor: pointer;
+        .delete-icon {
+          display: flex;
+          width: 14px;
+          height: 16px;
+        }
+        .delete-text {
+          display: flex;
+          margin-left: 3px;
+          font-weight: bold;
+        }
+      }
     }
   }
   .input-container {

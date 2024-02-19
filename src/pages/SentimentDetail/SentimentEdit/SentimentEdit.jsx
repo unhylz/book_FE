@@ -13,6 +13,9 @@ import "../../SentimentWrite/BookSearch.scss";
 import BookLogo from "../../SentimentWrite/BookLogo.png";
 import ImgAdd from "../../SentimentWrite/AddImg.png";
 import ModalFrame from '../../SentimentWrite/Modal';
+import { SentimentIdSearch } from "../../../modules/api/search";
+import { MyPageProfile } from "../../../modules/api/search";
+import userImg from "../../../assets/icons/user_Img.png"
 
 function DecoModal({ isOpen, onClose, search, setSelectedBook, setBookImageFile, setAuthor, setPublisher }) {
 
@@ -53,7 +56,7 @@ function DecoModal({ isOpen, onClose, search, setSelectedBook, setBookImageFile,
   }
   const hButtonClick=(index)=>{
     console.log(index)
-    console.log("선택한 책이에요요요옹ㅇ", bookData[index].title);
+    console.log("선택한 책", bookData[index].title);
     if (bookData[index] && bookData[index].title) {
       setSelectedBook(bookData[index].title);
       setAuthor(bookData[index].author);
@@ -143,10 +146,6 @@ function DecoModal({ isOpen, onClose, search, setSelectedBook, setBookImageFile,
 }
 
 export default function SentimentWrite() {
-  // const location = useLocation();
-  // const bookTitle = location.state ? location.state.bookTitle : null;
-  // console.log("bookTitle: ", bookTitle);
-
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [search, setSearch] = useState("");
@@ -163,7 +162,10 @@ export default function SentimentWrite() {
   const [publisher, setPublisher] = useState("");
   const [selectedBook, setSelectedBook] = useState(""); // 선택한 도서 제목 상태 추가
   const imgRef = useRef();
-	const { id, sentiment_title } = useParams();
+	const [profile, setProfile] = useState(null);
+
+	const location = useLocation();
+	const id = location.state.id;
 
   //유저 콘텍스트-----------------------------------------------------------
 
@@ -284,24 +286,80 @@ export default function SentimentWrite() {
     cursor: "pointer",
   }
 
+	useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await SentimentIdSearch(id);
+				console.log("받아온 데이터 1차", data)
+				setTitle(data[0].sentiment.sentiment_title);
+				setSearch(data[0].sentiment.book_title);
+				setSelectedBook(data[0].sentiment.book_title);
+				setContent(data[0].sentiment.content);
+				setAuthor(data[0].sentiment.author);
+				setPublisher(data[0].sentiment.publisher);
+				setRating(Number(data[0].sentiment.score.toFixed(1)));
+				setImgFile(data[0].sentiment.image_path);
+				setBookImageFile(data[0].sentiment.book_image);
+
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+	useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const profile = await MyPageProfile(user_id);
+        setProfile(profile[0]);
+      } catch (error) {
+        console.error("데이터 가져오기 오류 - 프로필:", error);
+      }
+    };
+
+    if (user_context.user_data.isLogin) {
+      fetchData();
+    }
+    if (profile) {
+      console.log("===== profile 데이터:", profile);
+    }
+  }, []);
+
   return (
     <form onSubmit={handleFormSubmit}>
-      <header className="header-container">
-        <Link to="/" className="logo">
-          <img
-            style={{ width: "175px", height: "84px" }}
-            src={BookLogo}
-            alt="logo"
-          />
-        </Link>
-        <div className="btn-user-container">
-          <button type="submit" className="write-btn" >
-            작성하기
-          </button>
-          {/* 사용자 정보 들어가야 함 */}
-          <div className="user-box">Paul</div>
-        </div>
-      </header>
+			{profile && (
+				<header className="header-container">
+					<Link to="/" className="logo">
+						<img
+							style={{ width: "175px", height: "84px" }}
+							src={BookLogo}
+							alt="logo"
+						/>
+					</Link>
+					<div className="btn-user-container">
+						<button type="submit" className="write-btn" >
+							작성하기
+						</button>
+						{(profile.profile_image === null || profile.profile_image === "기본 프로필") && (
+							<img
+								src={userImg}
+								alt="MyPage"
+								className="user-image"
+							/>
+						)}
+						{!(profile.profile_image === null || profile.profile_image === "기본 프로필") && (
+							<img
+								src={profile.profile_image}
+								alt="MyPage"
+								className="user-image"
+							/>
+						)}
+						<div className="user-box">{profile.nickname}</div>
+					</div>
+				</header>
+			)}
 
       <div className="write">
         <div className="image-add-container">
@@ -319,12 +377,6 @@ export default function SentimentWrite() {
               alt="addbtn"
             />
           </label>
-          {/* <img
-            style={{ width: "60px", height: "60px" }}
-            src={ImgAdd}
-            alt="addbtn"
-            onClick={() => document.getElementById("imageInput").click()}
-          /> */}
         </div>
         <div className="write-container">
           <input
@@ -378,6 +430,7 @@ export default function SentimentWrite() {
               <div className="star">
                 {[...Array(rating)].map((a, i) => (
                   <PiStarFill
+										color="#5FCB75"
                     className="star-lg"
                     key={i}
                     onClick={() => setRating(i + 1)}

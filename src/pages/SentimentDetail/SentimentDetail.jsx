@@ -28,6 +28,7 @@ import "./SentimentDetail.scss";
 import AcountModalContainer from "../../container/AcountModalContainer";
 import { UserContext } from "../../context/Login";
 import { SentimentIdSearch } from "../../modules/api/search";
+import { PiStarFill, PiStarLight } from "react-icons/pi";
 import axios from 'axios';
 
 function formatDateTime(dateTimeString) {
@@ -57,6 +58,7 @@ export default function SentimentDetail() {
   const navigate = useNavigate();
   const { content, id, sentiment_title } = useParams();
   const [SearchData, setSearchData] = useState(null);
+  const [sentimentData, setSentimentData] = useState("");
 
   const [modalState, setModalState] = useState(null);
   const [modal, setModal] = useState(false);
@@ -80,6 +82,7 @@ export default function SentimentDetail() {
       try {
         const data = await SentimentIdSearch(id);
         setSearchData(data);
+        setSentimentData(data[0].sentiment);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
@@ -114,11 +117,35 @@ export default function SentimentDetail() {
   const [isRecommand, setIsRecommand] = useState(false);
   const [isScrap, setIsScrap] = useState(false);
 
-  const handleRecommand = () => {
-    setIsRecommand(!isRecommand);
+  const handleRecommand = async () => {
+    if(isLoggedIn){
+      if(user_id === SearchData[0].sentiment.user_id) {
+        alert("본인 센티먼트는 추천할 수 없습니다.")
+      }
+      else {
+        setIsRecommand(!isRecommand);
+        const response = await axios.post(`/users/${user_id}/like/sentiment/${id}`);
+        console.log("추천 성공", response.data)
+      }
+    }
+    else {
+      alert("로그인 후 가능합니다.")
+    }
   };
-  const handleScrap = () => {
-    setIsScrap(!isScrap);
+  const handleScrap = async () => {
+    if(isLoggedIn){
+      if(user_id === SearchData[0].sentiment.user_id) {
+        alert("본인 센티먼트는 스크랩할 수 없습니다.")
+      }
+      else {
+        setIsScrap(!isScrap);
+      const response = await axios.post(`/users/${user_id}/scrap/${id}`);
+      console.log("스크랩 성공", response.data)
+      }
+    }
+    else {
+      alert("로그인 후 가능합니다")
+    }
   };
 
   //상단 컴포넌트
@@ -182,6 +209,15 @@ export default function SentimentDetail() {
                     alt="Book Cover"
                   />
                   <div className="rating">
+                    <div className="star">
+                      {[...Array(Math.floor(SearchData[0].sentiment.score))].map((_, i) => (
+                        <PiStarFill
+                          color="#5FCB75"
+                          className="star-lg"
+                          key={i}
+                        />
+                      ))}
+                    </div>
                     {SearchData[0].sentiment.score.toFixed(1)}
                   </div>
                 </div>
@@ -232,7 +268,7 @@ export default function SentimentDetail() {
             <div
               className="update-button"
               onClick={() => {
-                navigate(`/editsentiment/${id}`);
+                navigate(`/editsentiment/${id}`, {state: { id }});
               }}
             >
               <img src={editIcon} alt="editIcon" className="edit-icon" />
@@ -327,6 +363,9 @@ export default function SentimentDetail() {
       </>
     );
   };
+  useEffect(() => {
+    console.log("센티먼트 데이터 확인용 77:", SearchData);
+  }, [SearchData]);
 
   return (
     <div>

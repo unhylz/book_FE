@@ -14,6 +14,7 @@ import searchIcon from "./search.png"
 import axios from "axios";
 import "./BookSearch.scss";
 import { MyPageProfile } from "../../modules/api/search";
+import userImg from "../../assets/icons/user_Img.png"
 
 function DecoModal({ isOpen, onClose, search, setSelectedBook, setBookImageFile, setAuthor, setPublisher }) {
   const [issue, setIssue] = useState({
@@ -322,11 +323,20 @@ export default function SentimentWrite() {
           <button type="submit" className="write-btn" >
             작성하기
           </button>
-          <img
-            src={profile.profile_image}
-            alt="MyPage"
-            className="user-image"
-          />
+          {(profile.profile_image === null || profile.profile_image === "기본 프로필") && (
+            <img
+              src={userImg}
+              alt="MyPage"
+              className="user-image"
+            />
+          )}
+          {!(profile.profile_image === null || profile.profile_image === "기본 프로필") && (
+            <img
+              src={profile.profile_image}
+              alt="MyPage"
+              className="user-image"
+            />
+          )}
           <div className="user-box">{profile.nickname}</div>
         </div>
       </header>
@@ -407,6 +417,7 @@ export default function SentimentWrite() {
               <div className="star">
                 {[...Array(rating)].map((a, i) => (
                   <PiStarFill
+                    color="#5FCB75"
                     className="star-lg"
                     key={i}
                     onClick={() => setRating(i + 1)}
