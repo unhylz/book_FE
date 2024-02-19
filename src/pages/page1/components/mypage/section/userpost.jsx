@@ -11,6 +11,8 @@ import DiaIcon from "../../../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../../assets/tiers/그랜드마스터.svg";
 import Pagination from "./pagenation";
+import "../../../../Home/components/sentiment/Sentiment.scss"
+import "./userProfile.scss"
 import axios from "axios";
 import xIcon from "../../../../../assets/icons/xIcon.svg"
 import { UserContext } from "../../../../../context/Login"
@@ -88,6 +90,7 @@ return (
                 <img
                   src={`${result.book_image}`}
                   alt={result.book_title}
+                  width="100" height="148"
                 />
               </Link>
               <div className="none-img">
