@@ -12,8 +12,7 @@ import GoldIcon from "../../../../assets/tiers/골드.svg";
 import DiaIcon from "../../../../assets/tiers/다이아.svg";
 import MasterIcon from "../../../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../../../assets/tiers/그랜드마스터.svg";
-import rightIcon from "../../../../assets/icons/chevron_right.svg";
-import leftIcon from "../../../../assets/icons/chevron_left.svg";
+import Pagination from "../pagination/Pagination";
 import "./Sentiment.scss";
 import { SentimentData } from "../../../../modules/api/search";
 import { FollowSentimentData } from "../../../../modules/api/search";
@@ -28,45 +27,29 @@ function formatDateTime(dateTimeString) {
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
 
-export default function Sentiment({ userId, selectedButton }) {
-  const cursorId = "1"; // 센티먼트는 커서 1부터 추후 수정 ----------------
-
-  const itemsPerPage = 2;
-  const PageNumPerPage = 3;
+export default function Sentiment({
+  userId,
+  selectedButton,
+  setCursorId,
+  cursorId,
+  setPageNum,
+  pageNum,
+}) {
   const [SearchData, setSearchData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [startPage, setStartPage] = useState(1);
-  const [endPage, setEndPage] = useState(PageNumPerPage);
-
-  const handlePageChange = async (pageNumber) => {
-    setCurrentPage(pageNumber);
-    try {
-      if (selectedButton === "sentiment") {
-        const data = await SentimentData(cursorId);
-        setSearchData(data.result);
-      }
-      if (selectedButton === "follow") {
-        const data = await FollowSentimentData(userId, cursorId);
-        setSearchData(data.result);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchData = async () => {
       try {
         console.log(selectedButton);
 
         if (selectedButton === "sentiment") {
           const data = await SentimentData(cursorId);
-          setSearchData(data.result);
+          setSearchData(data.result.list);
         }
         if (selectedButton === "follow") {
           const data = await FollowSentimentData(userId, cursorId);
-          setSearchData(data.result);
+          setSearchData(data.result.list);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -74,11 +57,11 @@ export default function Sentiment({ userId, selectedButton }) {
     };
 
     fetchData();
-  }, [userId, selectedButton]);
+  }, [userId, selectedButton, cursorId]);
 
   useEffect(() => {
     if (SearchData) {
-      console.log("Sentiment data:", SearchData);
+      console.log("Sentiment data ?????:", SearchData);
     }
   }, [SearchData]);
 
@@ -112,7 +95,9 @@ export default function Sentiment({ userId, selectedButton }) {
                   to={`/sentiment/main/${result.sentiment_id}/${result.sentiment_title}`}
                   className="book-link"
                 >
-                  <img src={result.book_image} alt={result.book_title} />
+                  <div className="info-img">
+                    <img src={result.book_image} alt={result.book_title} />
+                  </div>
                 </Link>
                 <div className="none-img">
                   <div className="detail-info">
@@ -174,7 +159,14 @@ export default function Sentiment({ userId, selectedButton }) {
         {!Array.isArray(SearchData) && <p>센티먼트가 없습니다.</p>}
       </div>
       <div className="pagination-container">
-        <div className="pagination">페이지네이션 추가</div>
+        {Array.isArray(SearchData) && (
+          <Pagination
+            setCursorId={setCursorId}
+            cursorId={cursorId}
+            setPageNum={setPageNum}
+            pageNum={pageNum}
+          />
+        )}
       </div>
     </div>
   );

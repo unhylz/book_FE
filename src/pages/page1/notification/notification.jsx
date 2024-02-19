@@ -6,6 +6,8 @@ import NotificationItem from "../notification/notification_item";
 import AcountModalContainer from "../../../container/AcountModalContainer";
 import axios from "axios";
 import { UserContext } from "../../../context/Login";
+import "./notice.scss";
+import "../components/mypage/mypage.scss";
 
 export default function Notification() {
   const [comments, setComments] = useState([]); 
@@ -17,6 +19,10 @@ export default function Notification() {
   const [modal, setModal] = useState(false);
 
   const user_context = useContext(UserContext);
+
+  const userId = user_context.user_data.id;
+  const isLoggedIn = user_context.user_data.isLogin;
+
   console.log(user_context);
   if (user_context && user_context.user_data) {
   console.log("사용자 정보: ", user_context.user_data.id); 
@@ -27,13 +33,19 @@ export default function Notification() {
   useEffect(() => {
     const user_Id = user_context.user_data.id;
     axios
-      .get(`users/${user_Id}/notifications`)
+
+      .get(`users/${userId}/notifications`)
+
       .then((response) => {
         setNotificationsData(response.data);
         setIsNotified(true);
       })
       .catch((error) => console.error(error));
-  }, []);
+  }, [user_context.user_data.isLogin]);
+
+  useEffect(() => {
+    console.log("notificationsData =====: ", notificationsData);
+  }, [notificationsData]);
 
   const addComment = (newComment) => {
     setComments([...comments, newComment]);
@@ -79,9 +91,10 @@ export default function Notification() {
             {notificationsData.map((notification, index) => (
               <NotificationItem
                 key={index}
-                id={notification.sentiment_id}
+                sentiment_id={notification.sentiment_id}
                 title={notification.title}
-                date={notification.date}
+                read_at={notification.read_at}
+                created_at={notification.created_at}
                 content={notification.content}
               />
             ))}

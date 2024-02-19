@@ -25,25 +25,35 @@
       margin-left: 30px;
       display: flex;
 
-      img {
-        //border: 1px solid $black; //기본 책표지 이미지에 테두리 삭제 요청
-        //height: 100%;
+      .info-img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        //border: 1px solid red;
+        height: 140px;
         width: 100px;
         max-width: 100px;
-        margin-right: 10px;
-        object-fit: cover;
+        text-align: center;
 
-        &:hover {
-          cursor: pointer;
-        }
+        img {
+          border: 1px solid $black; //기본 책표지 이미지에 테두리 삭제 요청
+          height: 100%;
+          width: 100%;
+          margin-right: 10px;
+          object-fit: fill;
 
-        &:active {
-          cursor: grabbing;
+          &:hover {
+            cursor: pointer;
+          }
+
+          &:active {
+            cursor: grabbing;
+          }
         }
       }
 
       .none-img {
-        margin-left: 10px;
+        margin-left: 20px;
 
         .detail-info {
           //border: 2px dashed pink;
@@ -209,33 +219,6 @@
         font-weight: bold;
         font-size: 17px;
         color: $green;
-      }
-    }
-  }
-}
-
-.pagination-container {
-  .pagination {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 50px;
-    margin-right: 10px;
-
-    button {
-      background-color: white;
-      border: none;
-      color: #565656;
-      border-radius: 5px;
-      padding: 10px 15px;
-      cursor: pointer;
-      font-size: 15px;
-      //font-weight: bold;
-
-      &.active {
-        background-color: $green;
-        color: white;
-        cursor: grabbing;
       }
     }
   }

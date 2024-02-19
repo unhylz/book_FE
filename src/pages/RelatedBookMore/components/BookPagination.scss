@@ -1,0 +1,44 @@
+//BookPagination.scss
+@import "../../../lib/scss/BSL.scss";
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 80px;
+  //border: 2px dashed red;
+
+  .left-right {
+    width: 40px;
+    //border: 2px dashed red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &.disabled {
+      display: none;
+    }
+  }
+
+  .pagination-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: white;
+    border: none;
+    color: rgba($black, 0.7);
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+
+    &.active {
+      background-color: $green;
+      color: white;
+    }
+  }
+}

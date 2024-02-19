@@ -2,14 +2,13 @@
 // 나경 to 지현
 // 이 파일이 홈페이지에서 센티먼트 항목 클릭하면 연결 돼요!
 // 센티먼트 페이지 만들고 나중에 여기로 옮기면 될 것 같아요:)
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../Home/components/header/Header";
 import SideAd from "../Home/components/advertisement/SideAd";
 import Footer from "../Home/components/footer/Footer";
 import CommentItem from "./Comment/Comment";
 import ModalFrame from "../SentimentWrite/Modal";
-import axios from "axios";
 import likeBlackIcon from "../../assets/icons/like_black.png";
 import bookmarkBlackIcon from "../../assets/icons/bookmark_black.png";
 import editIcon from "../../assets/icons/edit_Img.png";
@@ -27,8 +26,18 @@ import MasterIcon from "../../assets/tiers/마스터.svg";
 import GrandMasterIcon from "../../assets/tiers/그랜드마스터.svg";
 import "./SentimentDetail.scss";
 import AcountModalContainer from "../../container/AcountModalContainer";
-
+import { UserContext } from "../../context/Login";
 import { SentimentIdSearch } from "../../modules/api/search";
+
+function formatDateTime(dateTimeString) {
+  const year = dateTimeString.slice(6, 10);
+  const month = dateTimeString.slice(0, 2);
+  const day = dateTimeString.slice(3, 5);
+  const hours = dateTimeString.slice(12, 14);
+  const minutes = dateTimeString.slice(15, 17);
+
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
+}
 
 export default function SentimentDetail() {
   // 선택한 센티먼트 id와 title 변수
@@ -37,6 +46,12 @@ export default function SentimentDetail() {
   console.log("검색어가 있으면 ", content);
   console.log(sentiment_title);
   */
+
+  const user_context = useContext(UserContext);
+  console.log("로그인 확인: ", user_context.user_data);
+
+  const userId = user_context.user_data.id;
+  const isLoggedIn = user_context.user_data.isLogin;
 
   const navigate = useNavigate();
   const { content, id, sentiment_title } = useParams();
@@ -115,8 +130,7 @@ export default function SentimentDetail() {
     const { id } = useParams();
 
     console.log(id);
-    //console.log(content.title);
-    //console.log(SentimentDetailDummy[id-1].title);
+
 
     return (
       <div>
@@ -133,7 +147,7 @@ export default function SentimentDetail() {
                     {SearchData[0].sentiment.book_title}
                   </div>
                   <div className="book-author">
-                    {SearchData[0].sentiment.author}
+                    {SearchData[0].sentiment.author} | {SearchData[0].sentiment.publisher}
                   </div>
                 </div>
                 <div className="writer-info-box">
@@ -154,7 +168,7 @@ export default function SentimentDetail() {
                       />
                     </div>
                     <div className="date">
-                      {SearchData[0].sentiment.created_at}
+                      {formatDateTime(SearchData[0].sentiment.created_at)}
                     </div>
                   </div>
                 </div>

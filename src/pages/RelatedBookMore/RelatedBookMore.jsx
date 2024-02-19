@@ -10,6 +10,7 @@ import "./RelatedBookMore.scss";
 import { BookSearch } from "../../modules/api/search";
 import { UserContext } from "../../context/Login";
 import AcountModalContainer from "../../container/AcountModalContainer";
+import Pagination from "./components/BookPagination";
 
 export default function RelatedBookMore() {
   const user_context = useContext(UserContext);
@@ -18,7 +19,8 @@ export default function RelatedBookMore() {
   const userId = user_context.user_data.id; //"2"; //임시 --------------
   const isLogin = user_context.user_data.isLogin;
 
-  const cursorId = "0";
+  const [cursorId, setCursorId] = useState(0);
+  const [pageNum, setPageNum] = useState(null);
 
   // 선택한 센티먼트 id와 title 변수
   const { content } = useParams();
@@ -33,6 +35,7 @@ export default function RelatedBookMore() {
 
   const [modalState, setModalState] = useState(null);
   const [modal, setModal] = useState(false);
+  const [Num, setNum] = useState(null);
 
   //console.log("content detail page: ", content);
 
@@ -49,7 +52,13 @@ export default function RelatedBookMore() {
     const fetchData = async () => {
       try {
         const data = await BookSearch(userId, cursorId, content);
-        setSearchData(data);
+        ///*
+        const temp = (data.total_page_num - 1) * 5;
+        const num = await BookSearch(userId, temp, content);
+        setNum(num.cursorId);
+        //*/
+        setSearchData(data.list);
+        setPageNum(data.total_page_num);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
@@ -58,14 +67,28 @@ export default function RelatedBookMore() {
     if (content) {
       fetchData();
     }
-  }, [content]);
+  }, [content, userId, cursorId]);
 
   useEffect(() => {
-    if (SearchData && SearchData.bookData) {
-      console.log("검색 도서 데이터:", SearchData.bookData);
-      setSearchNum(SearchData.bookData.bookObject.length);
+    if (SearchData) {
+      console.log("검색 도서 데이터:", SearchData);
     }
   }, [SearchData]);
+
+  useEffect(() => {
+    if (pageNum) {
+      console.log("PageNum 검색 도서 데이터:", pageNum);
+    }
+  }, [pageNum]);
+
+  useEffect(() => {
+    if (Num) {
+      console.log("==----검색 num 데이터:", Num);
+      setSearchNum(Num);
+    } else {
+      setSearchNum(0);
+    }
+  }, [Num]);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -93,10 +116,7 @@ export default function RelatedBookMore() {
 
     if (SearchData) {
       // 선택된 정렬 옵션에 따라 데이터를 정렬
-      const sortedData = sortData(
-        SearchData.bookData.bookObject,
-        selectedSortOption
-      );
+      const sortedData = sortData(SearchData, selectedSortOption);
       // 정렬된 데이터를 RelatedSentimentResults 컴포넌트에 전달
       setSortedSearchData(sortedData);
     }
@@ -170,7 +190,16 @@ export default function RelatedBookMore() {
                 />
               )}
             </div>
-            <p>페이지네이션 추가</p>
+            <div className="pagination-container">
+              {Array.isArray(SearchData) && (
+                <Pagination
+                  setCursorId={setCursorId}
+                  cursorId={cursorId}
+                  setPageNum={setPageNum}
+                  pageNum={pageNum}
+                />
+              )}
+            </div>
           </div>
         </div>
 
