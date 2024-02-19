@@ -28,7 +28,7 @@ export default function MypageScrap() {
     const [totalItems, setTotalItems] = useState(0);
     const itemsPerPage = 10;
     const postsPerPage = 5; 
-    const [sentimentData, setSentimentData] = useState(null);
+    const [sentimentData, setSentimentData] = useState([]);
     const user_context = useContext(UserContext);
     console.log(user_context);
     if (user_context && user_context.user_data) {
@@ -59,8 +59,9 @@ export default function MypageScrap() {
         withCredentials: true,
       })
       .then(response => {
+      if(response.data && response.data.sentimentObject){
         setSentimentData(response.data.sentimentObject);
-        console.log(response.data)
+      }
       }) 
       .catch(error => console.error(error));
     }, []);
@@ -90,8 +91,9 @@ export default function MypageScrap() {
                       className="book-link"
                     >
                       <img
-                        src={`${result.image_file}`}
+                        src={`${result.book_image}`}
                         alt={result.book_title}
+                        width="100" height="148"
                       />
                     </Link>
                     <div className="none-img">
