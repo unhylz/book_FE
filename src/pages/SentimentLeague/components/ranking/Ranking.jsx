@@ -153,8 +153,10 @@ export default function Ranking() {
 
   useEffect(() => {
     //setPageNumber(userRankData.pageNum);
-    setPageNumber(1); //임시
-    setSearchResult(userRankData.nickname);
+    if (userRankData) {
+      setPageNumber(1); //임시
+      setSearchResult(userRankData.nickname);
+    }
   }, [userRankData]);
 
   useEffect(() => {
