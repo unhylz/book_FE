@@ -14,6 +14,7 @@ import "./Header.scss";
 import { postLogout } from "../../../../modules/api/account.js";
 import { UnreadNotification } from "../../../../modules/api/search";
 import { MyPageProfile } from "../../../../modules/api/search";
+import userImg from "../../../../assets/icons/user_Img.png"
 
 export default function Header({
   onLogoClick,
@@ -235,11 +236,18 @@ export default function Header({
               <button className="mypage-btn" onClick={handleMypageClick}>
                 <div className="icon-container">
                   <div className="image-container">
-                    <img
+                    {(profile.profile_image === "기본 프로필" || profile.profile_image === null) && 
+                      <img src={userImg} alt="userImg" className="profile-image" 
+                      style={{ width: "30px", height: "30px" }} />
+                    }
+                    {!(profile.profile_image === "기본 프로필"|| profile.profile_image === null) && 
+                      <img
                       src={profile.profile_image}
-                      alt="MyPage"
-                      className="mypage-icon"
+                      alt="userImg"
+                      className="profile-image"
+                      style={{ width: "35px", height: "35px" }}
                     />
+                    }
                   </div>
                 </div>
                 <div className="profile-nickname">{profile.nickname}</div>
