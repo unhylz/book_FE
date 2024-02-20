@@ -39,10 +39,16 @@ function App() {
   const setLogout = ()=>{
     dispatcher({type:'LOGOUT'});
   }
+  const changeId = (id)=>{
+    dispatcher({type:'CHANGE_ID',id});
+  }
+  const changeEmail = (email)=>{
+    dispatcher({type:'CHANGE_Email',email});
+  }
 
 return (
   <>
-    <UserContext.Provider value={{user_data:state,setLogin,setLogout}}>
+    <UserContext.Provider value={{user_data:state,setLogin,setLogout,changeId,changeEmail}}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomeContainer />} />

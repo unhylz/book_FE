@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import PasswordSearch from "../components/PasswordSearch/PasswordSearch";
 import { postCheckCode, sendAuth } from "../modules/api/account";
+import { UserContext } from "../context/Login";
 
 export default function PasswordSearchContainer(props) {
   const [email, setEmail] = useState("");
@@ -13,7 +14,8 @@ export default function PasswordSearchContainer(props) {
   const [timer, setTimer] = useState("05:00");
   const [isTimerOn, setIsTimerOn] = useState(false);
   const [test, setTest] = useState();
-  
+
+  const user_context = useContext(UserContext);
 
   let sec = 300;
 
@@ -27,6 +29,7 @@ export default function PasswordSearchContainer(props) {
           sec = sec - 1;
         }
         setTimer(sec2timer(sec));
+        console.log(user_context)
       }, 1000);
       return () => clearInterval(id);
     }
@@ -66,23 +69,22 @@ export default function PasswordSearchContainer(props) {
     const res = await sendAuth(email);
     console.log(res,res,res)
     setEmailState(2)
-    
     setIsTimerOn(true); 
   };
 
   const onClickResendBtn = () => {
     //인증번호 재요청 함수
   };
-
   const onSubmitHandler = async (e) => {
     //인증번호 검증 함수; await
     e.preventDefault();
     console.log("인증번호 검사 및 제출합니다.");
 
-    const check = await postCheckCode(email, authnum);
-
-    if (check) {
+    const userId = await postCheckCode(email, authnum);
+    if (userId !== 'err') {
       props.setState("passwordchange");
+      console.log('user_id',userId)
+      user_context.changeId(userId)
       setAuthState(2)
     } else {  
       console.log("인증번호 틀림.");

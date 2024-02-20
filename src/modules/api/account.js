@@ -162,10 +162,10 @@ export const postCheckCode = async(email,verificationCode)=>{
       )
     console.log(res)
     if('message' in res.data)
-      {return true}
+      { return res.data.userId}
     else if(res.data.status===409)
-    {return false }
-    else{ return false}
+    {return 'err' }
+    else{ return 'err'}
   }
   catch(err){
     console.log(err.toJSON())
@@ -200,8 +200,11 @@ export const postPwChange = async(password, user_id)=>{
       {password},
       {withCredentials:true}
     )
+    console.log(res)
   }
-  catch{}
+  catch(err){
+    console.log(err)
+  }
 }
 
 export const postLogout = async()=>{
