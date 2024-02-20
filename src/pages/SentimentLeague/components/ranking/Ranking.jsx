@@ -112,8 +112,10 @@ export default function Ranking() {
 
     // Season에 따른 seasonNum 상태 업데이트
     if (item === dropdownItems[0]) {
+      setPageNumber(1);
       SetSeasonNum("1");
     } else if (item === dropdownItems[1]) {
+      setPageNumber(1);
       SetSeasonNum("2");
     }
 
@@ -176,7 +178,7 @@ export default function Ranking() {
     };
 
     fetchData();
-  }, [pageNumber, searchResult]);
+  }, [pageNumber, searchResult, seasonNum]);
 
   useEffect(() => {
     handleSearch();
