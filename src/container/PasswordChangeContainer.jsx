@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import PasswordChange from "../components/passwordChange/PasswordChange";
 import { postPwChange } from "../modules/api/account";
+import { UserContext } from "../context/Login";
 
 export default function PasswordChangeContainer(props) {
   const [pw, setPw] = useState("");
@@ -11,12 +12,16 @@ export default function PasswordChangeContainer(props) {
   const [pwCheckEye, setPwCheckEye] = useState(true);
   const [pwCheckState, setPwCheckState] = useState(0);
 
+  const user_context = useContext(UserContext);
+  console.log(user_context)
+
   const onSubmitPwChange = (e) => {
     e.preventDefault();
     if (pw===pwCheck)
     {
       props.setState("login");
-      const user_id = 4; //context에서 받아오기로 수정
+      const user_id = user_context.user_data.id; //context에서 받아오기로 수정
+      console.log('userid:',user_id)
       postPwChange(pw, user_id);
     }
 
@@ -108,3 +113,4 @@ export default function PasswordChangeContainer(props) {
     />
   );
 }
+  

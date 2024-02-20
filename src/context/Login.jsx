@@ -19,6 +19,21 @@ import React, { createContext, useReducer } from "react";
         isLogin:false,
         id:0,
         email:null}
+      
+    case'CHANGE_ID':
+      console.log('아이디변경 실행')
+      return{
+        ...state,
+        isLogin:false,
+        id:action.id,
+      }
+    
+    case 'CHANGE_EMAIL':
+      console.log('이메일변경 실행')
+      return{
+        ...state,
+        email:action.email
+      }
   }}
 
   export const initialState = {isLogin:false,id:0,email:null};
