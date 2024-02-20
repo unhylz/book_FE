@@ -26,6 +26,11 @@ function UserProfile({ userData }) {
     status_message:""
   })
 
+  useEffect(()=>{
+    setMessage(userData[0].status_message);
+    console.log(userData[0])
+  },[])
+
   const goToMypageFollower = () => {
     navigate("../mypage_follower");
   };
@@ -196,7 +201,7 @@ const sendStatusMessage = (statusMessage) => {
         <p className="email">{userData[0].email}</p>
         <div className="message-edit">
         <div className="message-box">
-          {message ? <h5>{userData[0].status_message}</h5> : <h5>...</h5>}
+          {message ? <h5>{message}</h5> : <h5>...</h5>}
         </div>
         <button className="edit-button2" onClick={handleEditButtonClick}>
           <img src={flag} alt="flagIcon" />
