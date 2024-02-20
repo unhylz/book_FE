@@ -111,12 +111,14 @@ export default function CommentItem({data, id, user_id}) {
       const response = axios.post(`/sentiments/${id}/comments/${user_id}/write`, body, config);
       console.log('응답 데이터:', response.data);
       alert("api 전송 성공");
-  
+
+      // 입력 필드 초기화
+      setContent("");
+      setCommentValid(true);
     } catch (error) {
       console.error('글 등록 오류:', error);
     }
-    setContent("")
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (
@@ -185,7 +187,7 @@ export default function CommentItem({data, id, user_id}) {
                   <img className="delete-icon" src={deleteIcon} alt="deleteIcon" />
                   <div className="delete-text">삭제하기</div>
                 </div>
-)}
+                )}
                 {isOpen && (
                   <ModalFrame>
                     <h3>www.booksentimentleague.com 내용:</h3>
