@@ -17,7 +17,7 @@ import { useContext } from "react";
 
 
 function UserProfile({ userData }) {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(' ');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -196,7 +196,7 @@ const sendStatusMessage = (statusMessage) => {
         <p className="email">{userData[0].email}</p>
         <div className="message-edit">
         <div className="message-box">
-          {message ? <h5>{message}</h5> : <h5>...</h5>}
+          {message ? <h5>{userData[0].status_message}</h5> : <h5>...</h5>}
         </div>
         <button className="edit-button2" onClick={handleEditButtonClick}>
           <img src={flag} alt="flagIcon" />
